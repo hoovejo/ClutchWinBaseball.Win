@@ -1,0 +1,57 @@
+﻿<Page
+    x:Class="ClutchWinBaseball.HubPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ClutchWinBaseball"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding Main, Source={StaticResource Locator}}"
+    xmlns:data="using:ClutchWinBaseball.Data"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.png"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="HighContrast">
+                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="{x:Null}"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Hub x:Name="MainHub" x:Uid="Hub" Header="ClutchWin" Background="{ThemeResource HubBackgroundImageBrush}">
+            <HubSection x:Name="HomeHubSection" x:Uid="HubSection1">
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="Welcome!"
+                                   Style="{ThemeResource  SubheaderTextBlockStyle}" Margin="0,0,0,12" />
+                        <TextBlock Text="Discover how your favorite baseball teams or players perform against their rivals."
+                                   Style="{ThemeResource  SubheaderTextBlockStyle}" />
+                    </StackPanel>
+
+                </DataTemplate>
+            </HubSection>
+
+            <HubSection x:Name="FeaturedHubSection" x:Uid="HubSection2" Header="Featured" Width="Auto" DataContext="{Binding Items}" >
+                <DataTemplate>
+                    <ListView ItemsSource="{Binding}" IsItemClickEnabled="True" 
+                                  ItemClick="GridView_ItemClick" ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="25,15,0,15">
+                                    <TextBlock Text="{Binding LineOne}" Style="{ThemeResource ListViewItemTextBlockStyle}" />
+                                    <TextBlock Text="{Binding LineTwo}" Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </DataTemplate>
+            </HubSection>
+            
+        </Hub>
+    </Grid>
+</Page>

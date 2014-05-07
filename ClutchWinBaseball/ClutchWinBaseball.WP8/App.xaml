@@ -1,0 +1,60 @@
+﻿<Application 
+    x:Class="ClutchWinBaseball.WP8.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:vm="clr-namespace:ClutchWinBaseball.Portable;assembly=ClutchWinBaseball.Portable">
+
+    <!--Application Resources-->
+    <Application.Resources>
+        <sys:Double x:Key="PanoramaItemHeaderFontSize">66</sys:Double>
+
+        <Style x:Key="PanoramaItemHeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiLight}"/>
+            <Setter Property="FontSize" Value="{StaticResource PanoramaItemHeaderFontSize}"/>
+            <Setter Property="CharacterSpacing" Value="-35"/>
+        </Style>
+
+        <!--Global View Model Locator-->
+        <vm:ViewModelLocator x:Key="Locator" />
+        
+        <!--Global jump list definition-->
+        <phone:JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
+        <phone:JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
+
+        <Style x:Key="JumpListStyle" TargetType="phone:LongListSelector">
+            <Setter Property="LayoutMode" Value="List" />
+            <Setter Property="Margin" Value="12,12,0,0"/>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border Background="{Binding Converter={StaticResource BackgroundConverter}}" Width="470" Height="70" Margin="6">
+                            <TextBlock Text="{Binding Key}" Foreground="{Binding Converter={StaticResource ForegroundConverter}}"                                       
+                                       FontFamily="{StaticResource PhoneFontFamilySemiBold}" FontSize="28" Padding="2" VerticalAlignment="Bottom"/>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="KeyedListGroupHeader" >
+            <Border Background="Transparent">
+                <Border Background="Transparent" BorderBrush="Transparent" BorderThickness="1" Width="400" Height="90" HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding Key}" Foreground="{StaticResource PhoneAccentBrush}" FontSize="28" Padding="2" 
+                               FontFamily="{StaticResource PhoneFontFamilySemiLight}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Border>
+            </Border>
+        </DataTemplate>
+        
+    </Application.Resources>
+
+    <Application.ApplicationLifetimeObjects>
+        <!--Required object that handles lifetime events for the application-->
+        <shell:PhoneApplicationService 
+            Launching="Application_Launching" Closing="Application_Closing" 
+            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+    </Application.ApplicationLifetimeObjects>
+
+</Application>

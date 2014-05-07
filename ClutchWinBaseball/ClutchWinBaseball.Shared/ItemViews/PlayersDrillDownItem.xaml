@@ -1,0 +1,44 @@
+﻿<UserControl
+    x:Class="ClutchWinBaseball.ItemViews.PlayersDrillDownItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ClutchWinBaseball.ItemViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Grid x:Name="grid" Height="300" Width="300">
+            <Viewbox Stretch="Uniform">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,0,35,4" >
+                        <TextBlock x:Name="atBatLabel" Text="At bats" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="hitLabel" Text="Hits" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="secondBaseLabel" Text="Second bases" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="thirdBaseLabel" Text="Third bases" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="homeRunLabel" Text="Home runs" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="runBattedInLabel" Text="Runs batted in" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="strikeOutLabel" Text="Strike outs" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="baseBallLabel" Text="Base balls" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="averageLabel" Text="Average" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="25,0,10,4">
+                        <TextBlock x:Name="atBatValue" Text="{Binding AtBat}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="hitValue" Text="{Binding Hit}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="secondBaseValue" Text="{Binding SecondBase}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="thirdBaseValue" Text="{Binding ThirdBase}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="homeRunValue" Text="{Binding HomeRun}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="runBattedInValue" Text="{Binding RunBattedIn}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="strikeOutValue" Text="{Binding StrikeOut}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="baseBallValue" Text="{Binding BaseBall}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="averageValue" Text="{Binding Average}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Viewbox>
+        </Grid>
+    </Grid>
+</UserControl>

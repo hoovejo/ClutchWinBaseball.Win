@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>349ae525-343e-4c50-ba4e-e1da5dc8894a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ClutchWinBaseball</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Common\BindableBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\PlayersBatterItem.xaml.cs">
+      <DependentUpon>PlayersBatterItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\PlayersDrillDownItem.xaml.cs">
+      <DependentUpon>PlayersDrillDownItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\PlayersPitcherItem.xaml.cs">
+      <DependentUpon>PlayersPitcherItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\PlayersResultsItem.xaml.cs">
+      <DependentUpon>PlayersResultsItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\PlayersTeamItem.xaml.cs">
+      <DependentUpon>PlayersTeamItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\PlayersYearItem.xaml.cs">
+      <DependentUpon>PlayersYearItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\TeamsDrillDownItem.xaml.cs">
+      <DependentUpon>TeamsDrillDownItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\TeamsFranchiseItem.xaml.cs">
+      <DependentUpon>TeamsFranchiseItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\TeamsOpponentItem.xaml.cs">
+      <DependentUpon>TeamsOpponentItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ItemViews\TeamsResultsItem.xaml.cs">
+      <DependentUpon>TeamsResultsItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\IndicatorDataSource.cs" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\LightGray.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\MediumGray.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\DarkGray.png" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\NavigationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\SuspensionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableDictionary.cs" />
+    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en-US\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\PlayersBatterItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\PlayersDrillDownItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\PlayersPitcherItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\PlayersResultsItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\PlayersTeamItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\PlayersYearItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\TeamsDrillDownItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\TeamsFranchiseItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\TeamsOpponentItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ItemViews\TeamsResultsItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

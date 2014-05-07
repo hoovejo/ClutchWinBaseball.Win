@@ -1,0 +1,191 @@
+﻿<Page
+    x:Class="ClutchWinBaseball.TeamsFeature"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ClutchWinBaseball"
+    xmlns:itemViews="using:ClutchWinBaseball.ItemViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <CollectionViewSource x:Name="cvsFranchiseItems" IsSourceGrouped="True" Source="{Binding FranchiseItems}" />
+            <CollectionViewSource x:Name="cvsOpponentsItems" IsSourceGrouped="True" Source="{Binding OpponentsItems}" />
+            <CollectionViewSource x:Name="cvsTeamResultItems" IsSourceGrouped="True" Source="{Binding TeamResultItems}" />
+            <CollectionViewSource x:Name="cvsTeamDrillDownItems" IsSourceGrouped="True" Source="{Binding TeamDrillDownItems}" />
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <Binding Path="Teams" Source="{StaticResource Locator}"/>
+    </Page.DataContext>
+
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <!--Pivot Control-->
+        <Pivot Title="Team vs Team" x:Name="pvControl">
+
+            <!--Pivot item for Franchises-->
+            <PivotItem x:Uid="PivotItem" Header="teams" CommonNavigationTransitionInfo.IsStaggerElement="True">
+                <SemanticZoom x:Name="teamsSemanticZoom">
+                    <SemanticZoom.ZoomedOutView>
+                        <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                ItemContainerStyle="{StaticResource ListItemStyle}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Group.Key}" FontFamily="Segoe UI" FontWeight="Light" FontSize="24"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </SemanticZoom.ZoomedOutView>
+                    <SemanticZoom.ZoomedInView>
+                        <ListView x:Name="teamsItemsGridView" ItemsSource="{Binding Source={StaticResource cvsFranchiseItems}}" Margin="12,0,0,0"
+                                    IsItemClickEnabled="True"
+                                    ItemClick="Teams_ItemClick" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <itemViews:TeamsFranchiseItem />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Background="{ThemeResource PhoneAccentBrush}" >
+                                                <TextBlock Text="{Binding Key}" Foreground="{ThemeResource PhoneForegroundBrush}" Margin="10" 
+                                                            Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </SemanticZoom.ZoomedInView>
+                </SemanticZoom>
+            </PivotItem>
+
+            <!--Pivot item for Opponents-->
+            <PivotItem Header="opponents">
+                <SemanticZoom x:Name="opponentsSemanticZoom">
+                    <SemanticZoom.ZoomedOutView>
+                        <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                  ItemContainerStyle="{StaticResource ListItemStyle}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Group.Key}" FontFamily="Segoe UI" FontWeight="Light" FontSize="24"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </SemanticZoom.ZoomedOutView>
+                    <SemanticZoom.ZoomedInView>
+                        <ListView x:Name="opponentItemsGridView" ItemsSource="{Binding Source={StaticResource cvsOpponentsItems}}" Margin="12,0,0,0"
+                                      IsItemClickEnabled="True"
+                                      ItemClick="Opponents_ItemClick" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <itemViews:TeamsOpponentItem />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Background="{ThemeResource PhoneAccentBrush}" >
+                                                <TextBlock Text="{Binding Key}" Foreground="{ThemeResource PhoneForegroundBrush}" Margin="10" 
+                                                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </SemanticZoom.ZoomedInView>
+                </SemanticZoom>
+            </PivotItem>
+
+            <!--Pivot item for Team results -->
+            <PivotItem Header="results">
+                <SemanticZoom x:Name="teamResultsSemanticZoom">
+                    <SemanticZoom.ZoomedOutView>
+                        <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                  ItemContainerStyle="{StaticResource ListItemStyle}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Group.Key}" FontFamily="Segoe UI" FontWeight="Light" FontSize="24"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </SemanticZoom.ZoomedOutView>
+                    <SemanticZoom.ZoomedInView>
+                        <ListView x:Name="teamResultsItemsGridView" ItemsSource="{Binding Source={StaticResource cvsTeamResultItems}}" Margin="12,0,0,0"
+                                      IsItemClickEnabled="True"
+                                      ItemClick="TeamResults_ItemClick" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <itemViews:TeamsResultsItem />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Background="{ThemeResource PhoneAccentBrush}" >
+                                                <TextBlock Text="{Binding Key}" Foreground="{ThemeResource PhoneForegroundBrush}" Margin="10" 
+                                                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </SemanticZoom.ZoomedInView>
+                </SemanticZoom>
+            </PivotItem>
+
+            <!--Pivot item for team game details -->
+            <PivotItem Header="details">
+                <SemanticZoom x:Name="teamDrillDownSemanticZoom">
+                    <SemanticZoom.ZoomedOutView>
+                        <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                  ItemContainerStyle="{StaticResource ListItemStyle}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Group.Key}" FontFamily="Segoe UI" FontWeight="Light" FontSize="24"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </SemanticZoom.ZoomedOutView>
+                    <SemanticZoom.ZoomedInView>
+                        <ListView x:Name="teamDrillDownItemsGridView" ItemsSource="{Binding Source={StaticResource cvsTeamDrillDownItems}}" Margin="12,0,0,0" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <itemViews:TeamsDrillDownItem />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Background="{ThemeResource PhoneAccentBrush}" >
+                                                <TextBlock Text="{Binding Key}" Foreground="{ThemeResource PhoneForegroundBrush}" Margin="10" 
+                                                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </SemanticZoom.ZoomedInView>
+                </SemanticZoom>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>

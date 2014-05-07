@@ -1,0 +1,40 @@
+﻿<UserControl
+    x:Class="ClutchWinBaseball.ItemViews.TeamsResultsItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ClutchWinBaseball.ItemViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Grid x:Name="grid" Height="300" Width="300">
+            <Viewbox Stretch="Uniform">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,0,35,4" >
+                        <TextBlock x:Name="gamesLabel" Text="Games" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="teamLabel" Text="Team" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="oppoLabel" Text="Opponent" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="winsLabel" Text="Wins" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="lossLabel" Text="Losses" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="runsfLabel" Text="Runs for" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="runsaLabel" Text="Runs against" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="25,0,10,4">
+                        <TextBlock x:Name="gamesValue" Text="{Binding Games}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="teamValue" Text="{Binding Team}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="oppoValue" Text="{Binding Opponent}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="winsValue" Text="{Binding Wins}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="lossValue" Text="{Binding Losses}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="runsfValue" Text="{Binding RunsFor}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="runsaValue" Text="{Binding RunsAgainst}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Viewbox>
+        </Grid>
+    </Grid>
+</UserControl>

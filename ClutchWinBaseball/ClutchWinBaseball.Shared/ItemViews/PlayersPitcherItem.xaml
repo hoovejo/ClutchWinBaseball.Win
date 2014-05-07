@@ -1,0 +1,16 @@
+﻿<UserControl
+    x:Class="ClutchWinBaseball.ItemViews.PlayersPitcherItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ClutchWinBaseball.ItemViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid HorizontalAlignment="Left" Width="250" Height="Auto" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel Orientation="Horizontal" Margin="12,2,0,4">
+            <TextBlock x:Name="titleTextBlock" Text="{Binding LineOne}" Margin="4,10,0,10" Style="{ThemeResource BodyTextBlockStyle}" />
+            <TextBlock x:Name="categoryTextBlock" Text="{Binding LineTwo}" Margin="4,0,0,0" Style="{StaticResource SimpleSubtle}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

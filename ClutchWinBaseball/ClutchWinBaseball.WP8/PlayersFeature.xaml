@@ -1,0 +1,187 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="ClutchWinBaseball.WP8.PlayersFeature"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
+    DataContext="{Binding Players, Source={StaticResource Locator}}"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+
+
+        <!--Pivot Control-->
+        <phone:Pivot Title="Player vs Player" x:Name="pvControl">
+            <phone:Pivot.Background>
+                <ImageBrush ImageSource="/ClutchWinBaseball.WP8;component/Assets/PanoramaBackground.png"/>
+            </phone:Pivot.Background>
+
+            <!--Pivot item for batters-->
+            <phone:PivotItem Header="batters">
+
+                <Grid x:Name="innerGrid">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <Button Foreground="Red" Margin="4,0,20,0"
+                                    AutomationProperties.Name="goToYears" Click="goTo_Years"
+                                    Style="{StaticResource PivotTitleStyle}" >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding SelectedYearId}" Margin="0,-0,10,10" Style="{StaticResource PhoneTextAccentStyle}" TextWrapping="NoWrap" />
+                                <TextBlock Text=">" FontFamily="Segoe UI Symbol" Margin="0,0,0,10" Style="{StaticResource PhoneTextAccentStyle}" TextWrapping="NoWrap" />
+                            </StackPanel>
+                        </Button>
+                        <Button Foreground="Red" Margin="20,0,0,0"
+                                    AutomationProperties.Name="goToTeams" Click="goTo_Teams"
+                                    Style="{StaticResource PivotTitleStyle}" >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding SelectedTeamId}" Margin="0,0,10,10" Style="{StaticResource PhoneTextAccentStyle}" TextWrapping="NoWrap" />
+                                <TextBlock Text=">" FontFamily="Segoe UI Symbol" Margin="0,0,0,10" Style="{StaticResource PhoneTextAccentStyle}" TextWrapping="NoWrap" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!--Content should be placed within the following grid-->
+                    <Grid Grid.Row="1">
+                      <phone:LongListSelector Margin="13,-30,0,0" ItemsSource="{Binding BatterItems}" Name="piBatters" 
+                                        GroupHeaderTemplate="{StaticResource KeyedListGroupHeader}"
+                                        JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
+                                        LayoutMode="List">
+                            <phone:LongListSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Width="432" Tap="BatterStackPanel_Tap" >
+                                        <TextBlock Text="{Binding LineOne}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                        <TextBlock Text="{Binding LineTwo}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </phone:LongListSelector.ItemTemplate>
+                        </phone:LongListSelector>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+
+
+            <!--Pivot item for Pitchers-->
+            <phone:PivotItem Header="pitchers">
+                <phone:LongListSelector Margin="13,-30,0,0" ItemsSource="{Binding PitcherItems}" Name="piPitchers"
+                                        GroupHeaderTemplate="{StaticResource KeyedListGroupHeader}"
+                                        JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
+                                        LayoutMode="List">
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Width="432" Tap="PitcherStackPanel_Tap" >
+                                <TextBlock Text="{Binding LineOne}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                <TextBlock Text="{Binding LineTwo}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+
+
+            <!--Pivot item for Player results -->
+            <phone:PivotItem Header="results">
+                <phone:LongListSelector Margin="13,-30,0,0" ItemsSource="{Binding PlayerResultItems}" Name="piPlayerResults"
+                                        GroupHeaderTemplate="{StaticResource KeyedListGroupHeader}"
+                                        JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
+                                        LayoutMode="List">
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Vertical" Grid.Column="0" Margin="25,10,25,4" Tap="ResultsStackPanel_Tap" >
+                                    <TextBlock Text="Game Type" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Games" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="At bat" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Hit" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Second base" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Third base" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Home run" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Run batted in" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Strike out" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Base ball" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Average" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Grid.Column="1" Margin="4,10,25,4" Tap="ResultsStackPanel_Tap" >
+                                    <TextBlock Text="{Binding GameType}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding Games}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding AtBat}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding Hit}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding SecondBase}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding ThirdBase}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding HomeRun}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding RunBattedIn}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding StrikeOut}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding BaseBall}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding Average}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+
+
+            <!--Pivot item for Player game details -->
+            <phone:PivotItem Header="details">
+                <phone:LongListSelector Margin="13,-30,0,0" ItemsSource="{Binding PlayerDrillDownItems}" Name="piPlayerDrillDown"
+                                        GroupHeaderTemplate="{StaticResource KeyedListGroupHeader}"
+                                        JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
+                                        LayoutMode="List">
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Vertical" Grid.Column="0" Margin="25,10,25,4" Tap="ResultsStackPanel_Tap" >
+                                    <TextBlock Text="At bat" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Hit" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Second base" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Third base" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Home run" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Run batted in" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Strike out" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Base ball" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="Average" TextAlignment="Left" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Grid.Column="1" Margin="4,10,25,4" Tap="ResultsStackPanel_Tap" >
+                                    <TextBlock Text="{Binding AtBat}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding Hit}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding SecondBase}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding ThirdBase}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding HomeRun}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding RunBattedIn}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding StrikeOut}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding BaseBall}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding Average}" TextAlignment="Right" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+
+
+        </phone:Pivot>
+
+
+    </Grid>
+    
+</phone:PhoneApplicationPage>

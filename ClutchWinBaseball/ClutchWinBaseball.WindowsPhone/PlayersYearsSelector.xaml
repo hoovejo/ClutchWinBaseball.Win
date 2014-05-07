@@ -1,0 +1,44 @@
+﻿<Page
+    x:Class="ClutchWinBaseball.PlayersYearsSelector"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ClutchWinBaseball"
+    xmlns:itemViews="using:ClutchWinBaseball.ItemViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="{Binding Players, Source={StaticResource Locator}}">
+
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- TitlePanel -->
+        <StackPanel Grid.Row="0" Margin="24,17,0,28">
+            <TextBlock Text="Batter vs Pitcher" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
+            <TextBlock Text="years" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+        </StackPanel>
+
+        <!--Content should be placed within the following grid-->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="24,0,0,0">
+            <ListView ItemsSource="{Binding YearItems}" IsItemClickEnabled="True" 
+                                  ItemClick="Years_ItemClick" ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <itemViews:PlayersYearItem />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>
