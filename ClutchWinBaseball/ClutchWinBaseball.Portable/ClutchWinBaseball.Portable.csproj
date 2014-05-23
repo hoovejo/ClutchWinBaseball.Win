@@ -38,6 +38,8 @@
     <Compile Include="Common\DataContext.cs" />
     <Compile Include="Common\KeyedList.cs" />
     <Compile Include="DataModel\BatterModel.cs" />
+    <Compile Include="FeatureStateModel\PlayersContextViewModel.cs" />
+    <Compile Include="FeatureStateModel\TeamsContextViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="PlayersFeatureViewModel.cs" />
     <Compile Include="TeamsFeatureViewModel.cs" />

@@ -16,7 +16,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,0,35,4" >
-                        <TextBlock x:Name="gameTypeLabel" Text="Game Type" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="gameTypeLabel" Text="Game type" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="gamesLabel" Text="Games" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="atBatLabel" Text="At bat" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="hitLabel" Text="Hits" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />

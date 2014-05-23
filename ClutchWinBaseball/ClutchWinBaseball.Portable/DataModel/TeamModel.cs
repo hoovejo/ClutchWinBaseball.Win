@@ -15,15 +15,9 @@ namespace ClutchWinBaseball.Portable.DataModel
             return LeagueId;
         }
 
-        [JsonProperty("id")]
-        public int Id { get; set; }
-        [JsonProperty("year_id")]
-        public int YearId { get; set; }
-        [JsonProperty("team_id")]
+        [JsonProperty("team_abbr")]
         public string TeamId { get; set; }
-        [JsonProperty("team_type")]
-        public string TeamType { get; set; }
-        [JsonProperty("league_id")]
+        [JsonProperty("league")]
         public string LeagueId { get; set; }
         [JsonProperty("location")]
         public string Location { get; set; }
