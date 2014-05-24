@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace ClutchWinBaseball.Portable
 {
@@ -60,51 +61,86 @@ namespace ClutchWinBaseball.Portable
         //base list to build opponent list from
         private List<TeamsFranchisesViewModel> FranchiseList = new List<TeamsFranchisesViewModel>();
 
-        public async Task<bool> LoadFranchisesData()
-        {
-            FranchiseItems.Clear();
+        public string FranchisesDataString { get; set; }
+        public string TeamsResultsDataString { get; set; }
+        public string TeamsDrillDownDataString { get; set; }
 
-            var dataContext = new DataContext();
-            var franchises = await dataContext.GetFranchisesAsync();
+        public async Task<bool> LoadFranchisesDataAsync(string cachedJson = "")
+        {
+            List<FranchiseModel> franchises;
+            IsDataLoaded = false;
+
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
+
+                svcResult = await dataContext.GetFranchisesAsync();
+                if (svcResult == null) { return false; } //no results message
+                FranchisesDataString = svcResult;
+                franchises = JsonConvert.DeserializeObject<List<FranchiseModel>>(svcResult);
+            }
+            else
+            {
+                franchises = JsonConvert.DeserializeObject<List<FranchiseModel>>(cachedJson);
+            }
 
             var groupedItems =
                 from franchise in franchises
                 orderby franchise.Location
                 select new TeamsFranchisesViewModel
                 {
-                    FirstLetter = franchise.Location.Substring(0, 1), 
-                    LineOne = franchise.GetDisplayName(), 
-                    LineTwo = franchise.GetDetail(), 
-                    TeamId = franchise.RetroId, 
+                    FirstLetter = franchise.Location.Substring(0, 1),
+                    LineOne = franchise.GetDisplayName(),
+                    LineTwo = franchise.GetDetail(),
+                    TeamId = franchise.RetroId,
                     Location = franchise.Location
                 } into list
                 group list by list.FirstLetter into listByYear
                 select new KeyedList<string, TeamsFranchisesViewModel>(listByYear);
 
+            if (FranchiseList.Count <= 0)
+            {
+                foreach (var franchise in franchises)
+                {
+                    FranchiseList.Add(new TeamsFranchisesViewModel()
+                    {
+                        LineOne = franchise.GetDisplayName(),
+                        LineTwo = franchise.GetDetail(),
+                        TeamId = franchise.RetroId,
+                        Location = franchise.Location
+                    });
+                }
+            }
+
+            FranchiseItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 FranchiseItems.Add(viewModelItem);
             }
 
-            foreach (var franchise in franchises)
-            {
-                FranchiseList.Add(new TeamsFranchisesViewModel()
-                {
-                    LineOne = franchise.GetDisplayName(), 
-                    LineTwo = franchise.GetDetail(), 
-                    TeamId = franchise.RetroId, 
-                    Location = franchise.Location
-                });
-            }
-
-            IsFranchiseDataLoaded = true;
             IsDataLoaded = true;
             return true;
         }
 
-        public void LoadOpponentsData()
+        public void LoadOpponentsData(string cachedJson = "")
         {
-            OpponentsItems.Clear();
+            IsDataLoaded = false;
+
+            if (!string.IsNullOrEmpty(cachedJson) && FranchiseList.Count <= 0)
+            {
+                var franchises = JsonConvert.DeserializeObject<List<FranchiseModel>>(cachedJson);
+                foreach (var franchise in franchises)
+                {
+                    FranchiseList.Add(new TeamsFranchisesViewModel()
+                    {
+                        LineOne = franchise.GetDisplayName(),
+                        LineTwo = franchise.GetDetail(),
+                        TeamId = franchise.RetroId,
+                        Location = franchise.Location
+                    });
+                }
+            }
 
             var groupedItems =
                 from team in FranchiseList
@@ -121,6 +157,7 @@ namespace ClutchWinBaseball.Portable
                 group list by list.FirstLetter into listByYear
                 select new KeyedList<string, TeamsOpponentsViewModel>(listByYear);
 
+            OpponentsItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 OpponentsItems.Add(viewModelItem);
@@ -128,21 +165,32 @@ namespace ClutchWinBaseball.Portable
             IsDataLoaded = true;
         }
 
-        public async Task<bool> LoadTeamResultsData()
+        public async Task<bool> LoadTeamResultsDataAsync(string cachedJson = "")
         {
+            List<TeamsResultModel> items;
             IsDataLoaded = false;
-            TeamResultItems.Clear();
 
-            var dataContext = new DataContext();
-            var items = await dataContext.GetTeamResultsAsync(SelectedTeamId, SelectedOpponentId);
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
+
+                svcResult = await dataContext.GetTeamResultsAsync(SelectedTeamId, SelectedOpponentId);
+                if (svcResult == null) { return false; } //no results message
+                TeamsResultsDataString = svcResult;
+                items = JsonConvert.DeserializeObject<List<TeamsResultModel>>(svcResult);
+            }
+            else
+            {
+                items = JsonConvert.DeserializeObject<List<TeamsResultModel>>(cachedJson);
+            }
 
             var groupedItems =
-                from item in items.Rows
+                from item in items
                 orderby item.Year descending
                 select new TeamsResultsViewModel
                 {
                     Year = item.Year,
-                    Games = item.Games,
                     Team = item.Team,
                     Opponent = item.Opponent,
                     Wins = item.Wins,
@@ -153,6 +201,7 @@ namespace ClutchWinBaseball.Portable
                 group list by list.Year into listByYear
                 select new KeyedList<string, TeamsResultsViewModel>(listByYear);
 
+            TeamResultItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 TeamResultItems.Add(viewModelItem);
@@ -161,16 +210,28 @@ namespace ClutchWinBaseball.Portable
             return true;
         }
 
-        public async Task<bool> LoadTeamDrillDownData()
+        public async Task<bool> LoadTeamDrillDownDataAsync(string cachedJson = "")
         {
+            List<TeamsDrillDownModel> items;
             IsDataLoaded = false;
-            TeamDrillDownItems.Clear();
 
-            var dataContext = new DataContext();
-            var items = await dataContext.GetTeamDrillDownAsync(SelectedTeamId, SelectedOpponentId, SelectedYearId);
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
+
+                svcResult = await dataContext.GetTeamDrillDownAsync(SelectedTeamId, SelectedOpponentId, SelectedYearId);
+                if (svcResult == null) { return false; } //no results message
+                TeamsDrillDownDataString = svcResult;
+                items = JsonConvert.DeserializeObject<List<TeamsDrillDownModel>>(svcResult);
+            }
+            else
+            {
+                items = JsonConvert.DeserializeObject<List<TeamsDrillDownModel>>(cachedJson);
+            }
 
             var groupedItems =
-                from item in items.Rows
+                from item in items
                 orderby item.GameDate descending
                 select new TeamsDrillDownViewModel
                 {
@@ -185,6 +246,7 @@ namespace ClutchWinBaseball.Portable
                 group list by list.GameDate into listByYear
                 select new KeyedList<string, TeamsDrillDownViewModel>(listByYear);
 
+            TeamDrillDownItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 TeamDrillDownItems.Add(viewModelItem);

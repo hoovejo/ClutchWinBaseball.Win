@@ -104,7 +104,7 @@ namespace ClutchWinBaseball.Views
             ViewModelLocator.Players.SelectedYearId = ((PlayersYearsViewModel)e.ClickedItem).LineOne;
             //TODO: check if the tapped value is the same as previous
 
-            await ViewModelLocator.Players.LoadTeamData();
+            await ViewModelLocator.Players.LoadTeamDataAsync();
 
             Frame.Navigate(typeof(PlayersFeature));
         }
@@ -126,7 +126,7 @@ namespace ClutchWinBaseball.Views
 
             if (!ViewModelLocator.Players.IsYearDataLoaded)
             {
-                await ViewModelLocator.Players.LoadYearData();
+                await ViewModelLocator.Players.LoadYearDataAsync();
             }
         }
 

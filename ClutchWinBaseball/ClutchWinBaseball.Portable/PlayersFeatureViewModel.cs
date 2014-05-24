@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace ClutchWinBaseball.Portable
 {
@@ -73,33 +74,65 @@ namespace ClutchWinBaseball.Portable
             private set { if (value != _isDataLoaded) { _isDataLoaded = value; NotifyPropertyChanged("IsDataLoaded"); } }
         }
 
-        //Determine if Players feature is ready
-        public bool IsYearDataLoaded { get; private set; }
+        //temp
+        public bool IsYearDataLoaded {get; set;}
 
-        public async Task<bool> LoadYearData()
+        public string YearsDataString { get; set; }
+        public string TeamsDataString { get; set; }
+        public string BattersDataString { get; set; }
+        public string PitchersDataString { get; set; }
+        public string PlayersResultsDataString { get; set; }
+        public string PlayersDrillDownDataString { get; set; }
+
+        public async Task<bool> LoadYearDataAsync(string cachedJson = "")
         {
+            List<YearModel> years;
+            IsDataLoaded = false;
+
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
+
+                svcResult = await dataContext.GetYearsAsync();
+                if (svcResult == null) { return false; } //no results message
+                YearsDataString = svcResult;
+                years = JsonConvert.DeserializeObject<List<YearModel>>(svcResult);
+            }
+            else
+            {
+                years = JsonConvert.DeserializeObject<List<YearModel>>(cachedJson);
+            }
+
             YearItems.Clear();
-
-            var dataContext = new DataContext();
-            var years = await dataContext.GetYearsAsync();
-
             foreach (var year in years)
             {
                 this.YearItems.Add(new PlayersYearsViewModel() { LineOne = year.Id.ToString(CultureInfo.CurrentCulture) });
             }
-            IsYearDataLoaded = true;
             IsDataLoaded = true;
             return true;
         }
 
-        public async Task<bool> LoadTeamData()
+        public async Task<bool> LoadTeamDataAsync(string cachedJson = "")
         {
+            List<TeamModel> teams;
             IsDataLoaded = false;
-            TeamItems.Clear();
 
-            var dataContext = new DataContext();
-            List<TeamModel> teams = await dataContext.GetTeamsAsync(SelectedYearId);
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
 
+                svcResult = await dataContext.GetTeamsAsync(SelectedYearId);
+                if (svcResult == null) { return false; } //no results message
+                TeamsDataString = svcResult;
+                teams = JsonConvert.DeserializeObject<List<TeamModel>>(svcResult);
+            }
+            else
+            {
+                teams = JsonConvert.DeserializeObject<List<TeamModel>>(cachedJson);
+            } 
+            
             var groupedItems =
                 from team in teams
                 orderby team.Location
@@ -113,6 +146,7 @@ namespace ClutchWinBaseball.Portable
                 group list by list.FirstLetter into listByYear
                 select new KeyedList<string, PlayersTeamsViewModel>(listByYear);
 
+            TeamItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 TeamItems.Add(viewModelItem);
@@ -121,14 +155,26 @@ namespace ClutchWinBaseball.Portable
             return true;
         }
 
-        public async Task<bool> LoadBatterData()
+        public async Task<bool> LoadBatterDataAsync(string cachedJson = "")
         {
+            List<BatterModel> batters;
             IsDataLoaded = false;
-            BatterItems.Clear();
 
-            var dataContext = new DataContext();
-            List<BatterModel> batters = await dataContext.GetBattersAsync(SelectedTeamId, SelectedYearId);
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
 
+                svcResult = await dataContext.GetBattersAsync(SelectedTeamId, SelectedYearId);
+                if (svcResult == null) { return false; } //no results message
+                BattersDataString = svcResult;
+                batters = JsonConvert.DeserializeObject<List<BatterModel>>(svcResult);
+            }
+            else
+            {
+                batters = JsonConvert.DeserializeObject<List<BatterModel>>(cachedJson);
+            } 
+            
             var groupedItems =
                 from batter in batters
                 orderby batter.FirstName
@@ -141,6 +187,7 @@ namespace ClutchWinBaseball.Portable
                 group list by list.FirstLetter into listByYear
                 select new KeyedList<string, PlayersBattersViewModel>(listByYear);
 
+            BatterItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 BatterItems.Add(viewModelItem);
@@ -149,16 +196,28 @@ namespace ClutchWinBaseball.Portable
             return true;
         }
 
-        public async Task<bool> LoadPitcherData()
+        public async Task<bool> LoadPitcherDataAsync(string cachedJson = "")
         {
+            List<PitcherModel> pitchers;
             IsDataLoaded = false;
-            PitcherItems.Clear();
 
-            var dataContext = new DataContext();
-            var pitchers = await dataContext.GetPitchersAsync(SelectedBatterId, SelectedYearId);
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
+
+                svcResult = await dataContext.GetPitchersAsync(SelectedBatterId, SelectedYearId);
+                if (svcResult == null) { return false; } //no results message
+                PitchersDataString = svcResult;
+                pitchers = JsonConvert.DeserializeObject<List<PitcherModel>>(svcResult);
+            }
+            else
+            {
+                pitchers = JsonConvert.DeserializeObject<List<PitcherModel>>(cachedJson);
+            } 
 
             var groupedItems =
-                from pitcher in pitchers.Rows
+                from pitcher in pitchers
                 orderby pitcher.FirstName
                 select new PlayersPitchersViewModel
                 {
@@ -169,6 +228,7 @@ namespace ClutchWinBaseball.Portable
                 group list by list.FirstLetter into listByYear
                 select new KeyedList<string, PlayersPitchersViewModel>(listByYear);
 
+            PitcherItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 PitcherItems.Add(viewModelItem);
@@ -177,21 +237,32 @@ namespace ClutchWinBaseball.Portable
             return true;
         }
 
-        public async Task<bool> LoadPlayerResultsData()
+        public async Task<bool> LoadPlayerResultsDataAsync(string cachedJson = "")
         {
+            List<PlayersResultModel> items;
             IsDataLoaded = false;
-            PlayerResultItems.Clear();
 
-            var dataContext = new DataContext();
-            var items = await dataContext.GetPlayerResultsAsync(SelectedBatterId, SelectedPitcherId);
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
+
+                svcResult = await dataContext.GetPlayerResultsAsync(SelectedBatterId, SelectedPitcherId);
+                if (svcResult == null) { return false; } //no results message
+                PlayersResultsDataString = svcResult;
+                items = JsonConvert.DeserializeObject<List<PlayersResultModel>>(svcResult);
+            }
+            else
+            {
+                items = JsonConvert.DeserializeObject<List<PlayersResultModel>>(cachedJson);
+            } 
 
             var groupedItems =
-                from item in items.Rows
+                from item in items
                 orderby item.Year descending
                 select new PlayersResultsViewModel
                 {
                     GameYear = item.Year,
-                    GameType = item.Type,
                     Games = item.Games,
                     AtBat = item.AtBat,
                     Hit = item.Hit,
@@ -199,13 +270,12 @@ namespace ClutchWinBaseball.Portable
                     ThirdBase = item.ThirdBase,
                     HomeRun = item.HomeRun,
                     RunBattedIn = item.RunBattedIn,
-                    StrikeOut = item.StrikeOut,
-                    BaseBall = item.BaseBall,
-                    Average = item.Average
+                    StrikeOut = item.StrikeOut
                 } into list
                 group list by list.GameYear into listByYear
                 select new KeyedList<string, PlayersResultsViewModel>(listByYear);
 
+            PlayerResultItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 PlayerResultItems.Add(viewModelItem);
@@ -214,16 +284,28 @@ namespace ClutchWinBaseball.Portable
             return true;
         }
 
-        public async Task<bool> LoadPlayerDrillDownData()
+        public async Task<bool> LoadPlayerDrillDownDataAsync(string cachedJson = "")
         {
+            List<PlayersDrillDownModel> items;
             IsDataLoaded = false;
-            PlayerDrillDownItems.Clear();
 
-            var dataContext = new DataContext();
-            var items = await dataContext.GetPlayerDrillDownAsync(SelectedBatterId, SelectedPitcherId, SelectedGameYear, SelectedGameType);
+            if (string.IsNullOrEmpty(cachedJson))
+            {
+                var dataContext = new DataContext();
+                var svcResult = string.Empty;
+
+                svcResult = await dataContext.GetPlayerDrillDownAsync(SelectedBatterId, SelectedPitcherId, SelectedGameYear);
+                if (svcResult == null) { return false; } //no results message
+                PlayersDrillDownDataString = svcResult;
+                items = JsonConvert.DeserializeObject<List<PlayersDrillDownModel>>(svcResult);
+            }
+            else
+            {
+                items = JsonConvert.DeserializeObject<List<PlayersDrillDownModel>>(cachedJson);
+            } 
 
             var groupedItems =
-                from item in items.Rows
+                from item in items
                 orderby item.GameDate descending
                 select new PlayersDrillDownViewModel
                 {
@@ -234,13 +316,12 @@ namespace ClutchWinBaseball.Portable
                     ThirdBase = item.ThirdBase,
                     HomeRun = item.HomeRun,
                     RunBattedIn = item.RunBattedIn,
-                    StrikeOut = item.StrikeOut,
-                    BaseBall = item.BaseBall,
-                    Average = item.Average
+                    StrikeOut = item.StrikeOut
                 } into list
                 group list by list.GameDate into listByYear
                 select new KeyedList<string, PlayersDrillDownViewModel>(listByYear);
 
+            PlayerDrillDownItems.Clear();
             foreach (var viewModelItem in groupedItems)
             {
                 PlayerDrillDownItems.Add(viewModelItem);

@@ -101,7 +101,7 @@ namespace ClutchWinBaseball.Views
             ViewModelLocator.Players.SelectedTeamId = ((PlayersTeamsViewModel)e.ClickedItem).TeamId;
             //TODO: check if the tapped value is the same as previous
 
-            await ViewModelLocator.Players.LoadBatterData();
+            await ViewModelLocator.Players.LoadBatterDataAsync();
 
             Frame.Navigate(typeof(PlayersFeature));
         }

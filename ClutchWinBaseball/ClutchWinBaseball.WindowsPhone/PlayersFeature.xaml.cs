@@ -1,7 +1,9 @@
 ﻿using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
 using System;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -11,6 +13,9 @@ namespace ClutchWinBaseball
     public sealed partial class PlayersFeature : Page
     {
         private NavigationHelper navigationHelper;
+        private PlayersDataManager dataLoadManager;
+        private ContextCacheManager cacheManager;
+        private PlayersContextViewModel playersContext;
 
         public PlayersFeature()
         {
@@ -19,6 +24,14 @@ namespace ClutchWinBaseball
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
+            playersContext = PlayersContextViewModel.Instance;
+
+            var tempFolder = ApplicationData.Current.TemporaryFolder;
+            var fileManager = new CacheFileManager(tempFolder);
+
+            cacheManager = new ContextCacheManager(fileManager);
+            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager);
         }
 
         /// <summary>
@@ -75,8 +88,17 @@ namespace ClutchWinBaseball
         private async void Batters_ItemClick(object sender, ItemClickEventArgs e)
         {
             ViewModelLocator.Players.SelectedBatterId = ((PlayersBattersViewModel)e.ClickedItem).BatterId;
-            //TODO: check if the tapped value is the same as previous
-            await ViewModelLocator.Players.LoadPitcherData();
+
+            bool isNetworkAvailable = true;
+            bool success = false;
+
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetworkAvailable);
+
+            if (success)
+            {
+                success = await cacheManager.SavePlayersContextAsync(playersContext);
+            }
+
             pvControl.SelectedIndex = 1;
         }
 
@@ -88,8 +110,17 @@ namespace ClutchWinBaseball
         private async void Pitchers_ItemClick(object sender, ItemClickEventArgs e)
         {
             ViewModelLocator.Players.SelectedPitcherId = ((PlayersPitchersViewModel)e.ClickedItem).PitcherId;
-            //TODO: check if the tapped value is the same as previous
-            await ViewModelLocator.Players.LoadPlayerResultsData();
+
+            bool isNetworkAvailable = true;
+            bool success = false;
+
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetworkAvailable);
+
+            if (success)
+            {
+                success = await cacheManager.SavePlayersContextAsync(playersContext);
+            }
+
             pvControl.SelectedIndex = 2;
         }
 
@@ -102,8 +133,17 @@ namespace ClutchWinBaseball
         {
             ViewModelLocator.Players.SelectedGameType = ((PlayersResultsViewModel)e.ClickedItem).GameType;
             ViewModelLocator.Players.SelectedGameYear = ((PlayersResultsViewModel)e.ClickedItem).GameYear;
-            //TODO: check if the tapped value is the same as previous
-            await ViewModelLocator.Players.LoadPlayerDrillDownData();
+
+            bool isNetworkAvailable = true;
+            bool success = false;
+
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetworkAvailable);
+
+            if (success)
+            {
+                success = await cacheManager.SavePlayersContextAsync(playersContext);
+            }
+
             pvControl.SelectedIndex = 3;
         }
 
@@ -126,10 +166,20 @@ namespace ClutchWinBaseball
         {
             this.navigationHelper.OnNavigatedTo(e);
 
-            if (!ViewModelLocator.Players.IsYearDataLoaded)
+            if (!playersContext.IsHydratedObject)
             {
-                await ViewModelLocator.Players.LoadYearData();
+                PlayersContextViewModel ctx = await cacheManager.ReadPlayersContextAsync();
+                if (ctx != null)
+                {
+                    playersContext.ReHydrateMe(ctx);
+                }
+                playersContext.IsHydratedObject = true;
             }
+
+            bool isNetworkAvailable = true;
+            bool success = false;
+
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Seasons, isNetworkAvailable);
 
             (battersSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsBatterItems.View.CollectionGroups;
             (pitcherSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPitcherItems.View.CollectionGroups;

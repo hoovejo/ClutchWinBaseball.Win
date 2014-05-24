@@ -1,7 +1,9 @@
 ﻿using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
 using System;
+using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -13,6 +15,9 @@ namespace ClutchWinBaseball
     public sealed partial class PlayersYearsSelector : Page
     {
         private NavigationHelper navigationHelper;
+        private PlayersDataManager dataLoadManager;
+        private ContextCacheManager cacheManager;
+        private PlayersContextViewModel playersContext;
 
         public PlayersYearsSelector()
         {
@@ -21,6 +26,14 @@ namespace ClutchWinBaseball
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
+            playersContext = PlayersContextViewModel.Instance;
+
+            var tempFolder = ApplicationData.Current.TemporaryFolder;
+            var fileManager = new CacheFileManager(tempFolder);
+
+            cacheManager = new ContextCacheManager(fileManager);
+            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager);
         }
 
         /// <summary>
@@ -66,8 +79,16 @@ namespace ClutchWinBaseball
         private async void Years_ItemClick(object sender, ItemClickEventArgs e)
         {
             ViewModelLocator.Players.SelectedYearId = ((PlayersYearsViewModel)e.ClickedItem).LineOne;
-            //TODO: check if the tapped value is the same as previous
-            await ViewModelLocator.Players.LoadTeamData();
+
+            bool isNetworkAvailable = true;
+            bool success = false;
+
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Teams, isNetworkAvailable);
+
+            if (success)
+            {
+                success = await cacheManager.SavePlayersContextAsync(playersContext);
+            }
 
             Frame.Navigate(typeof(PlayersFeature));
         }

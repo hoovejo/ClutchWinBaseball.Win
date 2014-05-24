@@ -31,7 +31,7 @@
         </Grid.ChildrenTransitions>
 
         <!--Pivot Control-->
-        <Pivot Title="Team vs Team" x:Name="pvControl">
+        <Pivot Title="Team vs Team" x:Name="pvControl" SelectionChanged="pvControl_SelectionChanged">
 
             <!--Pivot item for Franchises-->
             <PivotItem x:Uid="PivotItem" Header="teams" CommonNavigationTransitionInfo.IsStaggerElement="True">
@@ -73,7 +73,7 @@
             </PivotItem>
 
             <!--Pivot item for Opponents-->
-            <PivotItem Header="opponents">
+            <PivotItem Header="opponents" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="opponentsSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -112,7 +112,7 @@
             </PivotItem>
 
             <!--Pivot item for Team results -->
-            <PivotItem Header="results">
+            <PivotItem Header="results" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="teamResultsSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -151,7 +151,7 @@
             </PivotItem>
 
             <!--Pivot item for team game details -->
-            <PivotItem Header="details">
+            <PivotItem Header="details" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="teamDrillDownSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"

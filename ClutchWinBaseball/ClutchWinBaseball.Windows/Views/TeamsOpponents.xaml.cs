@@ -69,7 +69,7 @@ namespace ClutchWinBaseball.Views
         {
             ViewModelLocator.Teams.SelectedOpponentId = ((TeamsOpponentsViewModel)e.ClickedItem).TeamId;
             //TODO: check if the tapped value is the same as previous
-            await ViewModelLocator.Teams.LoadTeamResultsData();
+            await ViewModelLocator.Teams.LoadTeamResultsDataAsync();
 
             rootPage.LoadView(typeof(TeamsResults));
         }

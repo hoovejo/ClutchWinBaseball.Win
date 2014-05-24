@@ -25,7 +25,7 @@ namespace ClutchWinBaseball.WP8
         {
             if (!ViewModelLocator.Teams.IsFranchiseDataLoaded)
             {
-                await ViewModelLocator.Teams.LoadFranchisesData();
+                await ViewModelLocator.Teams.LoadFranchisesDataAsync();
             }
         }
 
@@ -54,7 +54,7 @@ namespace ClutchWinBaseball.WP8
             {
                 selectedItem = ((TeamsOpponentsViewModel)textBlock.DataContext).TeamId;
                 ViewModelLocator.Teams.SelectedOpponentId = selectedItem;
-                await ViewModelLocator.Teams.LoadTeamResultsData();
+                await ViewModelLocator.Teams.LoadTeamResultsDataAsync();
                 pvControl.SelectedIndex = 2;
                 if (piTeamResults != null && piTeamResults.ItemsSource.Count > 0)
                 {
@@ -73,7 +73,7 @@ namespace ClutchWinBaseball.WP8
             {
                 selectedItem = ((TeamsResultsViewModel)textBlock.DataContext).Year;
                 ViewModelLocator.Teams.SelectedYearId = selectedItem;
-                await ViewModelLocator.Teams.LoadTeamDrillDownData();
+                await ViewModelLocator.Teams.LoadTeamDrillDownDataAsync();
 
                 pvControl.SelectedIndex = 3;
                 if (piTeamDrillDown != null && piTeamDrillDown.ItemsSource.Count > 0)

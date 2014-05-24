@@ -22,7 +22,7 @@ namespace ClutchWinBaseball.WP8
             {
                 selectedItem = ((PlayersTeamsViewModel)textBlock.DataContext).TeamId;
                 ViewModelLocator.Players.SelectedTeamId = selectedItem;
-                await ViewModelLocator.Players.LoadBatterData();
+                await ViewModelLocator.Players.LoadBatterDataAsync();
             }
 
             NavigationService.Navigate(new Uri("/PlayersFeature.xaml", UriKind.Relative));

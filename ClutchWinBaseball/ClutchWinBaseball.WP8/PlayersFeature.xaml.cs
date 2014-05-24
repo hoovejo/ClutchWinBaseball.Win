@@ -21,7 +21,7 @@ namespace ClutchWinBaseball.WP8
         {
             if (!ViewModelLocator.Players.IsYearDataLoaded)
             {
-                await ViewModelLocator.Players.LoadYearData();
+                await ViewModelLocator.Players.LoadYearDataAsync();
             }
         }
 
@@ -43,7 +43,7 @@ namespace ClutchWinBaseball.WP8
             {
                 selectedItem = ((PlayersBattersViewModel)textBlock.DataContext).BatterId;
                 ViewModelLocator.Players.SelectedBatterId = selectedItem;
-                await ViewModelLocator.Players.LoadPitcherData();
+                await ViewModelLocator.Players.LoadPitcherDataAsync();
                 pvControl.SelectedIndex = 1;
                 if (piPitchers != null && piPitchers.ItemsSource.Count > 0)
                 {
@@ -60,7 +60,7 @@ namespace ClutchWinBaseball.WP8
             {
                 selectedItem = ((PlayersPitchersViewModel)textBlock.DataContext).PitcherId;
                 ViewModelLocator.Players.SelectedPitcherId = selectedItem;
-                await ViewModelLocator.Players.LoadPlayerResultsData();
+                await ViewModelLocator.Players.LoadPlayerResultsDataAsync();
                 pvControl.SelectedIndex = 2;
                 if (piPlayerResults != null && piPlayerResults.ItemsSource.Count > 0)
                 {
@@ -81,7 +81,7 @@ namespace ClutchWinBaseball.WP8
                 selectedYear = ((PlayersResultsViewModel)textBlock.DataContext).GameYear;
                 ViewModelLocator.Players.SelectedGameType = selectedItem;
                 ViewModelLocator.Players.SelectedGameYear = selectedYear;
-                await ViewModelLocator.Players.LoadPlayerDrillDownData();
+                await ViewModelLocator.Players.LoadPlayerDrillDownDataAsync();
 
                 pvControl.SelectedIndex = 3;
                 if (piPlayerDrillDown != null && piPlayerDrillDown.ItemsSource.Count > 0)

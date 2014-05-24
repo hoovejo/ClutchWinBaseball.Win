@@ -72,7 +72,7 @@ namespace ClutchWinBaseball.Views
         {
             ViewModelLocator.Players.SelectedPitcherId = ((PlayersPitchersViewModel)e.ClickedItem).PitcherId;
             //TODO: check if the tapped value is the same as previous
-            await ViewModelLocator.Players.LoadPlayerResultsData();
+            await ViewModelLocator.Players.LoadPlayerResultsDataAsync();
 
             rootPage.LoadView(typeof(PlayersResults));
         }

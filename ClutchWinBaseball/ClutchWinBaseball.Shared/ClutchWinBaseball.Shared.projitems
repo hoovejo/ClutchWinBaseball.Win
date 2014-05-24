@@ -15,7 +15,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CacheFileManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\BindableBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ContextCacheManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlayersDataManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TeamsDataManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ItemViews\PlayersBatterItem.xaml.cs">
       <DependentUpon>PlayersBatterItem.xaml</DependentUpon>
     </Compile>

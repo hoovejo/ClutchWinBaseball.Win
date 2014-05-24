@@ -1,16 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using System;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace ClutchWinBaseball.Portable.FeatureStateModel
 {
     public class TeamsContextViewModel
     {
-        [XmlIgnore]
+        private static readonly Lazy<TeamsContextViewModel> PrivateInstance =
+            new Lazy<TeamsContextViewModel>(() => new TeamsContextViewModel(), LazyThreadSafetyMode.PublicationOnly);
+
+        public static TeamsContextViewModel Instance { get { return PrivateInstance.Value;  } }
+
+        [JsonIgnore]
         public bool IsHydratedObject { get; set; }
+
+
+        public void ReHydrateMe(TeamsContextViewModel cache)
+        {
+            TeamsContextViewModel gospel = TeamsContextViewModel.Instance;
+
+            gospel.lastOpponentFilterFranchiseId = cache.lastOpponentFilterFranchiseId;
+            gospel.lastSearchFranchiseId = cache.lastSearchFranchiseId;
+            gospel.lastSearchOpponentId = cache.lastSearchOpponentId;
+            gospel.lastDrillDownFranchiseId = cache.lastDrillDownFranchiseId;
+            gospel.lastDrillDownOpponentId = cache.lastDrillDownOpponentId;
+            gospel.lastDrillDownYearId = cache.lastDrillDownYearId;
+        }
+
+        public bool HasLoadedFranchisesOncePerSession { get; set; }
 
         private string lastOpponentFilterFranchiseId;
 

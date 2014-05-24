@@ -1,11 +1,35 @@
-﻿using System.Xml.Serialization;
+﻿using Newtonsoft.Json;
+using System;
+using System.Threading;
+using System.Xml.Serialization;
 
 namespace ClutchWinBaseball.Portable.FeatureStateModel
 {
     public class PlayersContextViewModel
     {
-        [XmlIgnore]
+        private static readonly Lazy<PlayersContextViewModel> PrivateInstance =
+            new Lazy<PlayersContextViewModel>(() => new PlayersContextViewModel(), LazyThreadSafetyMode.PublicationOnly);
+
+        public static PlayersContextViewModel Instance { get { return PrivateInstance.Value; } }
+
+        [JsonIgnore]
         public bool IsHydratedObject { get; set; }
+
+        public void ReHydrateMe(PlayersContextViewModel cache)
+        {
+            PlayersContextViewModel gospel = PlayersContextViewModel.Instance;
+
+            gospel.lastYearId = cache.lastYearId;
+            gospel.lastTeamId = cache.lastTeamId;
+            gospel.lastBatterId = cache.lastBatterId;
+            gospel.lastSearchBatterId = cache.lastSearchBatterId;
+            gospel.lastSearchPitcherId = cache.lastSearchPitcherId;
+            gospel.lastDrillDownBatterId = cache.lastDrillDownBatterId;
+            gospel.lastDrillDownPitcherId = cache.lastDrillDownPitcherId;
+            gospel.lastDrillDownResultYearId = cache.lastDrillDownResultYearId;
+        }
+
+        public bool HasLoadedSessionOncePerSession { get; set; }
 
         private string lastYearId;
 
@@ -31,14 +55,6 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
         }
 
         private string lastTeamId;
-        private bool loadBatters;
-        public void SetVoteLoadBatters(bool value, string teamId)
-        {
-            if (teamId != null && lastTeamId != teamId)
-            {
-                loadBatters = value;
-            }
-        }
 
         public bool ShouldExecuteLoadBatters(bool update, string teamId)
         {
@@ -46,7 +62,7 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
             if (teamId == null) return false;
 
             bool returnValue;
-            if (loadBatters)
+            if (lastTeamId == null || !lastTeamId.Equals(teamId))
             {
                 returnValue = true;
             }

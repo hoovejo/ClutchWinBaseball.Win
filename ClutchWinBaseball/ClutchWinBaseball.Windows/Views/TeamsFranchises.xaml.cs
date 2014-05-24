@@ -93,7 +93,7 @@ namespace ClutchWinBaseball.Views
 
             if (!ViewModelLocator.Teams.IsFranchiseDataLoaded)
             {
-                await ViewModelLocator.Teams.LoadFranchisesData();
+                await ViewModelLocator.Teams.LoadFranchisesDataAsync();
             }
         }
 

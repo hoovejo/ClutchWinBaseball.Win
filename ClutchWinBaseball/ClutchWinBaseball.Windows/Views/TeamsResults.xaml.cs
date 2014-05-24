@@ -69,7 +69,7 @@ namespace ClutchWinBaseball.Views
         {
             ViewModelLocator.Teams.SelectedYearId = ((TeamsResultsViewModel)e.ClickedItem).Year;
             //TODO: check if the tapped value is the same as previous
-            await ViewModelLocator.Teams.LoadTeamDrillDownData();
+            await ViewModelLocator.Teams.LoadTeamDrillDownDataAsync();
 
             rootPage.LoadView(typeof(TeamsDrillDown));
         }

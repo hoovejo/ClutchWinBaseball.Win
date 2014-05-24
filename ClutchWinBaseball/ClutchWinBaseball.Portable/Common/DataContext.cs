@@ -1,7 +1,4 @@
-﻿using ClutchWinBaseball.Portable.DataModel;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,19 +6,19 @@ namespace ClutchWinBaseball.Portable.Common
 {
     public class DataContext
     {
-        public async Task<List<FranchiseModel>> GetFranchisesAsync()
+        public async Task<string> GetFranchisesAsync()
         {
-            // http://clutchwin.com/api/v1/franchises.json?&access_token=abc
+            // http://clutchwin.com/api/v1/franchises.json?
             // &access_token=abc
-            var uri = new StringBuilder(Config.FranchiseSearch)
+            var uri = new StringBuilder(Config.Franchise)
                 .Append(Config.AccessTokenKey).Append(Config.AccessTokenValue);
 
             var httpClient = new HttpClient();
-            var content = await httpClient.GetStringAsync(Config.Franchise);
-            return JsonConvert.DeserializeObject<List<FranchiseModel>>(content);
+            var content = await httpClient.GetStringAsync(uri.ToString());
+            return content;
         }
 
-        public async Task<TeamsResultModel> GetTeamResultsAsync(string teamId, string opponentId)
+        public async Task<string> GetTeamResultsAsync(string teamId, string opponentId)
         {
             // http://clutchwin.com/api/v1/games/for_team/summary.json?
             // &access_token=abc&franchise_abbr=TOR&opp_franchise_abbr=BAL&group=season,team_abbr,opp_abbr&fieldset=basic
@@ -33,10 +30,10 @@ namespace ClutchWinBaseball.Portable.Common
 
             var httpClient = new HttpClient();
             var content = await httpClient.GetStringAsync(uri.ToString());
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<TeamsResultModel>(content);
+            return content;
         }
 
-        public async Task<TeamsDrillDownModel> GetTeamDrillDownAsync(string teamId, string opponentId, string yearId)
+        public async Task<string> GetTeamDrillDownAsync(string teamId, string opponentId, string yearId)
         {
             // http://clutchwin.com/api/v1/games/for_team.json?
             // &access_token=abc&franchise_abbr=TOR&opp_franchise_abbr=BAL&season=2013&fieldset=basic
@@ -49,10 +46,10 @@ namespace ClutchWinBaseball.Portable.Common
 
             var httpClient = new HttpClient();
             var content = await httpClient.GetStringAsync(uri.ToString());
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<TeamsDrillDownModel>(content);
+            return content;
         }
 
-        public async Task<List<YearModel>> GetYearsAsync()
+        public async Task<string> GetYearsAsync()
         {
             // http://clutchwin.com/api/v1/seasons.json?
             // &access_token=abc
@@ -60,24 +57,24 @@ namespace ClutchWinBaseball.Portable.Common
                 .Append(Config.AccessTokenKey).Append(Config.AccessTokenValue);
 
             var httpClient = new HttpClient();
-            var content = await httpClient.GetStringAsync(uri.ToString());                
-            return JsonConvert.DeserializeObject<List<YearModel>>(content);
+            var content = await httpClient.GetStringAsync(uri.ToString());
+            return content;
         }
 
-        public async Task<List<TeamModel>> GetTeamsAsync(string yearId)
+        public async Task<string> GetTeamsAsync(string yearId)
         {
             // http://clutchwin.com/api/v1/teams.json?
             // &access_token=abc&season=2013
-            var uri = new StringBuilder(Config.RosterSearch)
+            var uri = new StringBuilder(Config.Teams)
                 .Append(Config.AccessTokenKey).Append(Config.AccessTokenValue)
                 .Append(Config.SeasonIdKey).Append(yearId);
 
             var httpClient = new HttpClient();
             var content = await httpClient.GetStringAsync(uri.ToString());
-            return JsonConvert.DeserializeObject<List<TeamModel>>(content);
+            return content;
         }
 
-        public async Task<List<BatterModel>> GetBattersAsync(string teamId, string yearId)
+        public async Task<string> GetBattersAsync(string teamId, string yearId)
         {
             // http://clutchwin.com/api/v1/players.json?
             // &access_token=abc&team_abbr=BAL&season=2013
@@ -88,10 +85,10 @@ namespace ClutchWinBaseball.Portable.Common
 
             var httpClient = new HttpClient();
             var content = await httpClient.GetStringAsync(uri.ToString());
-            return JsonConvert.DeserializeObject<List<BatterModel>>(content);
+            return content;
         }
 
-        public async Task<PitcherModel> GetPitchersAsync(string batterId, string yearId)
+        public async Task<string> GetPitchersAsync(string batterId, string yearId)
         {
             // http://clutchwin.com/api/v1/opponents/pitchers.json?
             // &access_token=abc&bat_id=aybae001&season=2013&fieldset=basic
@@ -103,10 +100,10 @@ namespace ClutchWinBaseball.Portable.Common
 
             var httpClient = new HttpClient();
             var content = await httpClient.GetStringAsync(uri.ToString());
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<PitcherModel>(content);
+            return content;
         }
 
-        public async Task<PlayersResultModel> GetPlayerResultsAsync(string batterId, string pitcherId)
+        public async Task<string> GetPlayerResultsAsync(string batterId, string pitcherId)
         {
             // http://clutchwin.com/api/v1/events/summary.json?
             // &access_token=abc&bat_id=aybae001&pit_id=parkj001&group=season
@@ -118,10 +115,10 @@ namespace ClutchWinBaseball.Portable.Common
 
             var httpClient = new HttpClient();
             var content = await httpClient.GetStringAsync(uri.ToString());
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<PlayersResultModel>(content);
+            return content;
         }
 
-        public async Task<PlayersDrillDownModel> GetPlayerDrillDownAsync(string batterId, string pitcherId, string yearId, string gameType)
+        public async Task<string> GetPlayerDrillDownAsync(string batterId, string pitcherId, string yearId)
         {
             // http://clutchwin.com/api/v1/events/summary.json?
             // &access_token=abc&bat_id=aybae001&pit_id=parkj001&season=2013&group=game_date
@@ -134,7 +131,7 @@ namespace ClutchWinBaseball.Portable.Common
 
             var httpClient = new HttpClient();
             var content = await httpClient.GetStringAsync(uri.ToString());
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<PlayersDrillDownModel>(content);
+            return content;
         }
     }
 }
