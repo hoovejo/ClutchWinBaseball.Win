@@ -37,6 +37,7 @@
     <Compile Include="Common\Config.cs" />
     <Compile Include="Common\DataContext.cs" />
     <Compile Include="Common\KeyedList.cs" />
+    <Compile Include="Common\NetworkFunctions.cs" />
     <Compile Include="DataModel\BatterModel.cs" />
     <Compile Include="FeatureStateModel\PlayersContextViewModel.cs" />
     <Compile Include="FeatureStateModel\TeamsContextViewModel.cs" />

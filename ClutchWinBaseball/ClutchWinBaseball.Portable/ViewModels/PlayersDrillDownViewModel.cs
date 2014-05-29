@@ -5,19 +5,13 @@ namespace ClutchWinBaseball.Portable.ViewModels
 {
     public class PlayersDrillDownViewModel : INotifyPropertyChanged
     {
-        private string _gameDate, _gameYear, _atBat, _hit, _secondBase, 
-            _thirdBase, _homeRun, _runBattedIn, _strikeOut, _baseBall, _average;
+        private string _gameDate, _atBat, _hit, _secondBase,
+            _thirdBase, _homeRun, _runBattedIn, _strikeOut, _walks, _average;
 
         public string GameDate
         {
             get { return _gameDate; }
             set { if (value != _gameDate) { _gameDate = value; NotifyPropertyChanged("GameDate"); } }
-        }
-
-        public string GameYear 
-        { 
-            get { return _gameYear; } 
-            set { if (value != _gameYear) { _gameYear = value; NotifyPropertyChanged("GameYear"); } } 
         }
 
         public string AtBat 
@@ -30,6 +24,18 @@ namespace ClutchWinBaseball.Portable.ViewModels
         { 
             get { return _hit; }
             set { if (value != _hit) { _hit = value; NotifyPropertyChanged("Hit"); } } 
+        }
+
+        public string Walks
+        {
+            get { return _walks; }
+            set { if (value != _walks) { _walks = value; NotifyPropertyChanged("Walks"); } }
+        }
+
+        public string StrikeOut
+        {
+            get { return _strikeOut; }
+            set { if (value != _strikeOut) { _strikeOut = value; NotifyPropertyChanged("StrikeOut"); } }
         }
 
         public string SecondBase 
@@ -54,18 +60,6 @@ namespace ClutchWinBaseball.Portable.ViewModels
         { 
             get { return _runBattedIn; }
             set { if (value != _runBattedIn) { _runBattedIn = value; NotifyPropertyChanged("RunBattedIn"); } } 
-        }
-
-        public string StrikeOut 
-        { 
-            get { return _strikeOut; }
-            set { if (value != _strikeOut) { _strikeOut = value; NotifyPropertyChanged("StrikeOut"); } } 
-        }
-
-        public string BaseBall 
-        { 
-            get { return _baseBall; }
-            set { if (value != _baseBall) { _baseBall = value; NotifyPropertyChanged("BaseBall"); } } 
         }
 
         public string Average 

@@ -1,5 +1,6 @@
 ﻿using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
 using System;
@@ -31,8 +32,8 @@ namespace ClutchWinBaseball
             var tempFolder = ApplicationData.Current.TemporaryFolder;
             var fileManager = new CacheFileManager(tempFolder);
 
-            cacheManager = new ContextCacheManager(fileManager); 
-            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager);
+            cacheManager = new ContextCacheManager(fileManager);
+            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager, cacheManager);
         }
 
         /// <summary>
@@ -77,17 +78,14 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void Teams_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModelLocator.Players.SelectedTeamId = ((PlayersTeamsViewModel)e.ClickedItem).TeamId;
+            var teamId = ((PlayersTeamsViewModel)e.ClickedItem).TeamId;
+            ViewModelLocator.Players.SelectedTeamId = teamId;
+            playersContext.SelectedTeamId = teamId; 
 
-            bool isNetworkAvailable = true;
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Batters, isNetworkAvailable);
-
-            if (success)
-            {
-                success = await cacheManager.SavePlayersContextAsync(playersContext);
-            }
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Batters, isNetAvailable);
 
             Frame.Navigate(typeof(PlayersFeature));
         }

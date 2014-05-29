@@ -18,15 +18,17 @@ namespace ClutchWinBaseball
         private TeamsContextViewModel _teamsContext;
         private TeamsFeatureViewModel _teamsViewModel;
         private CacheFileManager _fileManager;
+        private ContextCacheManager _cacheManager;
 
-        public TeamsDataManager(TeamsContextViewModel teamsContext, TeamsFeatureViewModel teamsViewModel, CacheFileManager fileManager) 
+        public TeamsDataManager(TeamsContextViewModel tc, TeamsFeatureViewModel tvm, CacheFileManager fm, ContextCacheManager c) 
         {
-            _teamsContext = teamsContext;
-            _teamsViewModel = teamsViewModel;
-            _fileManager = fileManager;
+            _teamsContext = tc;
+            _teamsViewModel = tvm;
+            _fileManager = fm;
+            _cacheManager = c;
         }
 
-        public async Task<bool> LoadTeamsDataAsync(TeamsEndpoints endpoint, bool isNetworkAvailable)
+        public async Task<bool> LoadTeamsDataAsync(TeamsEndpoints endpoint, bool isNetAvailable)
         {
             bool returnValue = false;
 
@@ -37,9 +39,10 @@ namespace ClutchWinBaseball
                         if (!_teamsContext.HasLoadedFranchisesOncePerSession)
                         {
                             //cache reads are allowed if no network, but svc calls not allowed
-                            if (!isNetworkAvailable) { returnValue = false; break; }
+                            if (!isNetAvailable) { returnValue = false; break; }
 
                             returnValue = await _teamsViewModel.LoadFranchisesDataAsync();
+                            await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
                             if (returnValue && _teamsViewModel.FranchiseItems.Count > 0)
                             {
@@ -67,12 +70,13 @@ namespace ClutchWinBaseball
                     break;
                 case TeamsEndpoints.Opponents:
                     {
-                        if (_teamsContext.ShouldFilterOpponents(isNetworkAvailable, _teamsViewModel.SelectedTeamId))
+                        if (_teamsContext.ShouldFilterOpponents(isNetAvailable))
                         {
                             //cache reads are allowed if no network, but svc calls not allowed
-                            if (!isNetworkAvailable) { returnValue = false; break; }
+                            if (!isNetAvailable) { returnValue = false; break; }
 
-                            _teamsViewModel.LoadOpponentsData();
+                            _teamsViewModel.LoadOpponentsData(_teamsContext);
+                            await _cacheManager.SaveTeamsContextAsync(_teamsContext);
                             returnValue = true;
                         }
                         else
@@ -82,7 +86,7 @@ namespace ClutchWinBaseball
                                 var jsonString = await _fileManager.CacheInquiryAsync(Config.TF_CacheFileKey);
                                 if (!string.IsNullOrEmpty(jsonString))
                                 {
-                                    _teamsViewModel.LoadOpponentsData(jsonString);
+                                    _teamsViewModel.LoadOpponentsData(_teamsContext, jsonString);
                                 } 
                             }
                             returnValue = true;
@@ -91,13 +95,13 @@ namespace ClutchWinBaseball
                     break;
                 case TeamsEndpoints.FranchiseSearch:
                     {
-                        if (_teamsContext.ShouldExecuteTeamResultsSearch(isNetworkAvailable, _teamsViewModel.SelectedTeamId, 
-                            _teamsViewModel.SelectedOpponentId))
+                        if (_teamsContext.ShouldExecuteTeamResultsSearch(isNetAvailable))
                         {
                             //cache reads are allowed if no network, but svc calls not allowed
-                            if (!isNetworkAvailable) { returnValue = false; break; }
+                            if (!isNetAvailable) { returnValue = false; break; }
 
-                            returnValue = await _teamsViewModel.LoadTeamResultsDataAsync();
+                            returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(_teamsContext);
+                            await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
                             if (returnValue && _teamsViewModel.TeamResultItems.Count > 0)
                             {
@@ -112,7 +116,7 @@ namespace ClutchWinBaseball
                                 var jsonString = await _fileManager.CacheInquiryAsync(Config.TR_CacheFileKey);
                                 if (!string.IsNullOrEmpty(jsonString))
                                 {
-                                    returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(jsonString);
+                                    returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(_teamsContext, jsonString);
                                 }
                             }
                             else
@@ -124,13 +128,13 @@ namespace ClutchWinBaseball
                     break;
                 case TeamsEndpoints.FranchiseYearSearch:
                     {
-                        if (_teamsContext.ShouldExecuteTeamDrillDownSearch(isNetworkAvailable, _teamsViewModel.SelectedTeamId, 
-                            _teamsViewModel.SelectedOpponentId, _teamsViewModel.SelectedYearId))
+                        if (_teamsContext.ShouldExecuteTeamDrillDownSearch(isNetAvailable))
                         {
                             //cache reads are allowed if no network, but svc calls not allowed
-                            if (!isNetworkAvailable) { returnValue = false; break; }
+                            if (!isNetAvailable) { returnValue = false; break; }
 
-                            returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync();
+                            returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext);
+                            await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
                             if (returnValue && _teamsViewModel.TeamDrillDownItems.Count > 0)
                             {
@@ -145,7 +149,7 @@ namespace ClutchWinBaseball
                                 var jsonString = await _fileManager.CacheInquiryAsync(Config.TDD_CacheFileKey);
                                 if (!string.IsNullOrEmpty(jsonString))
                                 {
-                                    returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(jsonString); 
+                                    returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext, jsonString); 
                                 }
                             }
                             else

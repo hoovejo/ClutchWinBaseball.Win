@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Threading;
-using System.Xml.Serialization;
 
 namespace ClutchWinBaseball.Portable.FeatureStateModel
 {
@@ -12,33 +11,42 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
 
         public static TeamsContextViewModel Instance { get { return PrivateInstance.Value;  } }
 
-        [JsonIgnore]
-        public bool IsHydratedObject { get; set; }
-
 
         public void ReHydrateMe(TeamsContextViewModel cache)
         {
             TeamsContextViewModel gospel = TeamsContextViewModel.Instance;
 
-            gospel.lastOpponentFilterFranchiseId = cache.lastOpponentFilterFranchiseId;
-            gospel.lastSearchFranchiseId = cache.lastSearchFranchiseId;
-            gospel.lastSearchOpponentId = cache.lastSearchOpponentId;
-            gospel.lastDrillDownFranchiseId = cache.lastDrillDownFranchiseId;
-            gospel.lastDrillDownOpponentId = cache.lastDrillDownOpponentId;
-            gospel.lastDrillDownYearId = cache.lastDrillDownYearId;
+            gospel.LastOpponentFilterFranchiseId = cache.LastOpponentFilterFranchiseId;
+            gospel.LastSearchFranchiseId = cache.LastSearchFranchiseId;
+            gospel.LastSearchOpponentId = cache.LastSearchOpponentId;
+            gospel.LastDrillDownFranchiseId = cache.LastDrillDownFranchiseId;
+            gospel.LastDrillDownOpponentId = cache.LastDrillDownOpponentId;
+            gospel.LastDrillDownYearId = cache.LastDrillDownYearId;
+
+            gospel.SelectedTeamId = cache.SelectedTeamId;
+            gospel.SelectedOpponentId = cache.SelectedOpponentId;
+            gospel.SelectedYearId = cache.SelectedYearId;
         }
 
+        [JsonIgnore]
+        public bool IsHydratedObject { get; set; }
+        [JsonIgnore]
         public bool HasLoadedFranchisesOncePerSession { get; set; }
 
-        private string lastOpponentFilterFranchiseId;
+        public string SelectedTeamId { get; set;}
+        public string SelectedOpponentId { get; set;}
+        public string SelectedYearId { get; set; }
 
-        public bool ShouldFilterOpponents(bool update, string franchiseId)
+
+        public string LastOpponentFilterFranchiseId { get; set; }
+
+        public bool ShouldFilterOpponents(bool update)
         {
             //needed for opponent filtering
-            if (franchiseId == null) return false;
+            if (SelectedTeamId == null) return false;
 
             bool returnValue;
-            if (lastOpponentFilterFranchiseId == null || !lastOpponentFilterFranchiseId.Equals(franchiseId))
+            if (LastOpponentFilterFranchiseId == null || !LastOpponentFilterFranchiseId.Equals(SelectedTeamId))
             {
                 returnValue = true;
             }
@@ -48,22 +56,22 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
             }
             if (update)
             {
-                lastOpponentFilterFranchiseId = franchiseId;
+                LastOpponentFilterFranchiseId = SelectedTeamId;
             }
             return returnValue;
         }
 
-        private string lastSearchFranchiseId;
-        private string lastSearchOpponentId;
+        public string LastSearchFranchiseId { get; set; }
+        public string LastSearchOpponentId { get; set; }
 
-        public bool ShouldExecuteTeamResultsSearch(bool update, string franchiseId, string opponentId)
+        public bool ShouldExecuteTeamResultsSearch(bool update)
         {
             //needed for team results svc call
-            if (franchiseId == null || opponentId == null) return false;
+            if (SelectedTeamId == null || SelectedOpponentId == null) return false;
 
             bool returnValue;
-            if (lastSearchFranchiseId == null || lastSearchOpponentId == null ||
-                    !lastSearchFranchiseId.Equals(franchiseId) || !lastSearchOpponentId.Equals(opponentId))
+            if (LastSearchFranchiseId == null || LastSearchOpponentId == null ||
+                    !LastSearchFranchiseId.Equals(SelectedTeamId) || !LastSearchOpponentId.Equals(SelectedOpponentId))
             {
                 returnValue = true;
             }
@@ -73,26 +81,26 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
             }
             if (update)
             {
-                lastSearchFranchiseId = franchiseId;
-                lastSearchOpponentId = opponentId;
+                LastSearchFranchiseId = SelectedTeamId;
+                LastSearchOpponentId = SelectedOpponentId;
             }
             return returnValue;
         }
 
-        private string lastDrillDownFranchiseId;
-        private string lastDrillDownOpponentId;
-        private string lastDrillDownYearId;
+        public string LastDrillDownFranchiseId { get; set; }
+        public string LastDrillDownOpponentId { get; set; }
+        public string LastDrillDownYearId { get; set; }
 
-        public bool ShouldExecuteTeamDrillDownSearch(bool update, string franchiseId, string opponentId, string yearId)
+        public bool ShouldExecuteTeamDrillDownSearch(bool update)
         {
             //needed for team results svc call
-            if (franchiseId == null || opponentId == null || yearId == null) return false;
+            if (SelectedTeamId == null || SelectedOpponentId == null || SelectedYearId == null) return false;
 
             bool returnValue;
-            if (lastDrillDownFranchiseId == null || lastDrillDownOpponentId == null ||
-                    lastDrillDownYearId == null ||
-                    !lastDrillDownFranchiseId.Equals(franchiseId) || !lastDrillDownOpponentId.Equals(opponentId) ||
-                    !lastDrillDownYearId.Equals(yearId))
+            if (LastDrillDownFranchiseId == null || LastDrillDownOpponentId == null ||
+                    LastDrillDownYearId == null ||
+                    !LastDrillDownFranchiseId.Equals(SelectedTeamId) || !LastDrillDownOpponentId.Equals(SelectedOpponentId) ||
+                    !LastDrillDownYearId.Equals(SelectedYearId))
             {
                 returnValue = true;
             }
@@ -102,9 +110,9 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
             }
             if (update)
             {
-                lastDrillDownFranchiseId = franchiseId;
-                lastDrillDownOpponentId = opponentId;
-                lastDrillDownYearId = yearId;
+                LastDrillDownFranchiseId = SelectedTeamId;
+                LastDrillDownOpponentId = SelectedOpponentId;
+                LastDrillDownYearId = SelectedYearId;
             }
             return returnValue;
         }

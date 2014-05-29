@@ -1,14 +1,14 @@
 ﻿using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.DataModel;
+using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
-using System.Threading.Tasks;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace ClutchWinBaseball.Portable
 {
@@ -27,26 +27,7 @@ namespace ClutchWinBaseball.Portable
         public ObservableCollection<KeyedList<string, TeamsResultsViewModel>> TeamResultItems { get; private set; }
         public ObservableCollection<KeyedList<string, TeamsDrillDownViewModel>> TeamDrillDownItems { get; private set; }
 
-        private string _selectedTeamId, _selectedOpponentId, _selectedYearId;
         private bool _isDataLoaded;
-
-        public string SelectedTeamId
-        {
-            get { return _selectedTeamId; }
-            set { if (value != _selectedTeamId) { _selectedTeamId = value; NotifyPropertyChanged("SelectedTeamId"); } }
-        }
-
-        public string SelectedOpponentId
-        {
-            get { return _selectedOpponentId; }
-            set { if (value != _selectedOpponentId) { _selectedOpponentId = value; NotifyPropertyChanged("SelectedOpponentId"); } }
-        }
-
-        public string SelectedYearId
-        {
-            get { return _selectedYearId; }
-            set { if (value != _selectedYearId) { _selectedYearId = value; NotifyPropertyChanged("SelectedYearId"); } }
-        }
 
         //Determine if we need to show loading spinner
         public bool IsDataLoaded
@@ -55,8 +36,6 @@ namespace ClutchWinBaseball.Portable
             private set { if (value != _isDataLoaded) { _isDataLoaded = value; NotifyPropertyChanged("IsDataLoaded"); } }
         }
 
-        //Determine if Teams feature is ready
-        public bool IsFranchiseDataLoaded { get; private set; }
 
         //base list to build opponent list from
         private List<TeamsFranchisesViewModel> FranchiseList = new List<TeamsFranchisesViewModel>();
@@ -123,7 +102,7 @@ namespace ClutchWinBaseball.Portable
             return true;
         }
 
-        public void LoadOpponentsData(string cachedJson = "")
+        public void LoadOpponentsData(TeamsContextViewModel context, string cachedJson = "")
         {
             IsDataLoaded = false;
 
@@ -144,7 +123,7 @@ namespace ClutchWinBaseball.Portable
 
             var groupedItems =
                 from team in FranchiseList
-                where team.TeamId != SelectedTeamId
+                where team.TeamId != context.SelectedTeamId
                 orderby team.Location
                 select new TeamsOpponentsViewModel
                 {
@@ -165,7 +144,7 @@ namespace ClutchWinBaseball.Portable
             IsDataLoaded = true;
         }
 
-        public async Task<bool> LoadTeamResultsDataAsync(string cachedJson = "")
+        public async Task<bool> LoadTeamResultsDataAsync(TeamsContextViewModel context, string cachedJson = "")
         {
             List<TeamsResultModel> items;
             IsDataLoaded = false;
@@ -175,7 +154,7 @@ namespace ClutchWinBaseball.Portable
                 var dataContext = new DataContext();
                 var svcResult = string.Empty;
 
-                svcResult = await dataContext.GetTeamResultsAsync(SelectedTeamId, SelectedOpponentId);
+                svcResult = await dataContext.GetTeamResultsAsync(context.SelectedTeamId, context.SelectedOpponentId);
                 if (svcResult == null) { return false; } //no results message
                 TeamsResultsDataString = svcResult;
                 items = JsonConvert.DeserializeObject<List<TeamsResultModel>>(svcResult);
@@ -191,6 +170,7 @@ namespace ClutchWinBaseball.Portable
                 select new TeamsResultsViewModel
                 {
                     Year = item.Year,
+                    Games = item.Wins + item.Losses,
                     Team = item.Team,
                     Opponent = item.Opponent,
                     Wins = item.Wins,
@@ -210,7 +190,7 @@ namespace ClutchWinBaseball.Portable
             return true;
         }
 
-        public async Task<bool> LoadTeamDrillDownDataAsync(string cachedJson = "")
+        public async Task<bool> LoadTeamDrillDownDataAsync(TeamsContextViewModel context, string cachedJson = "")
         {
             List<TeamsDrillDownModel> items;
             IsDataLoaded = false;
@@ -220,7 +200,7 @@ namespace ClutchWinBaseball.Portable
                 var dataContext = new DataContext();
                 var svcResult = string.Empty;
 
-                svcResult = await dataContext.GetTeamDrillDownAsync(SelectedTeamId, SelectedOpponentId, SelectedYearId);
+                svcResult = await dataContext.GetTeamDrillDownAsync(context.SelectedTeamId, context.SelectedOpponentId, context.SelectedYearId);
                 if (svcResult == null) { return false; } //no results message
                 TeamsDrillDownDataString = svcResult;
                 items = JsonConvert.DeserializeObject<List<TeamsDrillDownModel>>(svcResult);

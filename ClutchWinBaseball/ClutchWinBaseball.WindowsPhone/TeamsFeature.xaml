@@ -30,6 +30,16 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
 
+        <Popup x:Name="notify">
+            <Border  BorderThickness="2" Margin="10" BorderBrush="{ThemeResource PhoneAccentBrush}">
+                <StackPanel Background="LightBlue">
+                    <TextBlock Text="Notice" TextAlignment="Center" FontSize="40" Margin="10,0" />
+                    <TextBlock x:Name="notifyMsg" TextAlignment="Center" FontSize="21" Margin="10,0" />
+                    <Button x:Name="btn_continue" HorizontalAlignment="Center" Content="continue" Width="215" Click="btn_continue_Click"/>
+                </StackPanel>
+            </Border>
+        </Popup>
+
         <!--Pivot Control-->
         <Pivot Title="Team vs Team" x:Name="pvControl" SelectionChanged="pvControl_SelectionChanged">
 

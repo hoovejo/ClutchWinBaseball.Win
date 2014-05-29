@@ -45,5 +45,11 @@ namespace ClutchWinBaseball.Portable.Common
         public const string TO_CacheTaskKey = "opponents.svc";
         public const string TR_CacheFileKey = "teamsResults.json";
         public const string TDD_CacheFileKey = "teamsDrillDown.json";
+
+        public const string TeamsFeatureTabCache = "TeamsFeatureTabCache";
+        public const string PlayersFeatureTabCache = "PlayersFeatureTabCache";
+
+        public const string Error = "An error has occured";
+        public const string NetworkNotAvailable = "No available network";
     }
 }

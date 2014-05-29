@@ -16,29 +16,27 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,0,35,4" >
-                        <TextBlock x:Name="gameTypeLabel" Text="Game type" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="gamesLabel" Text="Games" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="atBatLabel" Text="At bat" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="atBatLabel" Text="At bats" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="hitLabel" Text="Hits" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="secondBaseLabel" Text="Second base" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="thirdBaseLabel" Text="Third base" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="walksLabel" Text="Walks" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="strikeOutLabel" Text="Strike outs" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="secondBaseLabel" Text="Second base hits" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="thirdBaseLabel" Text="Third base hits" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="homeRunLabel" Text="Home runs" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="runBattedInLabel" Text="Runs batted in" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="strikeOutLabel" Text="Strike outs" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="baseBallLabel" Text="Base balls" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="averageLabel" Text="Average" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="1" Margin="25,0,10,4">
-                        <TextBlock x:Name="gameTypeValue" Text="{Binding GameType}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="gamesValue" Text="{Binding Games}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="atBatValue" Text="{Binding AtBat}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="hitValue" Text="{Binding Hit}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="walksValue" Text="{Binding Walks}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="strikeOutValue" Text="{Binding StrikeOut}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="secondBaseValue" Text="{Binding SecondBase}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="thirdBaseValue" Text="{Binding ThirdBase}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="homeRunValue" Text="{Binding HomeRun}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="runBattedInValue" Text="{Binding RunBattedIn}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="strikeOutValue" Text="{Binding StrikeOut}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="baseBallValue" Text="{Binding BaseBall}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="averageValue" Text="{Binding Average}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
                     </StackPanel>
                 </Grid>

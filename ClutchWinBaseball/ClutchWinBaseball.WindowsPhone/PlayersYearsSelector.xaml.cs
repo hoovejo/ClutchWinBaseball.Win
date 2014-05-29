@@ -1,5 +1,6 @@
 ﻿using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
 using System;
@@ -33,7 +34,7 @@ namespace ClutchWinBaseball
             var fileManager = new CacheFileManager(tempFolder);
 
             cacheManager = new ContextCacheManager(fileManager);
-            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager);
+            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager, cacheManager);
         }
 
         /// <summary>
@@ -78,17 +79,14 @@ namespace ClutchWinBaseball
         /// <param name="e">Details about the click event.</param>
         private async void Years_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModelLocator.Players.SelectedYearId = ((PlayersYearsViewModel)e.ClickedItem).LineOne;
+            var yearId = ((PlayersYearsViewModel)e.ClickedItem).LineOne;
+            ViewModelLocator.Players.SelectedYearId = yearId;
+            playersContext.SelectedYearId = yearId;
 
-            bool isNetworkAvailable = true;
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Teams, isNetworkAvailable);
-
-            if (success)
-            {
-                success = await cacheManager.SavePlayersContextAsync(playersContext);
-            }
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Teams, isNetAvailable);
 
             Frame.Navigate(typeof(PlayersFeature));
         }
@@ -108,9 +106,14 @@ namespace ClutchWinBaseball
         /// </summary>
         /// <param name="e">Provides data for navigation methods and event
         /// handlers that cannot cancel the navigation request.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
+            bool success = false;
+
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Seasons, isNetAvailable);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

@@ -1,5 +1,6 @@
 ﻿using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
 using System;
@@ -31,7 +32,7 @@ namespace ClutchWinBaseball
             var fileManager = new CacheFileManager(tempFolder);
 
             cacheManager = new ContextCacheManager(fileManager);
-            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager);
+            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager, cacheManager);
         }
 
         /// <summary>
@@ -56,6 +57,12 @@ namespace ClutchWinBaseball
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            var tab = localSettings.Values[Config.PlayersFeatureTabCache];
+            if (tab != null)
+            {
+                pvControl.SelectedIndex = (int)tab;
+            }
         }
 
         /// <summary>
@@ -68,6 +75,8 @@ namespace ClutchWinBaseball
         /// serializable state.</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values[Config.PlayersFeatureTabCache] = pvControl.SelectedIndex;
         }
 
         private void goTo_Years(object sender, RoutedEventArgs e)
@@ -87,17 +96,12 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void Batters_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModelLocator.Players.SelectedBatterId = ((PlayersBattersViewModel)e.ClickedItem).BatterId;
+            playersContext.SelectedBatterId = ((PlayersBattersViewModel)e.ClickedItem).BatterId;
 
-            bool isNetworkAvailable = true;
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetworkAvailable);
-
-            if (success)
-            {
-                success = await cacheManager.SavePlayersContextAsync(playersContext);
-            }
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
 
             pvControl.SelectedIndex = 1;
         }
@@ -109,17 +113,12 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void Pitchers_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModelLocator.Players.SelectedPitcherId = ((PlayersPitchersViewModel)e.ClickedItem).PitcherId;
+            playersContext.SelectedPitcherId = ((PlayersPitchersViewModel)e.ClickedItem).PitcherId;
 
-            bool isNetworkAvailable = true;
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetworkAvailable);
-
-            if (success)
-            {
-                success = await cacheManager.SavePlayersContextAsync(playersContext);
-            }
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
 
             pvControl.SelectedIndex = 2;
         }
@@ -131,18 +130,12 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void PlayerResults_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModelLocator.Players.SelectedGameType = ((PlayersResultsViewModel)e.ClickedItem).GameType;
-            ViewModelLocator.Players.SelectedGameYear = ((PlayersResultsViewModel)e.ClickedItem).GameYear;
+            playersContext.SelectedGameYear = ((PlayersResultsViewModel)e.ClickedItem).GameYear;
 
-            bool isNetworkAvailable = true;
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetworkAvailable);
-
-            if (success)
-            {
-                success = await cacheManager.SavePlayersContextAsync(playersContext);
-            }
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetAvailable);
 
             pvControl.SelectedIndex = 3;
         }
@@ -174,12 +167,15 @@ namespace ClutchWinBaseball
                     playersContext.ReHydrateMe(ctx);
                 }
                 playersContext.IsHydratedObject = true;
+
+                ViewModelLocator.Players.SelectedYearId = playersContext.SelectedYearId;
+                ViewModelLocator.Players.SelectedTeamId = playersContext.SelectedTeamId;
             }
 
-            bool isNetworkAvailable = true;
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Seasons, isNetworkAvailable);
+            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Batters, isNetAvailable);
 
             (battersSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsBatterItems.View.CollectionGroups;
             (pitcherSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPitcherItems.View.CollectionGroups;
@@ -193,6 +189,68 @@ namespace ClutchWinBaseball
         }
 
         #endregion
-        
+
+        private async void pvControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
+            bool success = false;
+            bool neededRefresh = false;
+
+            switch (pvControl.SelectedIndex)
+            {
+                case 0:
+                    // not req'd handled by OnNavigatedTo
+                    break;
+                case 1:
+                    {
+                        if (ViewModelLocator.Players.PitcherItems.Count <= 0)
+                        {
+                            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
+                            neededRefresh = true;
+                        }
+                    }
+                    break;
+                case 2:
+                    {
+                        if (ViewModelLocator.Players.PlayerResultItems.Count <= 0)
+                        {
+                            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
+                            neededRefresh = true;
+                        }
+                    }
+                    break;
+                case 3:
+                    {
+                        if (ViewModelLocator.Players.PlayerDrillDownItems.Count <= 0)
+                        {
+                            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetAvailable);
+                            neededRefresh = true;
+                        }
+                    }
+                    break;
+            }
+
+            if (neededRefresh && !success)
+            {
+                // pop message
+            }
+        }
+
+        private void showNotification(string msg)
+        {
+            notifyMsg.Text = msg;
+            if (!notify.IsOpen)
+            {
+                notify.IsOpen = true;
+            }
+        }
+
+        private void btn_continue_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (notify.IsOpen)
+            {
+                notify.IsOpen = false;
+            }
+        }        
     }
 }

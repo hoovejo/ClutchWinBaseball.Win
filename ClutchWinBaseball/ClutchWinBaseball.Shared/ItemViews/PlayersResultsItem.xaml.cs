@@ -21,7 +21,6 @@ namespace ClutchWinBaseball.ItemViews
         {
             _item = item;
 
-            gameTypeLabel.Opacity = 0;
             gamesLabel.Opacity = 0;
             atBatLabel.Opacity = 0;
             hitLabel.Opacity = 0;
@@ -30,10 +29,9 @@ namespace ClutchWinBaseball.ItemViews
             homeRunLabel.Opacity = 0;
             runBattedInLabel.Opacity = 0;
             strikeOutLabel.Opacity = 0;
-            baseBallLabel.Opacity = 0;
+            walksLabel.Opacity = 0;
             averageLabel.Opacity = 0;
 
-            gameTypeValue.Opacity = 0;
             gamesValue.Opacity = 0;
             atBatValue.Opacity = 0;
             hitValue.Opacity = 0;
@@ -42,7 +40,7 @@ namespace ClutchWinBaseball.ItemViews
             homeRunValue.Opacity = 0;
             runBattedInValue.Opacity = 0;
             strikeOutValue.Opacity = 0;
-            baseBallValue.Opacity = 0;
+            walksValue.Opacity = 0;
             averageValue.Opacity = 0;
         }
 
@@ -51,7 +49,6 @@ namespace ClutchWinBaseball.ItemViews
         /// </summary>
         public void ShowLabels()
         {
-            gameTypeLabel.Opacity = 1;
             gamesLabel.Opacity = 1;
             atBatLabel.Opacity = 1;
             hitLabel.Opacity = 1;
@@ -60,7 +57,7 @@ namespace ClutchWinBaseball.ItemViews
             homeRunLabel.Opacity = 1;
             runBattedInLabel.Opacity = 1;
             strikeOutLabel.Opacity = 1;
-            baseBallLabel.Opacity = 1;
+            walksLabel.Opacity = 1;
             averageLabel.Opacity = 1;
         }
 
@@ -70,7 +67,6 @@ namespace ClutchWinBaseball.ItemViews
         /// </summary>
         public void ShowValues()
         {
-            gameTypeValue.Text = _item.GameType;
             gamesValue.Text = _item.Games;
             atBatValue.Text = _item.AtBat;
             hitValue.Text = _item.Hit;
@@ -79,10 +75,9 @@ namespace ClutchWinBaseball.ItemViews
             homeRunValue.Text = _item.HomeRun;
             runBattedInValue.Text = _item.RunBattedIn;
             strikeOutValue.Text = _item.StrikeOut;
-            baseBallValue.Text = _item.BaseBall;
+            walksValue.Text = _item.Walks;
             averageValue.Text = _item.Average;
 
-            gameTypeValue.Opacity = 1;
             gamesValue.Opacity = 1;
             atBatValue.Opacity = 1;
             hitValue.Opacity = 1;
@@ -91,7 +86,7 @@ namespace ClutchWinBaseball.ItemViews
             homeRunValue.Opacity = 1;
             runBattedInValue.Opacity = 1;
             strikeOutValue.Opacity = 1;
-            baseBallValue.Opacity = 1;
+            walksValue.Opacity = 1;
             averageValue.Opacity = 1;
         }
 
@@ -102,7 +97,6 @@ namespace ClutchWinBaseball.ItemViews
         {
             _item = null;
 
-            gameTypeValue.ClearValue(TextBlock.TextProperty);
             gamesValue.ClearValue(TextBlock.TextProperty);
             atBatValue.ClearValue(TextBlock.TextProperty);
             hitValue.ClearValue(TextBlock.TextProperty);
@@ -111,7 +105,7 @@ namespace ClutchWinBaseball.ItemViews
             homeRunValue.ClearValue(TextBlock.TextProperty);
             runBattedInValue.ClearValue(TextBlock.TextProperty);
             strikeOutValue.ClearValue(TextBlock.TextProperty);
-            baseBallValue.ClearValue(TextBlock.TextProperty);
+            walksValue.ClearValue(TextBlock.TextProperty);
             averageValue.ClearValue(TextBlock.TextProperty);
         }
 
