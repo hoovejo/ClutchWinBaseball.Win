@@ -14,8 +14,6 @@ namespace ClutchWinBaseball
     public sealed partial class PlayersFeature : Page
     {
         private NavigationHelper navigationHelper;
-        private PlayersDataManager dataLoadManager;
-        private ContextCacheManager cacheManager;
         private PlayersContextViewModel playersContext;
 
         public PlayersFeature()
@@ -27,12 +25,6 @@ namespace ClutchWinBaseball
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
             playersContext = PlayersContextViewModel.Instance;
-
-            var tempFolder = ApplicationData.Current.TemporaryFolder;
-            var fileManager = new CacheFileManager(tempFolder);
-
-            cacheManager = new ContextCacheManager(fileManager);
-            dataLoadManager = new PlayersDataManager(playersContext, ViewModelLocator.Players, fileManager, cacheManager);
         }
 
         /// <summary>
@@ -101,7 +93,7 @@ namespace ClutchWinBaseball
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
 
             pvControl.SelectedIndex = 1;
         }
@@ -118,7 +110,7 @@ namespace ClutchWinBaseball
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
 
             pvControl.SelectedIndex = 2;
         }
@@ -135,7 +127,7 @@ namespace ClutchWinBaseball
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetAvailable);
 
             pvControl.SelectedIndex = 3;
         }
@@ -161,7 +153,7 @@ namespace ClutchWinBaseball
 
             if (!playersContext.IsHydratedObject)
             {
-                PlayersContextViewModel ctx = await cacheManager.ReadPlayersContextAsync();
+                PlayersContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadPlayersContextAsync();
                 if (ctx != null)
                 {
                     playersContext.ReHydrateMe(ctx);
@@ -175,7 +167,16 @@ namespace ClutchWinBaseball
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Batters, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Batters, isNetAvailable);
+
+            if (!success && !isNetAvailable)
+            {
+                showNotification(Config.NetworkNotAvailable);
+            }
+            else if (!success)
+            {
+                showNotification(Config.Error);
+            }
 
             (battersSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsBatterItems.View.CollectionGroups;
             (pitcherSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPitcherItems.View.CollectionGroups;
@@ -205,7 +206,7 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Players.PitcherItems.Count <= 0)
                         {
-                            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
+                            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
                             neededRefresh = true;
                         }
                     }
@@ -214,7 +215,7 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Players.PlayerResultItems.Count <= 0)
                         {
-                            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
+                            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
                             neededRefresh = true;
                         }
                     }
@@ -223,16 +224,20 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Players.PlayerDrillDownItems.Count <= 0)
                         {
-                            success = await dataLoadManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetAvailable);
+                            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetAvailable);
                             neededRefresh = true;
                         }
                     }
                     break;
             }
 
-            if (neededRefresh && !success)
+            if (neededRefresh && !success && !isNetAvailable)
             {
-                // pop message
+                showNotification(Config.NetworkNotAvailable);
+            }
+            else if (neededRefresh && !success)
+            {
+                showNotification(Config.Error);
             }
         }
 

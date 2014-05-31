@@ -97,6 +97,7 @@
                         AutomationProperties.ItemType="Navigation Button"/>
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+            <TextBlock Grid.Row="1" x:Name="StatusBlock" Margin="0,0,0,5" Grid.ColumnSpan="2" Visibility="Collapsed"/>
         </Grid>
 
         <!-- Content -->

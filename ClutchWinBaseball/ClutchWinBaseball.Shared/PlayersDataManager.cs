@@ -32,7 +32,7 @@ namespace ClutchWinBaseball
 
         public async Task<bool> LoadPlayersDataAsync(PlayersEndpoints endpoint, bool isNetAvailable)
         {
-            bool returnValue = false;
+            bool returnValue = false;            
 
             switch (endpoint)
             {

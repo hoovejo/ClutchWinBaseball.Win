@@ -1,4 +1,5 @@
 ﻿using ClutchWinBaseball.Common;
+using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Views;
 using System;
 using System.Collections.Generic;
@@ -184,6 +185,18 @@ namespace ClutchWinBaseball
                         break; 
                     }
             };
+        }
+
+        public void ServiceInteractionNotify(bool success, bool isNetAvailable)
+        {
+            if (!success && !isNetAvailable)
+            {
+                NotifyUser(Config.NetworkNotAvailable, NotifyType.ErrorMessage);
+            }
+            else if (!success)
+            {
+                NotifyUser(Config.Error, NotifyType.ErrorMessage);
+            }
         }
 
         public void NotifyUser(string strMessage, NotifyType type)

@@ -108,6 +108,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="InputTextBlock1" Text="Years" Grid.Row="0" 
                        TextWrapping="Wrap" Margin="0,0,0,25" Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" x:Name="StatusBlock" Margin="0,0,0,5" Grid.ColumnSpan="2" Visibility="Collapsed"/>
             </Grid>
 
             <Grid x:Name="Output" Grid.Row="1">
