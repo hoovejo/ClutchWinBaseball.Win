@@ -15,7 +15,7 @@ namespace ClutchWinBaseball
     /// </summary>
     public sealed partial class TeamsFeature : Page
     {
-        private NavigationHelper navigationHelper;
+        private readonly NavigationHelper navigationHelper;
         private TeamsContextViewModel teamsContext;
 
         public TeamsFeature()
@@ -48,8 +48,37 @@ namespace ClutchWinBaseball
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            if (!teamsContext.IsHydratedObject)
+            {
+                TeamsContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadTeamsContextAsync();
+                if (ctx != null)
+                {
+                    teamsContext.ReHydrateMe(ctx);
+                }
+                teamsContext.IsHydratedObject = true;
+            }
+
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
+            bool success = false;
+
+            success = await DataManagerLocator.TeamsDataManager.GetFranchisesAsync(isNetAvailable);
+
+            (teamsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsFranchiseItems.View.CollectionGroups;
+            (opponentsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsOpponentsItems.View.CollectionGroups;
+            (teamResultsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamResultItems.View.CollectionGroups;
+            (teamDrillDownSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamDrillDownItems.View.CollectionGroups;
+
+            if (!success && !isNetAvailable)
+            {
+                showNotification(Config.NetworkNotAvailable);
+            }
+            else if (!success)
+            {
+                showNotification(Config.Error);
+            }
+
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             var tab = localSettings.Values[Config.TeamsFeatureTabCache];
             if (tab != null)
@@ -79,12 +108,14 @@ namespace ClutchWinBaseball
         /// <param name="e">Details about the click event.</param>
         private async void Teams_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Teams.IsLoadingData) return;
+
             teamsContext.SelectedTeamId = ((TeamsFranchisesViewModel)e.ClickedItem).TeamId;
 
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.Opponents, isNetAvailable);
+            success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 1;
         }
@@ -96,12 +127,14 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void Opponents_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Teams.IsLoadingData) return;
+
             teamsContext.SelectedOpponentId = ((TeamsOpponentsViewModel)e.ClickedItem).TeamId;
 
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.FranchiseSearch, isNetAvailable);
+            success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 2;
         }
@@ -113,12 +146,14 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void TeamResults_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Teams.IsLoadingData) return;
+
             teamsContext.SelectedYearId = ((TeamsResultsViewModel)e.ClickedItem).Year;
 
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.FranchiseYearSearch, isNetAvailable);
+            success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 3;
         }
@@ -138,38 +173,9 @@ namespace ClutchWinBaseball
         /// </summary>
         /// <param name="e">Provides data for navigation methods and event
         /// handlers that cannot cancel the navigation request.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-
-            if (!teamsContext.IsHydratedObject)
-            {
-                TeamsContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadTeamsContextAsync();
-                if (ctx != null)
-                {
-                    teamsContext.ReHydrateMe(ctx);
-                }
-                teamsContext.IsHydratedObject = true;
-            }
-
-            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            bool success = false;
-
-            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.Franchises, isNetAvailable);
-
-            (teamsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsFranchiseItems.View.CollectionGroups;
-            (opponentsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsOpponentsItems.View.CollectionGroups;
-            (teamResultsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamResultItems.View.CollectionGroups;
-            (teamDrillDownSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamDrillDownItems.View.CollectionGroups;
-
-            if (!success && !isNetAvailable)
-            {
-                showNotification(Config.NetworkNotAvailable);
-            }
-            else if (!success)
-            {
-                showNotification(Config.Error);
-            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -194,7 +200,7 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Teams.OpponentsItems.Count <= 0)
                         {
-                            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.Opponents, isNetAvailable);
+                            success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
                             neededRefresh = true;
                         }
                     }
@@ -203,7 +209,7 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Teams.TeamResultItems.Count <= 0)
                         {
-                            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.FranchiseSearch, isNetAvailable);
+                            success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable);
                             neededRefresh = true;
                         }
                     }
@@ -212,7 +218,7 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Teams.TeamDrillDownItems.Count <= 0)
                         {
-                            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.FranchiseYearSearch, isNetAvailable);
+                            success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable);
                             neededRefresh = true;
                         }
                     }

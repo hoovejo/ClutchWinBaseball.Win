@@ -74,7 +74,7 @@
         </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="110"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -84,80 +84,64 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+            <Button x:Name="backButton" Margin="39,36,39,0" Click="backButton_Click"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+            <TextBlock x:Name="pageTitle" Text="seasons" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+            <TextBlock Grid.Row="1" x:Name="StatusBlock" Margin="0,0,0,5" Grid.ColumnSpan="2" Visibility="Collapsed"/>
         </Grid>
 
         <!-- Content -->
-        <Grid x:Name="grid" Grid.Row="1">
+        <Grid x:Name="Output" Grid.Row="1">
+            <GridView x:Name="ItemsGridView" 
+					ItemsSource="{Binding YearItems}" 
+					ItemClick="Items_ItemClick"
+					IsItemClickEnabled="True"
+					ContainerContentChanging="Items_ContainerContentChanging"
+					IsSynchronizedWithCurrentItem="False"
+					SelectionMode="None"
+					IsSwipeEnabled="False"
+					ScrollViewer.IsHorizontalScrollChainingEnabled="False">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <itemViews:PlayersYearItem />
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+        </Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid x:Name="Input" Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBlock x:Name="InputTextBlock1" Text="Years" Grid.Row="0" 
-                       TextWrapping="Wrap" Margin="0,0,0,25" Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" x:Name="StatusBlock" Margin="0,0,0,5" Grid.ColumnSpan="2" Visibility="Collapsed"/>
-            </Grid>
-
-            <Grid x:Name="Output" Grid.Row="1">
-                <GridView x:Name="ItemsGridView" 
+        <Grid x:Name="OutputSmall" Grid.Row="1">
+            <ListView x:Name="ItemsListView" 
 						ItemsSource="{Binding YearItems}" 
+						ShowsScrollingPlaceholders="False"
 						ItemClick="Items_ItemClick"
 						IsItemClickEnabled="True"
 						ContainerContentChanging="Items_ContainerContentChanging"
 						IsSynchronizedWithCurrentItem="False"
 						SelectionMode="None"
-						IsSwipeEnabled="False"
+						IsSwipeEnabled="False" 
 						ScrollViewer.IsHorizontalScrollChainingEnabled="False">
-                    <GridView.ItemTemplate>
-                        <DataTemplate>
-                            <itemViews:PlayersYearItem />
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                    <GridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapGrid Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>
-                </GridView>
-            </Grid>
-
-            <Grid x:Name="OutputSmall" Grid.Row="1">
-                <ListView x:Name="ItemsListView" 
-						    ItemsSource="{Binding YearItems}" 
-						    ShowsScrollingPlaceholders="False"
-						    ItemClick="Items_ItemClick"
-						    IsItemClickEnabled="True"
-						    ContainerContentChanging="Items_ContainerContentChanging"
-						    IsSynchronizedWithCurrentItem="False"
-						    SelectionMode="None"
-						    IsSwipeEnabled="False" 
-						    ScrollViewer.IsHorizontalScrollChainingEnabled="False">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <itemViews:PlayersYearItem />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                </ListView>
-            </Grid>
-
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <itemViews:PlayersYearItem />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
         </Grid>
+
     </Grid>
 </Page>

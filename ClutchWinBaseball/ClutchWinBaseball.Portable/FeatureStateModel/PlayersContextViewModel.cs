@@ -35,7 +35,7 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
         [JsonIgnore]
         public bool IsHydratedObject { get; set; }
         [JsonIgnore]
-        public bool HasLoadedSessionOncePerSession { get; set; }
+        public bool HasLoadedSeasonsOncePerSession { get; set; }
 
 
         public string SelectedYearId { get; set; }

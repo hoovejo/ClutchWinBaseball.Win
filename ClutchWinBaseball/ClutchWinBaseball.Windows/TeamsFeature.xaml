@@ -9,6 +9,10 @@
     x:Class="ClutchWinBaseball.TeamsFeature"
     mc:Ignorable="d">
 
+    <Page.DataContext>
+        <Binding Path="Teams" Source="{StaticResource Locator}"/>
+    </Page.DataContext>
+    
     <Page.Resources>
         <Style x:Key="BaseStatusStyle" TargetType="TextBlock">
         	<Setter Property="FontFamily" Value="Segoe UI Semilight"/>
@@ -116,7 +120,7 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
@@ -125,8 +129,7 @@
 				</Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" x:Name="DescriptionText" Margin="0,20,0,0" HorizontalAlignment="Center" />
-
-				<Button Grid.Row="1" Grid.Column="0" x:Name="back" Height="40" Width="100" Click="previous_Click" Content="back" />
+                <Button Grid.Row="1" Grid.Column="0" x:Name="back" Height="40" Width="100" Click="previous_Click" Content="back" />
                 <ListBox Grid.Row="1" Grid.Column="1" x:Name="ContextControl" Width="474" BorderThickness="0" Height="40" HorizontalAlignment="Center"
 					ItemContainerStyle="{StaticResource ContextControlItemStyle}" IsTabStop="False" 
 					Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -138,16 +141,17 @@
 					</ListBox.ItemsPanel>
 				</ListBox>
                 <Button Grid.Row="1" Grid.Column="2" x:Name="next" Height="40" Width="100" Click="next_Click" Content="next" />
+                <ProgressRing Grid.Row="2" Grid.Column="1" IsActive="{Binding IsLoadingData}" />
                 <!-- Input Scenarios (replaceable section from child xaml) -->
-                <UserControl Grid.Row="2" x:Name="InputSection" Margin="0,5,0,0" Grid.ColumnSpan="3" IsTabStop="False" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <UserControl Grid.Row="3" x:Name="InputSection" Margin="0,5,0,0" Grid.ColumnSpan="3" IsTabStop="False" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
                 <!-- Output section -->
-				<TextBlock Grid.Row="3" x:Name="StatusBlock" Margin="0,0,0,5" Grid.ColumnSpan="3" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="4" x:Name="StatusBlock" Margin="0,0,0,5" Grid.ColumnSpan="3" Visibility="Collapsed"/>
 
                 <!-- Output Scenarios (replaceable section from child xaml)-->
-                <UserControl Grid.Row="4" x:Name="OutputSection" Grid.ColumnSpan="3" BorderThickness="0" Visibility="Collapsed"/>
+                <UserControl Grid.Row="5" x:Name="OutputSection" Grid.ColumnSpan="3" BorderThickness="0" Visibility="Collapsed"/>
                 <!-- Output Scenarios (replaceable section from child xaml)-->
-                <UserControl Grid.Row="4" x:Name="OutputSmallSection" Grid.ColumnSpan="3" BorderThickness="0" Visibility="Collapsed" />
+                <UserControl Grid.Row="5" x:Name="OutputSmallSection" Grid.ColumnSpan="3" BorderThickness="0" Visibility="Collapsed" />
             </Grid>
 
             <!-- Footer -->

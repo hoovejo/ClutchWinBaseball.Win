@@ -13,7 +13,7 @@ namespace ClutchWinBaseball
 {
     public sealed partial class PlayersFeature : Page
     {
-        private NavigationHelper navigationHelper;
+        private readonly NavigationHelper navigationHelper;
         private PlayersContextViewModel playersContext;
 
         public PlayersFeature()
@@ -88,12 +88,14 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void Batters_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Players.IsLoadingData) return;
+
             playersContext.SelectedBatterId = ((PlayersBattersViewModel)e.ClickedItem).BatterId;
 
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.GetPitchersAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 1;
         }
@@ -105,12 +107,14 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void Pitchers_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Players.IsLoadingData) return;
+
             playersContext.SelectedPitcherId = ((PlayersPitchersViewModel)e.ClickedItem).PitcherId;
 
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.GetPlayersResultsAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 2;
         }
@@ -122,12 +126,14 @@ namespace ClutchWinBaseball
         /// <param name="e">Defaults about the click event.</param>
         private async void PlayerResults_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Players.IsLoadingData) return;
+
             playersContext.SelectedGameYear = ((PlayersResultsViewModel)e.ClickedItem).GameYear;
 
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.GetPlayersDrillDownAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 3;
         }
@@ -151,23 +157,10 @@ namespace ClutchWinBaseball
         {
             this.navigationHelper.OnNavigatedTo(e);
 
-            if (!playersContext.IsHydratedObject)
-            {
-                PlayersContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadPlayersContextAsync();
-                if (ctx != null)
-                {
-                    playersContext.ReHydrateMe(ctx);
-                }
-                playersContext.IsHydratedObject = true;
-
-                ViewModelLocator.Players.SelectedYearId = playersContext.SelectedYearId;
-                ViewModelLocator.Players.SelectedTeamId = playersContext.SelectedTeamId;
-            }
-
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Batters, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.GetBattersAsync(isNetAvailable);
 
             if (!success && !isNetAvailable)
             {
@@ -206,7 +199,7 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Players.PitcherItems.Count <= 0)
                         {
-                            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
+                            success = await DataManagerLocator.PlayersDataManager.GetPitchersAsync(isNetAvailable);
                             neededRefresh = true;
                         }
                     }
@@ -215,7 +208,7 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Players.PlayerResultItems.Count <= 0)
                         {
-                            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
+                            success = await DataManagerLocator.PlayersDataManager.GetPlayersResultsAsync(isNetAvailable);
                             neededRefresh = true;
                         }
                     }
@@ -224,7 +217,7 @@ namespace ClutchWinBaseball
                     {
                         if (ViewModelLocator.Players.PlayerDrillDownItems.Count <= 0)
                         {
-                            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerYearSearch, isNetAvailable);
+                            success = await DataManagerLocator.PlayersDataManager.GetPlayersDrillDownAsync(isNetAvailable);
                             neededRefresh = true;
                         }
                     }

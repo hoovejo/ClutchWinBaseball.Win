@@ -1,4 +1,5 @@
 ﻿using ClutchWinBaseball.ItemViews;
+using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
@@ -23,12 +24,14 @@ namespace ClutchWinBaseball.Views
 
         private async void Items_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Teams.IsLoadingData) return;
+
             TeamsContextViewModel teamsContext = TeamsContextViewModel.Instance;
             teamsContext.SelectedTeamId = ((TeamsFranchisesViewModel)e.ClickedItem).TeamId;
 
             bool success = false;
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.Opponents, isNetAvailable);
+            success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
 
             rootPage.ServiceInteractionNotify(success, isNetAvailable);
 
@@ -39,7 +42,7 @@ namespace ClutchWinBaseball.Views
         {
             bool success = false;
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.Franchises, isNetAvailable);
+            success = await DataManagerLocator.TeamsDataManager.GetFranchisesAsync(isNetAvailable);
 
             // sets the items source for the zoomed out view to the group data as well
             (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsFranchiseItems.View.CollectionGroups;

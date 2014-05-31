@@ -1,4 +1,5 @@
 ﻿using ClutchWinBaseball.ItemViews;
+using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
@@ -23,12 +24,14 @@ namespace ClutchWinBaseball.Views
 
         private async void Items_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Players.IsLoadingData) return;
+
             PlayersContextViewModel playersContext = PlayersContextViewModel.Instance;
             playersContext.SelectedPitcherId = ((PlayersPitchersViewModel)e.ClickedItem).PitcherId;
 
             bool success = false;
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.PlayerSearch, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.GetPlayersResultsAsync(isNetAvailable);
 
             rootPage.ServiceInteractionNotify(success, isNetAvailable);
 

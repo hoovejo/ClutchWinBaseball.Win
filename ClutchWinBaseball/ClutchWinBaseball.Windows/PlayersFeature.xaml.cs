@@ -19,7 +19,7 @@ namespace ClutchWinBaseball
         private Frame HiddenFrame = null;
         private PlayersViewType _currentView = PlayersViewType.Batters;
 
-        private NavigationHelper navigationHelper;
+        private readonly NavigationHelper navigationHelper;
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -71,6 +71,25 @@ namespace ClutchWinBaseball
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            var view = localSettings.Values[Config.PlayersFeatureTabCache] as string;
+            if (view != null)
+            {
+                PlayersViewType savedView = (PlayersViewType)Enum.Parse(typeof(PlayersViewType), view);
+
+                switch (savedView)
+                {
+                    case PlayersViewType.Batters: LoadView(typeof(PlayersBatters)); break;
+                    case PlayersViewType.Pitchers: LoadView(typeof(PlayersPitchers)); break;
+                    case PlayersViewType.Results: LoadView(typeof(PlayersResults)); break;
+                    case PlayersViewType.DrillDown: LoadView(typeof(PlayersDrillDown)); break;
+                    default: LoadView(typeof(PlayersBatters)); break;
+                }
+            }
+            else
+            {
+                LoadView(typeof(PlayersBatters));
+            }
         }
 
         /// <summary>
@@ -83,10 +102,13 @@ namespace ClutchWinBaseball
         /// serializable state.</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values[Config.PlayersFeatureTabCache] = _currentView.ToString();
         }
 
         private void PageUnloaded(object sender, RoutedEventArgs e)
         {
+            ViewDefinitionLoaded -= PlayersFeature_ViewDefinitionLoaded;
             Window.Current.SizeChanged -= Current_SizeChanged;
         }
 
@@ -255,7 +277,14 @@ namespace ClutchWinBaseball
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(HubPage));
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
+            else
+            {
+                Frame.Navigate(typeof(HubPage));
+            }   
         }
 
         private void batter_Click(object sender, RoutedEventArgs e)

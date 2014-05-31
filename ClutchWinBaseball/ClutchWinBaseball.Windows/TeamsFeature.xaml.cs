@@ -1,12 +1,11 @@
 ﻿using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Portable.Common;
+using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Views;
 using System;
-using System.Collections.Generic;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace ClutchWinBaseball
@@ -19,7 +18,7 @@ namespace ClutchWinBaseball
         private Frame HiddenFrame = null;
         private TeamsViewType _currentView = TeamsViewType.Franchises;
 
-        private NavigationHelper navigationHelper;
+        private readonly NavigationHelper navigationHelper;
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -51,8 +50,6 @@ namespace ClutchWinBaseball
             var dataSource = new TeamsFeatureIndicatorDataSource();
             ContextControl.ItemsSource = dataSource.Items;
 
-            LoadView(typeof(TeamsFranchises));
-
             Loaded += PageLoaded;
             Unloaded += PageUnloaded;
         }
@@ -68,8 +65,39 @@ namespace ClutchWinBaseball
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session. The state will be null the first time a page is visited.</param>
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            TeamsContextViewModel teamsContext = TeamsContextViewModel.Instance;
+
+            if (!teamsContext.IsHydratedObject)
+            {
+                TeamsContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadTeamsContextAsync();
+                if (ctx != null)
+                {
+                    teamsContext.ReHydrateMe(ctx);
+                }
+                teamsContext.IsHydratedObject = true;
+            }
+
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            var view = localSettings.Values[Config.TeamsFeatureTabCache] as string;
+            if (view != null)
+            {
+                TeamsViewType savedView = (TeamsViewType)Enum.Parse(typeof(TeamsViewType), view);
+
+                switch (savedView)
+                {
+                    case TeamsViewType.Franchises: LoadView(typeof(TeamsFranchises)); break;
+                    case TeamsViewType.Opponents: LoadView(typeof(TeamsOpponents)); break;
+                    case TeamsViewType.Results: LoadView(typeof(TeamsResults)); break;
+                    case TeamsViewType.DrillDown: LoadView(typeof(TeamsDrillDown)); break;
+                    default: LoadView(typeof(PlayersBatters)); break;
+                }
+            }
+            else
+            {
+                LoadView(typeof(TeamsFranchises));
+            }
         }
 
         /// <summary>
@@ -82,10 +110,13 @@ namespace ClutchWinBaseball
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values[Config.TeamsFeatureTabCache] = _currentView.ToString();
         }
 
         private void PageUnloaded(object sender, RoutedEventArgs e)
         {
+            ViewDefinitionLoaded -= TeamsFeature_ViewDefinitionLoaded;
             Window.Current.SizeChanged -= Current_SizeChanged;
         }
 
@@ -117,9 +148,22 @@ namespace ClutchWinBaseball
             }
         }
 
-        void TeamsFeature_ViewDefinitionLoaded(object sender, TeamsViewDefinitionLoadedEventArgs e)
+        async void TeamsFeature_ViewDefinitionLoaded(object sender, TeamsViewDefinitionLoadedEventArgs e)
         {
             _currentView = e.TeamsViewType;
+
+            bool success = false;
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
+            //Handle restart/reentrance
+            switch (e.TeamsViewType)
+            {
+                case TeamsViewType.Franchises: success = await DataManagerLocator.TeamsDataManager.GetFranchisesAsync(isNetAvailable); break;
+                case TeamsViewType.Opponents: success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable); break;
+                case TeamsViewType.Results: success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable); break;
+                case TeamsViewType.DrillDown: success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable); break;
+            }
+
+            ServiceInteractionNotify(success, isNetAvailable);
         }
 
         /// <summary>
@@ -254,7 +298,14 @@ namespace ClutchWinBaseball
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(HubPage));
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
+            else
+            {
+                Frame.Navigate(typeof(HubPage));
+            }            
         }
 
         private void team_Click(object sender, RoutedEventArgs e)
@@ -291,8 +342,8 @@ namespace ClutchWinBaseball
         /// NavigationHelper to respond to the page's navigation methods.
         /// 
         /// Page specific logic should be placed in event handlers for the  
-        /// <see cref="GridCS.Common.NavigationHelper.LoadState"/>
-        /// and <see cref="GridCS.Common.NavigationHelper.SaveState"/>.
+        /// <see cref="LoadState"/>
+        /// and <see cref="SaveState"/>.
         /// The navigation parameter is available in the LoadState method 
         /// in addition to page state preserved during an earlier session.
 

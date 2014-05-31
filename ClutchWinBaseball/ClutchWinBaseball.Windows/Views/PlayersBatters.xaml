@@ -29,7 +29,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="InputTextBlock1" Text="Batters" Grid.Row="0" 
+            <TextBlock x:Name="InputTextBlock1" Text="batters" Grid.Row="0" Foreground="{ThemeResource TextSelectionHighlightColorThemeBrush}"
                        TextWrapping="Wrap" Margin="0,0,0,25" Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
         </Grid>
 

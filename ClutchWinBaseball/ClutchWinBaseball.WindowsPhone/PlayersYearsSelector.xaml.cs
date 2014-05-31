@@ -29,7 +29,14 @@ namespace ClutchWinBaseball
             ViewModelLocator.Players.SelectedYearId = yearId;
             playersContext.SelectedYearId = yearId;
 
-            Frame.Navigate(typeof(PlayersFeature));
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
+            else
+            {
+                Frame.Navigate(typeof(PlayersFeature));
+            }
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -37,7 +44,7 @@ namespace ClutchWinBaseball
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Seasons, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.GetSeasonsAsync(isNetAvailable);
 
             if (!success && !isNetAvailable)
             {

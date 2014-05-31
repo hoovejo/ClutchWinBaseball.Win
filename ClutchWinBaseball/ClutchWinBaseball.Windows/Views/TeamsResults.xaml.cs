@@ -24,12 +24,14 @@ namespace ClutchWinBaseball.Views
 
         private async void Items_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Teams.IsLoadingData) return;
+
             TeamsContextViewModel teamsContext = TeamsContextViewModel.Instance;
             teamsContext.SelectedYearId = ((TeamsResultsViewModel)e.ClickedItem).Year;
 
             bool success = false;
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.TeamsDataManager.LoadTeamsDataAsync(TeamsEndpoints.FranchiseYearSearch, isNetAvailable);
+            success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable);
 
             rootPage.ServiceInteractionNotify(success, isNetAvailable);
 

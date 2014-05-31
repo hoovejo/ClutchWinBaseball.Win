@@ -1,4 +1,5 @@
 ﻿using ClutchWinBaseball.ItemViews;
+using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
@@ -20,12 +21,14 @@ namespace ClutchWinBaseball.Views
 
         private async void Items_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ViewModelLocator.Players.IsLoadingData) return;
+
             PlayersContextViewModel playersContext = PlayersContextViewModel.Instance;
             playersContext.SelectedBatterId = ((PlayersBattersViewModel)e.ClickedItem).BatterId;
 
             bool success = false;
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Pitchers, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.GetPitchersAsync(isNetAvailable);
 
             rootPage.ServiceInteractionNotify(success, isNetAvailable);
 
@@ -38,7 +41,7 @@ namespace ClutchWinBaseball.Views
 
             bool success = false;
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.PlayersDataManager.LoadPlayersDataAsync(PlayersEndpoints.Batters, isNetAvailable);
+            success = await DataManagerLocator.PlayersDataManager.GetBattersAsync(isNetAvailable);
 
             rootPage.ServiceInteractionNotify(success, isNetAvailable);
 

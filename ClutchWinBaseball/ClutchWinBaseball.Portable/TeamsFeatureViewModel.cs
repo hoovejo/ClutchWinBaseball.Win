@@ -27,13 +27,13 @@ namespace ClutchWinBaseball.Portable
         public ObservableCollection<KeyedList<string, TeamsResultsViewModel>> TeamResultItems { get; private set; }
         public ObservableCollection<KeyedList<string, TeamsDrillDownViewModel>> TeamDrillDownItems { get; private set; }
 
-        private bool _isDataLoaded;
+        private bool _isLoadingData;
 
         //Determine if we need to show loading spinner
-        public bool IsDataLoaded
+        public bool IsLoadingData
         {
-            get { return _isDataLoaded; }
-            private set { if (value != _isDataLoaded) { _isDataLoaded = value; NotifyPropertyChanged("IsDataLoaded"); } }
+            get { return _isLoadingData; }
+            set { if (value != _isLoadingData) { _isLoadingData = value; NotifyPropertyChanged("IsLoadingData"); } }
         }
 
 
@@ -47,7 +47,6 @@ namespace ClutchWinBaseball.Portable
         public async Task<bool> LoadFranchisesDataAsync(string cachedJson = "")
         {
             List<FranchiseModel> franchises;
-            IsDataLoaded = false;
 
             if (string.IsNullOrEmpty(cachedJson))
             {
@@ -98,14 +97,11 @@ namespace ClutchWinBaseball.Portable
                 FranchiseItems.Add(viewModelItem);
             }
 
-            IsDataLoaded = true;
             return true;
         }
 
         public void LoadOpponentsData(TeamsContextViewModel context, string cachedJson = "")
         {
-            IsDataLoaded = false;
-
             if (!string.IsNullOrEmpty(cachedJson) && FranchiseList.Count <= 0)
             {
                 var franchises = JsonConvert.DeserializeObject<List<FranchiseModel>>(cachedJson);
@@ -141,13 +137,11 @@ namespace ClutchWinBaseball.Portable
             {
                 OpponentsItems.Add(viewModelItem);
             }
-            IsDataLoaded = true;
         }
 
         public async Task<bool> LoadTeamResultsDataAsync(TeamsContextViewModel context, string cachedJson = "")
         {
             List<TeamsResultModel> items;
-            IsDataLoaded = false;
 
             if (string.IsNullOrEmpty(cachedJson))
             {
@@ -186,14 +180,12 @@ namespace ClutchWinBaseball.Portable
             {
                 TeamResultItems.Add(viewModelItem);
             }
-            IsDataLoaded = true;
             return true;
         }
 
         public async Task<bool> LoadTeamDrillDownDataAsync(TeamsContextViewModel context, string cachedJson = "")
         {
             List<TeamsDrillDownModel> items;
-            IsDataLoaded = false;
 
             if (string.IsNullOrEmpty(cachedJson))
             {
@@ -231,7 +223,6 @@ namespace ClutchWinBaseball.Portable
             {
                 TeamDrillDownItems.Add(viewModelItem);
             }
-            IsDataLoaded = true;
             return true;
         }
 
