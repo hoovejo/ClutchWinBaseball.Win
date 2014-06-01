@@ -34,11 +34,16 @@ namespace ClutchWinBaseball.Portable
 
         private string _selectedYearId = "season";
         private string _selectedTeamId = "team";
-        private bool _isLoadingData;
+        private bool _isLoadingData, _isShowingBatters;
         
         public string SelectedYearId {  get { return _selectedYearId; } set { _selectedYearId = value; } }
         public string SelectedTeamId { get { return _selectedTeamId; } set { _selectedTeamId = value; } }
 
+        public bool IsShowingBatters
+        {
+            get { return _isShowingBatters; }
+            set { if (value != _isShowingBatters) { _isShowingBatters = value; NotifyPropertyChanged("IsShowingBatters"); } }
+        }
 
         //Determine if we need to show loading spinner
         public bool IsLoadingData

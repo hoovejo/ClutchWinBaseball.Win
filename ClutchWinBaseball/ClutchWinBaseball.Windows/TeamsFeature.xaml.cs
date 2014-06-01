@@ -87,10 +87,10 @@ namespace ClutchWinBaseball
 
                 switch (savedView)
                 {
-                    case TeamsViewType.Franchises: LoadView(typeof(TeamsFranchises)); break;
-                    case TeamsViewType.Opponents: LoadView(typeof(TeamsOpponents)); break;
-                    case TeamsViewType.Results: LoadView(typeof(TeamsResults)); break;
-                    case TeamsViewType.DrillDown: LoadView(typeof(TeamsDrillDown)); break;
+                    case TeamsViewType.Franchises: LoadView(typeof(TeamsFranchises), true); break;
+                    case TeamsViewType.Opponents: LoadView(typeof(TeamsOpponents), true); break;
+                    case TeamsViewType.Results: LoadView(typeof(TeamsResults), true); break;
+                    case TeamsViewType.DrillDown: LoadView(typeof(TeamsDrillDown), true); break;
                     default: LoadView(typeof(PlayersBatters)); break;
                 }
             }
@@ -152,18 +152,22 @@ namespace ClutchWinBaseball
         {
             _currentView = e.TeamsViewType;
 
-            bool success = false;
-            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             //Handle restart/reentrance
-            switch (e.TeamsViewType)
+            if (e.CheckDataLoad)
             {
-                case TeamsViewType.Franchises: success = await DataManagerLocator.TeamsDataManager.GetFranchisesAsync(isNetAvailable); break;
-                case TeamsViewType.Opponents: success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable); break;
-                case TeamsViewType.Results: success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable); break;
-                case TeamsViewType.DrillDown: success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable); break;
-            }
+                bool success = false;
+                bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
 
-            ServiceInteractionNotify(success, isNetAvailable);
+                switch (e.TeamsViewType)
+                {
+                    case TeamsViewType.Franchises: success = await DataManagerLocator.TeamsDataManager.GetFranchisesAsync(isNetAvailable); break;
+                    case TeamsViewType.Opponents: success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable); break;
+                    case TeamsViewType.Results: success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable); break;
+                    case TeamsViewType.DrillDown: success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable); break;
+                }
+
+                ServiceInteractionNotify(success, isNetAvailable);
+            }
         }
 
         /// <summary>
@@ -172,8 +176,9 @@ namespace ClutchWinBaseball
         /// and output sections into the respective UserControl on the main page.
         /// </summary>
         /// <param name="scenarioName"></param>
-        public void LoadView(Type viewClass)
+        public void LoadView(Type viewClass, bool checkDataLoad = false)
         {
+            NotifyUser(string.Empty, NotifyType.StatusMessage);
             // Load the ScenarioX.xaml file into the Frame.
             HiddenFrame.Navigate(viewClass, this);
 
@@ -206,25 +211,33 @@ namespace ClutchWinBaseball
             {
                 case "TeamsFranchises": 
                     {
-                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Franchises }); }
+                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this,
+                            new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Franchises, CheckDataLoad = checkDataLoad });
+                        }
                         ContextControl.SelectedIndex = 0;
                         break; 
                     }
                 case "TeamsOpponents": 
                     {
-                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Opponents }); }
+                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this,
+                            new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Opponents, CheckDataLoad = checkDataLoad });
+                        }
                         ContextControl.SelectedIndex = 1;
                         break; 
                     }
                 case "TeamsResults": 
                     {
-                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Results }); }
+                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this,
+                            new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Results, CheckDataLoad = checkDataLoad });
+                        }
                         ContextControl.SelectedIndex = 2;
                         break; 
                     }
                 case "TeamsDrillDown": 
                     {
-                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.DrillDown }); }
+                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this,
+                            new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.DrillDown, CheckDataLoad = checkDataLoad });
+                        }
                         ContextControl.SelectedIndex = 3;
                         break; 
                     }
@@ -278,10 +291,10 @@ namespace ClutchWinBaseball
         {
             switch (_currentView)
             {
-                case TeamsViewType.Franchises: LoadView(typeof(TeamsDrillDown)); break;
-                case TeamsViewType.Opponents: LoadView(typeof(TeamsFranchises)); break;
-                case TeamsViewType.Results: LoadView(typeof(TeamsOpponents)); break;
-                case TeamsViewType.DrillDown: LoadView(typeof(TeamsResults)); break;
+                case TeamsViewType.Franchises: LoadView(typeof(TeamsDrillDown), true); break;
+                case TeamsViewType.Opponents: LoadView(typeof(TeamsFranchises), true); break;
+                case TeamsViewType.Results: LoadView(typeof(TeamsOpponents), true); break;
+                case TeamsViewType.DrillDown: LoadView(typeof(TeamsResults), true); break;
             };
         }
 
@@ -289,10 +302,10 @@ namespace ClutchWinBaseball
         {
             switch (_currentView)
             {
-                case TeamsViewType.Franchises: LoadView(typeof(TeamsOpponents)); break;
-                case TeamsViewType.Opponents: LoadView(typeof(TeamsResults)); break;
-                case TeamsViewType.Results: LoadView(typeof(TeamsDrillDown)); break;
-                case TeamsViewType.DrillDown: LoadView(typeof(TeamsFranchises)); break;
+                case TeamsViewType.Franchises: LoadView(typeof(TeamsOpponents), true); break;
+                case TeamsViewType.Opponents: LoadView(typeof(TeamsResults), true); break;
+                case TeamsViewType.Results: LoadView(typeof(TeamsDrillDown), true); break;
+                case TeamsViewType.DrillDown: LoadView(typeof(TeamsFranchises), true); break;
             };
         }
 
@@ -310,28 +323,28 @@ namespace ClutchWinBaseball
 
         private void team_Click(object sender, RoutedEventArgs e)
         {
-            LoadView(typeof(TeamsFranchises));
+            LoadView(typeof(TeamsFranchises), true);
             // Fire the ViewDefinitionLoaded event since we know that everything is loaded now.
             if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Franchises }); }
         }
 
         private void opponent_Click(object sender, RoutedEventArgs e)
         {
-            LoadView(typeof(TeamsOpponents));
+            LoadView(typeof(TeamsOpponents), true);
             // Fire the ViewDefinitionLoaded event since we know that everything is loaded now.
             if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Opponents }); }
         }
 
         private void result_Click(object sender, RoutedEventArgs e)
         {
-            LoadView(typeof(TeamsResults));
+            LoadView(typeof(TeamsResults), true);
             // Fire the ViewDefinitionLoaded event since we know that everything is loaded now.
             if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.Results }); }
         }
 
         private void detail_Click(object sender, RoutedEventArgs e)
         {
-            LoadView(typeof(TeamsDrillDown));
+            LoadView(typeof(TeamsDrillDown), true);
             // Fire the ViewDefinitionLoaded event since we know that everything is loaded now.
             if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new TeamsViewDefinitionLoadedEventArgs { TeamsViewType = TeamsViewType.DrillDown }); }
         }
@@ -364,6 +377,7 @@ namespace ClutchWinBaseball
     public class TeamsViewDefinitionLoadedEventArgs : EventArgs
     {
         public TeamsViewType TeamsViewType { get; set; }
+        public bool CheckDataLoad { get; set; }
     }
 
     public enum TeamsViewType

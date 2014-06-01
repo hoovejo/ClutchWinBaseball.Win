@@ -1,4 +1,5 @@
 ﻿using ClutchWinBaseball.Common;
+using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Views;
 using System;
@@ -52,8 +53,6 @@ namespace ClutchWinBaseball
             var dataSource = new PlayersFeatureIndicatorDataSource();
             ContextControl.ItemsSource = dataSource.Items;
 
-            LoadView(typeof(PlayersBatters));
-
             Loaded += PageLoaded;
             Unloaded += PageUnloaded;
         }
@@ -79,10 +78,10 @@ namespace ClutchWinBaseball
 
                 switch (savedView)
                 {
-                    case PlayersViewType.Batters: LoadView(typeof(PlayersBatters)); break;
-                    case PlayersViewType.Pitchers: LoadView(typeof(PlayersPitchers)); break;
-                    case PlayersViewType.Results: LoadView(typeof(PlayersResults)); break;
-                    case PlayersViewType.DrillDown: LoadView(typeof(PlayersDrillDown)); break;
+                    case PlayersViewType.Batters: LoadView(typeof(PlayersBatters), true); break;
+                    case PlayersViewType.Pitchers: LoadView(typeof(PlayersPitchers), true); break;
+                    case PlayersViewType.Results: LoadView(typeof(PlayersResults), true); break;
+                    case PlayersViewType.DrillDown: LoadView(typeof(PlayersDrillDown), true); break;
                     default: LoadView(typeof(PlayersBatters)); break;
                 }
             }
@@ -140,9 +139,34 @@ namespace ClutchWinBaseball
             }
         }
 
-        void PlayersFeature_ViewDefinitionLoaded(object sender, PlayersViewDefinitionLoadedEventArgs e)
+        async void PlayersFeature_ViewDefinitionLoaded(object sender, PlayersViewDefinitionLoadedEventArgs e)
         {
             _currentView = e.PlayersViewType;
+
+            if (_currentView.Equals(PlayersViewType.Batters))
+            {
+                ViewModelLocator.Players.IsShowingBatters = true;
+            }
+            else
+            {
+                ViewModelLocator.Players.IsShowingBatters = false;
+            }
+            //Handle restart/reentrance
+            if (e.CheckDataLoad)
+            {
+                bool success = false;
+                bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
+
+                switch (e.PlayersViewType)
+                {
+                    case PlayersViewType.Batters: success = await DataManagerLocator.PlayersDataManager.GetBattersAsync(isNetAvailable); break;
+                    case PlayersViewType.Pitchers: success = await DataManagerLocator.PlayersDataManager.GetPitchersAsync(isNetAvailable); break;
+                    case PlayersViewType.Results: success = await DataManagerLocator.PlayersDataManager.GetPlayersResultsAsync(isNetAvailable); break;
+                    case PlayersViewType.DrillDown: success = await DataManagerLocator.PlayersDataManager.GetPlayersDrillDownAsync(isNetAvailable); break;
+                }
+
+                ServiceInteractionNotify(success, isNetAvailable);
+            }
         }
 
         /// <summary>
@@ -151,8 +175,9 @@ namespace ClutchWinBaseball
         /// and output sections into the respective UserControl on the main page.
         /// </summary>
         /// <param name="scenarioName"></param>
-        public void LoadView(Type viewClass)
+        public void LoadView(Type viewClass, bool checkDataLoad = false)
         {
+            NotifyUser(string.Empty, NotifyType.StatusMessage);
             // Load the ScenarioX.xaml file into the Frame.
             HiddenFrame.Navigate(viewClass, this);
 
@@ -185,25 +210,33 @@ namespace ClutchWinBaseball
             {
                 case "PlayersBatters": 
                     { 
-                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Batters }); }
+                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this,
+                            new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Batters, CheckDataLoad = checkDataLoad });
+                        }
                         ContextControl.SelectedIndex = 0;
                         break; 
                     }
                 case "PlayersPitchers": 
                     { 
-                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Pitchers }); }
+                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this,
+                            new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Pitchers, CheckDataLoad = checkDataLoad });
+                        }
                         ContextControl.SelectedIndex = 1;
                         break; 
                     }
                 case "PlayersResults": 
                     { 
-                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Results }); }
+                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this,
+                            new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Results, CheckDataLoad = checkDataLoad });
+                        }
                         ContextControl.SelectedIndex = 2;
                         break; 
                     }
                 case "PlayersDrillDown": 
                     { 
-                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.DrillDown }); }
+                        if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this,
+                            new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.DrillDown, CheckDataLoad = checkDataLoad });
+                        }
                         ContextControl.SelectedIndex = 3;
                         break; 
                     }
@@ -257,10 +290,10 @@ namespace ClutchWinBaseball
         {
             switch (_currentView)
             {
-                case PlayersViewType.Batters: LoadView(typeof(PlayersDrillDown)); break;
-                case PlayersViewType.Pitchers: LoadView(typeof(PlayersBatters)); break;
-                case PlayersViewType.Results: LoadView(typeof(PlayersPitchers)); break;
-                case PlayersViewType.DrillDown: LoadView(typeof(PlayersResults)); break;
+                case PlayersViewType.Batters: LoadView(typeof(PlayersDrillDown), true); break;
+                case PlayersViewType.Pitchers: LoadView(typeof(PlayersBatters), true); break;
+                case PlayersViewType.Results: LoadView(typeof(PlayersPitchers), true); break;
+                case PlayersViewType.DrillDown: LoadView(typeof(PlayersResults), true); break;
             };
         }
 
@@ -268,10 +301,10 @@ namespace ClutchWinBaseball
         {
             switch (_currentView)
             {
-                case PlayersViewType.Batters: LoadView(typeof(PlayersPitchers)); break;
-                case PlayersViewType.Pitchers: LoadView(typeof(PlayersResults)); break;
-                case PlayersViewType.Results: LoadView(typeof(PlayersDrillDown)); break;
-                case PlayersViewType.DrillDown: LoadView(typeof(PlayersBatters)); break;
+                case PlayersViewType.Batters: LoadView(typeof(PlayersPitchers), true); break;
+                case PlayersViewType.Pitchers: LoadView(typeof(PlayersResults), true); break;
+                case PlayersViewType.Results: LoadView(typeof(PlayersDrillDown), true); break;
+                case PlayersViewType.DrillDown: LoadView(typeof(PlayersBatters), true); break;
             };
         }
 
@@ -289,28 +322,28 @@ namespace ClutchWinBaseball
 
         private void batter_Click(object sender, RoutedEventArgs e)
         {
-            LoadView(typeof(PlayersBatters));
+            LoadView(typeof(PlayersBatters), true);
             // Fire the ViewDefinitionLoaded event since we know that everything is loaded now.
             if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Batters }); }
         }
 
         private void pitcher_Click(object sender, RoutedEventArgs e)
         {
-            LoadView(typeof(PlayersPitchers));
+            LoadView(typeof(PlayersPitchers), true);
             // Fire the ViewDefinitionLoaded event since we know that everything is loaded now.
             if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Pitchers }); }
         }
 
         private void result_Click(object sender, RoutedEventArgs e)
         {
-            LoadView(typeof(PlayersResults));
+            LoadView(typeof(PlayersResults), true);
             // Fire the ViewDefinitionLoaded event since we know that everything is loaded now.
             if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.Results }); }
         }
 
         private void detail_Click(object sender, RoutedEventArgs e)
         {
-            LoadView(typeof(PlayersDrillDown));
+            LoadView(typeof(PlayersDrillDown), true);
             // Fire the ViewDefinitionLoaded event since we know that everything is loaded now.
             if (ViewDefinitionLoaded != null) { ViewDefinitionLoaded(this, new PlayersViewDefinitionLoadedEventArgs { PlayersViewType = PlayersViewType.DrillDown }); }
         }
@@ -360,6 +393,7 @@ namespace ClutchWinBaseball
     public class PlayersViewDefinitionLoadedEventArgs : EventArgs
     {
         public PlayersViewType PlayersViewType { get; set; }
+        public bool CheckDataLoad { get; set; }
     }
 
     public enum PlayersViewType

@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CacheFileManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\BindableBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContextCacheManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataManagerLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlayersDataManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TeamsDataManager.cs" />
