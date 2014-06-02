@@ -13,7 +13,7 @@ namespace ClutchWinBaseball
     /// </summary>
     public sealed partial class HubPage : Page
     {
-        private NavigationHelper navigationHelper;
+        private readonly NavigationHelper navigationHelper;
 
         /// <summary>
         /// Gets the NavigationHelper used to aid in navigation and process lifetime management.
@@ -125,12 +125,16 @@ namespace ClutchWinBaseball
         {
             this.navigationHelper.OnNavigatedTo(e);
         }
-
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedFrom(e);
+            navigationHelper.OnNavigatedFrom(e);
+        }
+        #endregion
+
+        private async void HyperlinkButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
         }
 
-        #endregion
     }
 }

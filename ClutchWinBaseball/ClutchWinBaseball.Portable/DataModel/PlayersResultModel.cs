@@ -26,6 +26,6 @@ namespace ClutchWinBaseball.Portable.DataModel
         [JsonProperty("rbi_ct")]
         public string RunBattedIn { get; set; }
 
-        public double Average { get { return (double.Parse(Hit) / double.Parse(AtBat)); } }
+        public double Average { get { return (double.Parse(Hit) <= 0.00) ? 0.00 : (double.Parse(Hit) / double.Parse(AtBat)); } }
     }
 }

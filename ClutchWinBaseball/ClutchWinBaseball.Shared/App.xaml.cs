@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using ClutchWinBaseball.Common;
+using ClutchWinBaseball.Exceptions;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using ClutchWinBaseball.Common;
 
-// The Universal Hub Application project template is documented at http://go.microsoft.com/fwlink/?LinkID=391955
 
 namespace ClutchWinBaseball
 {
@@ -38,6 +29,13 @@ namespace ClutchWinBaseball
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+
+            this.UnhandledException += App_UnhandledException;
+        }
+
+        void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            ExceptionHandler.HandleException(e);
         }
 
         /// <summary>
@@ -116,6 +114,12 @@ namespace ClutchWinBaseball
 
             // Ensure the current window is active
             Window.Current.Activate();
+
+            ExceptionHandler.CheckForPreviousException();
+
+            //var tempFolder = ApplicationData.Current.TemporaryFolder;
+            //var fileManager = new CacheFileManager(tempFolder);
+            //await fileManager.DeleteAllFilesAsync();
         }
 
 #if WINDOWS_PHONE_APP

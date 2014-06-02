@@ -1,7 +1,10 @@
 ﻿using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.Portable.Common;
+using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
 using Microsoft.Phone.Controls;
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
@@ -14,18 +17,61 @@ namespace ClutchWinBaseball.WP8
             InitializeComponent();
         }
 
-        private async void YearStackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
+            bool success = false;
+
+            success = await DataManagerLocator.PlayersDataManager.GetSeasonsAsync(isNetAvailable);
+
+            if (!success && !isNetAvailable)
+            {
+                showNotification(Config.NetworkNotAvailable);
+            }
+            else if (!success)
+            {
+                showNotification(Config.Error);
+            }
+        }
+
+        private void YearStackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             var selectedItem = string.Empty;
             var textBlock = e.OriginalSource as TextBlock;
             if (textBlock != null)
             {
                 selectedItem = ((PlayersYearsViewModel)textBlock.DataContext).LineOne;
-                ViewModelLocator.Players.SelectedYearId = selectedItem;
-                await ViewModelLocator.Players.LoadTeamDataAsync();
             }
 
-            NavigationService.Navigate(new Uri("/PlayersFeature.xaml", UriKind.Relative));
+            PlayersContextViewModel playersContext = PlayersContextViewModel.Instance;
+            ViewModelLocator.Players.SelectedYearId = selectedItem;
+            playersContext.SelectedYearId = selectedItem;
+
+            if (NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
+            }
+            else
+            {
+                NavigationService.Navigate(new Uri("/PlayersFeature.xaml", UriKind.Relative));
+            }
+        }
+
+        private void showNotification(string msg)
+        {
+            notifyMsg.Text = msg;
+            if (!notify.IsOpen)
+            {
+                notify.IsOpen = true;
+            }
+        }
+
+        private void btn_continue_Click(object sender, RoutedEventArgs e)
+        {
+            if (notify.IsOpen)
+            {
+                notify.IsOpen = false;
+            }
         }
     }
 }

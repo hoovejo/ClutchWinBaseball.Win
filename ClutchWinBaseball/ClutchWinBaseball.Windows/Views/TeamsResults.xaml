@@ -30,7 +30,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock x:Name="InputTextBlock1" Text="results" Grid.Row="0" Foreground="{ThemeResource TextSelectionHighlightColorThemeBrush}"
-                    TextWrapping="Wrap" Margin="0,0,0,25" Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                    TextWrapping="Wrap" Margin="0,0,0,25" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Style="{StaticResource SubheaderTextBlockStyle}" 
+                       Text="select opponent first" x:Name="SelectOpponentText" 
+                       Visibility="{Binding TeamResultItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}" />            
         </Grid>
 
         <Grid x:Name="Output" Grid.Row="1">
@@ -71,7 +74,7 @@
                             </ItemsPanelTemplate>
                         </GridView.ItemsPanel>
                         <GridView.GroupStyle>
-                            <GroupStyle>
+                            <GroupStyle HidesIfEmpty="True">
                                 <GroupStyle.HeaderTemplate>
                                     <DataTemplate>
                                         <TextBlock Text='{Binding Key}' Foreground="{StaticResource ApplicationForegroundThemeBrush}" 
@@ -88,7 +91,8 @@
         <Grid x:Name="OutputSmall" Grid.Row="1">
             <SemanticZoom x:Name="semanticZoomSmall">
                 <SemanticZoom.ZoomedOutView>
-                    <ListView x:Name="listView" ItemContainerStyle="{StaticResource ListItemStyle}" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
+                    <ListView x:Name="listView" ItemContainerStyle="{StaticResource ListItemStyle}" 
+                              ScrollViewer.IsVerticalScrollChainingEnabled="False">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Group.Key}" FontFamily="Segoe UI" FontWeight="Light" FontSize="24"/>
@@ -111,7 +115,7 @@
 					        IsSynchronizedWithCurrentItem="False"
 					        SelectionMode="None"
 					        IsSwipeEnabled="False" 
-					        ScrollViewer.IsHorizontalScrollChainingEnabled="False">
+					        ScrollViewer.IsVerticalScrollChainingEnabled="False">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <itemViews:TeamsResultsItem />
@@ -123,7 +127,7 @@
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
                         <ListView.GroupStyle>
-                            <GroupStyle>
+                            <GroupStyle HidesIfEmpty="True">
                                 <GroupStyle.HeaderTemplate>
                                     <DataTemplate>
                                         <TextBlock Text='{Binding Key}' Foreground="{StaticResource ApplicationForegroundThemeBrush}" 

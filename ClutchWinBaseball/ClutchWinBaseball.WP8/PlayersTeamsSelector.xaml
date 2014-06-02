@@ -15,20 +15,37 @@
     DataContext="{Binding Players, Source={StaticResource Locator}}">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Style="{StaticResource LayoutGridStyle}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <ProgressBar Grid.Row="0" 
+                     Visibility="{Binding IsLoadingData, Converter={StaticResource booleanToVisibilityConverter}}" 
+                     Height="10" IsEnabled="{Binding IsLoadingData}" 
+                     IsIndeterminate="{Binding IsLoadingData}" VerticalAlignment="Top" Background="{x:Null}" 
+                     Foreground="{StaticResource PhoneAccentBrush}"/>
+
+        <Popup Grid.Row="0" x:Name="notify">
+            <Border BorderThickness="2" Margin="10" BorderBrush="{StaticResource PhoneBorderBrush}">
+                <StackPanel Background="LightBlue">
+                    <TextBlock Text="Notice" TextAlignment="Center" FontSize="40" Margin="10,0" />
+                    <TextBlock x:Name="notifyMsg" TextAlignment="Center" FontSize="21" Margin="10,0" />
+                    <Button x:Name="btn_continue" HorizontalAlignment="Center" Content="continue" Width="215" Click="btn_continue_Click" />
+                </StackPanel>
+            </Border>
+        </Popup>
+
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+        <StackPanel Grid.Row="1" Margin="12,17,0,28">
             <TextBlock Text="Batter vs Pitcher" Style="{StaticResource PhoneTextNormalStyle}"/>
             <TextBlock Text="teams" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="2" Margin="12,0,12,0">
             <phone:LongListSelector Margin="13,-30,0,0" ItemsSource="{Binding TeamItems}" Name="piTeams"
                                         GroupHeaderTemplate="{StaticResource KeyedListGroupHeader}"
                                         JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 

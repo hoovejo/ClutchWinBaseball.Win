@@ -16,10 +16,29 @@
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <ProgressBar Grid.Row="0" 
+                     Visibility="{Binding IsLoadingData, Converter={StaticResource booleanToVisibilityConverter}}" 
+                     Height="10" IsEnabled="{Binding IsLoadingData}" 
+                     IsIndeterminate="{Binding IsLoadingData}" VerticalAlignment="Top" Background="{x:Null}" 
+                     Foreground="{StaticResource PhoneAccentBrush}"/>
 
+        <Popup Grid.Row="0" x:Name="notify">
+            <Border BorderThickness="2" Margin="10" BorderBrush="{StaticResource PhoneBorderBrush}">
+                <StackPanel Background="LightBlue">
+                    <TextBlock Text="Notice" TextAlignment="Center" FontSize="40" Margin="10,0" />
+                    <TextBlock x:Name="notifyMsg" TextAlignment="Center" FontSize="21" Margin="10,0" />
+                    <Button x:Name="btn_continue" HorizontalAlignment="Center" Content="continue" Width="215" Click="btn_continue_Click" />
+                </StackPanel>
+            </Border>
+        </Popup>
+        
         <!--Pivot Control-->
-        <phone:Pivot Title="Team vs Team" x:Name="pvControl">
+        <phone:Pivot Grid.Row="1" Title="Team vs Team" x:Name="pvControl" SelectionChanged="pvControl_SelectionChanged">
             <phone:Pivot.Background>
                 <ImageBrush ImageSource="/ClutchWinBaseball.WP8;component/Assets/PanoramaBackground.png"/>
             </phone:Pivot.Background>
@@ -48,6 +67,10 @@
                                         GroupHeaderTemplate="{StaticResource KeyedListGroupHeader}"
                                         JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
                                         LayoutMode="List">
+                    <phone:LongListSelector.ListHeader>
+                        <TextBlock x:Uid="SelectTeamText" Text="select team first" Style="{StaticResource PhoneTextContrastStyle}"
+                                               Visibility="{Binding OpponentsItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                    </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Width="432" Tap="OpponentsPanel_Tap" >
@@ -66,6 +89,10 @@
                                         GroupHeaderTemplate="{StaticResource KeyedListGroupHeader}"
                                         JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
                                         LayoutMode="List">
+                    <phone:LongListSelector.ListHeader>
+                        <TextBlock x:Uid="SelectOpponentText" Text="select opponent first" Style="{StaticResource PhoneTextContrastStyle}"
+                                               Visibility="{Binding TeamResultItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                    </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -104,6 +131,10 @@
                                         GroupHeaderTemplate="{StaticResource KeyedListGroupHeader}"
                                         JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
                                         LayoutMode="List">
+                    <phone:LongListSelector.ListHeader>
+                        <TextBlock x:Uid="SelectResultText" Text="select result first" Style="{StaticResource PhoneTextContrastStyle}"
+                                               Visibility="{Binding TeamDrillDownItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                    </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid>

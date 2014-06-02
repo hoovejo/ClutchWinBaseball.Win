@@ -16,14 +16,14 @@
     DataContext="{Binding Main, Source={StaticResource Locator}}"
     shell:SystemTray.IsVisible="False">
 
-
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Mode="Minimized" Opacity="1.0" IsMenuEnabled="True" IsVisible="True" >
             <shell:ApplicationBarIconButton Click="SettingsButton_Click"  IconUri="/Assets/Images/feature.settings.png" Text="settings" />
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 
-<!--LayoutRoot is the root grid where all page content is placed-->
+
+        <!--LayoutRoot is the root grid where all page content is placed-->
 	<Grid x:Name="LayoutRoot" Background="Transparent">
 
 		<!-- LOCALIZATION NOTE:
@@ -64,25 +64,12 @@
             <phone:PanoramaItem Header="Welcome!">
                     <TextBlock TextWrapping="Wrap" 
                                Text="Discover how your favorite baseball teams or players perform against their rivals."
-                               Style="{StaticResource PhoneTextExtraLargeStyle}" />
+                               Style="{StaticResource PhoneTextLargeStyle}" />
             </phone:PanoramaItem>
 
 			<!--Panorama item Feature list-->
-			<phone:PanoramaItem>
+            <phone:PanoramaItem Header="featured">
                 <phone:LongListSelector Margin="0,-38,-22,2" ItemsSource="{Binding Items}">
-                    <phone:LongListSelector.ListHeaderTemplate>
-                        <DataTemplate>
-                            <Grid Margin="12,0,0,38">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="featured"
-                                           Style="{StaticResource PanoramaItemHeaderTextStyle}"
-                                           Grid.Row="0"/>
-                            </Grid>
-                        </DataTemplate>
-                    </phone:LongListSelector.ListHeaderTemplate>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Width="432" >
@@ -95,7 +82,17 @@
                     </phone:LongListSelector.ItemTemplate>
                 </phone:LongListSelector>
 			</phone:PanoramaItem>
-		</phone:Panorama>
+
+            <!--Panorama item credits-->
+            <phone:PanoramaItem Header="credits">
+                <StackPanel>
+                    <TextBlock Margin="10,0,0,0" TextWrapping="Wrap"
+                               Text="The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at:"
+                               Style="{StaticResource PhoneTextLargeStyle }" />
+                    <HyperlinkButton Margin="10,0,0,0" Content="www.retrosheet.org" Tag="http://www.retrosheet.org" Click="HyperlinkButton_Click" FontSize="12" />
+                </StackPanel>
+            </phone:PanoramaItem>
+        </phone:Panorama>
 
 	</Grid>
 </phone:PhoneApplicationPage>

@@ -155,7 +155,14 @@ namespace ClutchWinBaseball.Views
             ViewModelLocator.Players.SelectedYearId = yearId;
             playersContext.SelectedYearId = yearId;
 
-            Frame.Navigate(typeof(PlayersFeature));
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
+            else
+            {
+                Frame.Navigate(typeof(PlayersFeature));
+            }
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)

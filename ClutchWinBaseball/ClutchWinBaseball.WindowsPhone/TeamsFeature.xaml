@@ -46,7 +46,7 @@
         <Pivot Title="Team vs Team" x:Name="pvControl" SelectionChanged="pvControl_SelectionChanged">
 
             <!--Pivot item for Franchises-->
-            <PivotItem x:Uid="PivotItem" Header="teams" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <PivotItem x:Uid="FranchisesPivot" Header="teams" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="teamsSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -85,7 +85,7 @@
             </PivotItem>
 
             <!--Pivot item for Opponents-->
-            <PivotItem Header="opponents" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <PivotItem x:Uid="OpponentsPivot" Header="opponents" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="opponentsSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -101,6 +101,12 @@
                         <ListView x:Name="opponentItemsGridView" ItemsSource="{Binding Source={StaticResource cvsOpponentsItems}}" Margin="12,0,0,0"
                                       IsItemClickEnabled="True"
                                       ItemClick="Opponents_ItemClick" >
+                            <ListView.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Uid="SelectTeamText" Text="select team first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding OpponentsItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <itemViews:TeamsOpponentItem />
@@ -124,7 +130,7 @@
             </PivotItem>
 
             <!--Pivot item for Team results -->
-            <PivotItem Header="results" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <PivotItem x:Uid="TeamsResultsPivot" Header="results" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="teamResultsSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -140,6 +146,12 @@
                         <ListView x:Name="teamResultsItemsGridView" ItemsSource="{Binding Source={StaticResource cvsTeamResultItems}}" Margin="12,0,0,0"
                                       IsItemClickEnabled="True"
                                       ItemClick="TeamResults_ItemClick" >
+                            <ListView.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Uid="SelectOpponentText" Text="select opponent first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding TeamResultItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <itemViews:TeamsResultsItem />
@@ -163,7 +175,7 @@
             </PivotItem>
 
             <!--Pivot item for team game details -->
-            <PivotItem Header="details" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <PivotItem x:Uid="TeamsDrillDownPivot" Header="details" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="teamDrillDownSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -177,6 +189,12 @@
                     </SemanticZoom.ZoomedOutView>
                     <SemanticZoom.ZoomedInView>
                         <ListView x:Name="teamDrillDownItemsGridView" ItemsSource="{Binding Source={StaticResource cvsTeamDrillDownItems}}" Margin="12,0,0,0" >
+                            <ListView.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Uid="SelectResultText" Text="select result first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding TeamDrillDownItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <itemViews:TeamsDrillDownItem />

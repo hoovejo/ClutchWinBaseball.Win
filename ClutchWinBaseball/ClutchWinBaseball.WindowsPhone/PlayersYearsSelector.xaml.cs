@@ -54,6 +54,8 @@ namespace ClutchWinBaseball
             {
                 showNotification(Config.Error);
             }
+
+            base.OnNavigatedTo(e);
         }
 
         private void showNotification(string msg)

@@ -4,7 +4,6 @@ using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
 using System;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -47,7 +46,7 @@ namespace ClutchWinBaseball
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             var tab = localSettings.Values[Config.PlayersFeatureTabCache];
@@ -55,6 +54,18 @@ namespace ClutchWinBaseball
             {
                 pvControl.SelectedIndex = (int)tab;
             }
+
+            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
+            bool success = false;
+
+            success = await DataManagerLocator.PlayersDataManager.GetBattersAsync(isNetAvailable);
+
+            ServiceInteractionNotify(success, isNetAvailable);
+
+            (battersSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsBatterItems.View.CollectionGroups;
+            (pitcherSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPitcherItems.View.CollectionGroups;
+            (playerResultsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPlayerResults.View.CollectionGroups;
+            (playerDrillDownSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPlayerDrillDownItems.View.CollectionGroups;
         }
 
         /// <summary>
@@ -98,6 +109,8 @@ namespace ClutchWinBaseball
             success = await DataManagerLocator.PlayersDataManager.GetPitchersAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 1;
+
+            ServiceInteractionNotify(success, isNetAvailable);
         }
 
         /// <summary>
@@ -117,6 +130,8 @@ namespace ClutchWinBaseball
             success = await DataManagerLocator.PlayersDataManager.GetPlayersResultsAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 2;
+
+            ServiceInteractionNotify(success, isNetAvailable);
         }
 
         /// <summary>
@@ -136,6 +151,8 @@ namespace ClutchWinBaseball
             success = await DataManagerLocator.PlayersDataManager.GetPlayersDrillDownAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 3;
+
+            ServiceInteractionNotify(success, isNetAvailable);
         }
 
         #region NavigationHelper registration
@@ -153,28 +170,9 @@ namespace ClutchWinBaseball
         /// </summary>
         /// <param name="e">Provides data for navigation methods and event
         /// handlers that cannot cancel the navigation request.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-
-            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            bool success = false;
-
-            success = await DataManagerLocator.PlayersDataManager.GetBattersAsync(isNetAvailable);
-
-            if (!success && !isNetAvailable)
-            {
-                showNotification(Config.NetworkNotAvailable);
-            }
-            else if (!success)
-            {
-                showNotification(Config.Error);
-            }
-
-            (battersSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsBatterItems.View.CollectionGroups;
-            (pitcherSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPitcherItems.View.CollectionGroups;
-            (playerResultsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPlayerResults.View.CollectionGroups;
-            (playerDrillDownSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsPlayerDrillDownItems.View.CollectionGroups;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -229,6 +227,18 @@ namespace ClutchWinBaseball
                 showNotification(Config.NetworkNotAvailable);
             }
             else if (neededRefresh && !success)
+            {
+                showNotification(Config.Error);
+            }
+        }
+
+        private void ServiceInteractionNotify(bool success, bool isNetAvailable)
+        {
+            if (!success && !isNetAvailable)
+            {
+                showNotification(Config.NetworkNotAvailable);
+            }
+            else if (!success)
             {
                 showNotification(Config.Error);
             }

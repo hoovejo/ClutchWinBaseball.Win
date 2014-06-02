@@ -29,8 +29,8 @@ namespace ClutchWinBaseball.Portable
         public void LoadData()
         {
             // Sample data; replace with real data
-            this.Items.Add(new FeatureViewModel() { Id = 0, LineOne = "Team vs Team", LineTwo = "pick your fav team and opponent"});
-            this.Items.Add(new FeatureViewModel() { Id = 1, LineOne = "Batter vs Pitcher", LineTwo = "pick your fav batter vs pitcher"});
+            this.Items.Add(new FeatureViewModel() { Id = 0, LineOne = "Team vs Team", LineTwo = "checkout team matchups"});
+            this.Items.Add(new FeatureViewModel() { Id = 1, LineOne = "Batter vs Pitcher", LineTwo = "checkout player matchups"});
 
             this.IsDataLoaded = true;
         }

@@ -142,22 +142,23 @@ namespace ClutchWinBaseball.Views
             }
         }
 
-        private async void Items_ItemClick(object sender, ItemClickEventArgs e)
+        private void Items_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (ViewModelLocator.Players.IsLoadingData) return;
 
             PlayersContextViewModel playersContext = PlayersContextViewModel.Instance;
             var teamId = ((PlayersTeamsViewModel)e.ClickedItem).TeamId;
             ViewModelLocator.Players.SelectedTeamId = teamId;
-            playersContext.SelectedTeamId = teamId; 
+            playersContext.SelectedTeamId = teamId;
 
-            bool success = false;
-            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.PlayersDataManager.GetBattersAsync(isNetAvailable);
-
-            ServiceInteractionNotify(success, isNetAvailable);
-
-            Frame.Navigate(typeof(PlayersFeature));
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
+            else
+            {
+                Frame.Navigate(typeof(PlayersFeature));
+            }
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.WP8.Exceptions;
+using ClutchWinBaseball.WP8.Resources;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using System;
 using System.Diagnostics;
-using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using ClutchWinBaseball.Portable;
-using ClutchWinBaseball.Portable.Common;
-using ClutchWinBaseball.WP8.Resources;
+using Windows.Storage;
 
 namespace ClutchWinBaseball.WP8
 {
@@ -63,8 +61,12 @@ namespace ClutchWinBaseball.WP8
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
-        private void Application_Launching(object sender, LaunchingEventArgs e)
+        private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            ExceptionHandler.CheckForPreviousException();
+
+            var fileManager = new CacheFileManager(ApplicationData.Current.LocalFolder);
+            await fileManager.DeleteAllFilesAsync();
         }
 
         // Code to execute when the application is activated (brought to foreground)
@@ -104,6 +106,8 @@ namespace ClutchWinBaseball.WP8
         // Code to execute on Unhandled Exceptions
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
+            ExceptionHandler.HandleException(e);
+
             if (Debugger.IsAttached)
             {
                 // An unhandled exception has occurred; break into the debugger

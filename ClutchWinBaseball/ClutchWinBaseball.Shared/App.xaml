@@ -12,6 +12,8 @@
         <vm:ViewModelLocator x:Key="Locator" />
 
         <conv:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"></conv:BooleanToVisibilityConverter>
+        <conv:ItemCountToEmptyLabelVisibilityConverter x:Key="itemCountToEmptyLabelVisibilityConverter"></conv:ItemCountToEmptyLabelVisibilityConverter>
+        <conv:NoSeasonToButtonEnabledConverter x:Key="nullValueToButtonEnabledConverter"></conv:NoSeasonToButtonEnabledConverter>
 
         <x:String x:Key="AppName">ClutchWin baseball</x:String>
         <x:String x:Key="ChevronGlyph">&#xE26B;</x:String>

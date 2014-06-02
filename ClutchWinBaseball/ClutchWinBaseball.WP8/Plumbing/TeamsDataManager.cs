@@ -1,11 +1,11 @@
-﻿using ClutchWinBaseball.Exceptions;
-using ClutchWinBaseball.Portable;
+﻿using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
+using ClutchWinBaseball.WP8.Exceptions;
 using System;
 using System.Threading.Tasks;
 
-namespace ClutchWinBaseball
+namespace ClutchWinBaseball.WP8
 {
     public class TeamsDataManager
     {

@@ -23,14 +23,14 @@
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
-        <Hub x:Name="MainHub" x:Uid="Hub" Header="ClutchWin" Background="{ThemeResource HubBackgroundImageBrush}">
+        <Hub x:Name="MainHub" x:Uid="Hub" Header="{StaticResource AppName}" Background="{ThemeResource HubBackgroundImageBrush}">
             <HubSection x:Name="HomeHubSection" x:Uid="HubSection1">
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock Text="Welcome!"
-                                   Style="{ThemeResource  SubheaderTextBlockStyle}" Margin="0,0,0,12" />
-                        <TextBlock Text="Discover how your favorite baseball teams or players perform against their rivals."
-                                   Style="{ThemeResource  SubheaderTextBlockStyle}" />
+                        <TextBlock x:Uid="Welcome" Text="Welcome!"
+                                   Style="{ThemeResource SubheaderTextBlockStyle}" Margin="0,0,0,12" />
+                        <TextBlock x:Uid="Discover" Text="Discover how your favorite baseball teams or players perform against their rivals."
+                                   Style="{ThemeResource SubheaderTextBlockStyle}" />
                     </StackPanel>
 
                 </DataTemplate>
@@ -51,7 +51,19 @@
                     </ListView>
                 </DataTemplate>
             </HubSection>
-            
+
+            <HubSection x:Name="CreditsHubSection" x:Uid="HubSection3">
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="Credits"
+                                   Style="{ThemeResource SubheaderTextBlockStyle}" Margin="0,0,0,12" />
+                        <TextBlock Margin="10,0,0,0"
+                            Text="The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at:"
+                            Style="{ThemeResource BodyTextBlockStyle }" />
+                        <HyperlinkButton Margin="10,0,0,0" Content="www.retrosheet.org" Tag="http://www.retrosheet.org" Click="HyperlinkButton_Click" FontSize="12" />
+                    </StackPanel>
+                </DataTemplate>
+            </HubSection>
         </Hub>
     </Grid>
 </Page>

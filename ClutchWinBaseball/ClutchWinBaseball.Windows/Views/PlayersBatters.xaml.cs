@@ -35,16 +35,8 @@ namespace ClutchWinBaseball.Views
             rootPage.LoadView(typeof(PlayersPitchers));
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            PlayersContextViewModel playersContext = PlayersContextViewModel.Instance;
-
-            bool success = false;
-            bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.PlayersDataManager.GetBattersAsync(isNetAvailable);
-
-            rootPage.ServiceInteractionNotify(success, isNetAvailable);
-
             // sets the items source for the zoomed out view to the group data as well
             (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsBatterItems.View.CollectionGroups;
             (semanticZoomSmall.ZoomedOutView as ListViewBase).ItemsSource = cvsBatterItems.View.CollectionGroups;

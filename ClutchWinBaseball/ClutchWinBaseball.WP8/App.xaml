@@ -5,11 +5,25 @@
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:vm="clr-namespace:ClutchWinBaseball.Portable;assembly=ClutchWinBaseball.Portable">
+    xmlns:vm="clr-namespace:ClutchWinBaseball.Portable;assembly=ClutchWinBaseball.Portable"
+    xmlns:conv="clr-namespace:ClutchWinBaseball.WP8.Converters">
 
     <!--Application Resources-->
     <Application.Resources>
+
+        <conv:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"></conv:BooleanToVisibilityConverter>
+        <conv:ItemCountToEmptyLabelVisibilityConverter x:Key="itemCountToEmptyLabelVisibilityConverter"></conv:ItemCountToEmptyLabelVisibilityConverter>
+        <conv:NoSeasonToButtonEnabledConverter x:Key="nullValueToButtonEnabledConverter"></conv:NoSeasonToButtonEnabledConverter>
+        
         <sys:Double x:Key="PanoramaItemHeaderFontSize">66</sys:Double>
+
+        <Style x:Key="LayoutGridStyle" TargetType="Grid">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="/ClutchWinBaseball.WP8;component/Assets/PanoramaBackground.png"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <Style x:Key="PanoramaItemHeaderTextStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiLight}"/>

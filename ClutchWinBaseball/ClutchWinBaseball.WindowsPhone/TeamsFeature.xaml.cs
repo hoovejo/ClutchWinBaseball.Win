@@ -50,6 +50,13 @@ namespace ClutchWinBaseball
         /// session.  The state will be null the first time a page is visited.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            var tab = localSettings.Values[Config.TeamsFeatureTabCache];
+            if (tab != null)
+            {
+                pvControl.SelectedIndex = (int)tab;
+            }
+
             if (!teamsContext.IsHydratedObject)
             {
                 TeamsContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadTeamsContextAsync();
@@ -70,21 +77,7 @@ namespace ClutchWinBaseball
             (teamResultsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamResultItems.View.CollectionGroups;
             (teamDrillDownSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamDrillDownItems.View.CollectionGroups;
 
-            if (!success && !isNetAvailable)
-            {
-                showNotification(Config.NetworkNotAvailable);
-            }
-            else if (!success)
-            {
-                showNotification(Config.Error);
-            }
-
-            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            var tab = localSettings.Values[Config.TeamsFeatureTabCache];
-            if (tab != null)
-            {
-                pvControl.SelectedIndex = (int)tab;
-            }
+            ServiceInteractionNotify(success, isNetAvailable);
         }
 
         /// <summary>
@@ -118,6 +111,8 @@ namespace ClutchWinBaseball
             success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 1;
+
+            ServiceInteractionNotify(success, isNetAvailable);
         }
 
         /// <summary>
@@ -137,6 +132,8 @@ namespace ClutchWinBaseball
             success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 2;
+
+            ServiceInteractionNotify(success, isNetAvailable);
         }
 
         /// <summary>
@@ -156,6 +153,8 @@ namespace ClutchWinBaseball
             success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable);
 
             pvControl.SelectedIndex = 3;
+
+            ServiceInteractionNotify(success, isNetAvailable);
         }
 
         #region NavigationHelper registration
@@ -230,6 +229,18 @@ namespace ClutchWinBaseball
                 showNotification(Config.NetworkNotAvailable);
             }
             else if (neededRefresh && !success)
+            {
+                showNotification(Config.Error);
+            }
+        }
+
+        private void ServiceInteractionNotify(bool success, bool isNetAvailable)
+        {
+            if (!success && !isNetAvailable)
+            {
+                showNotification(Config.NetworkNotAvailable);
+            }
+            else if (!success)
             {
                 showNotification(Config.Error);
             }

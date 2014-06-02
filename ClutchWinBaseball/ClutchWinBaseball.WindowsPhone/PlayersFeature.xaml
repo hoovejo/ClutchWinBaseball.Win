@@ -46,7 +46,7 @@
         <Pivot Title="Batter vs Pitcher" x:Name="pvControl" SelectionChanged="pvControl_SelectionChanged">
 
             <!--Pivot item for Batters-->
-            <PivotItem x:Uid="PivotItem" Header="batters" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <PivotItem x:Uid="BatterPivot" Header="batters" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -63,6 +63,7 @@
                             </StackPanel>
                         </Button>
                         <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}" Margin="20,0,0,0"
+                                IsEnabled="{Binding SelectedYearId, Converter={StaticResource nullValueToButtonEnabledConverter}}"
                                     AutomationProperties.Name="goToTeams" Click="goTo_Teams"
                                     Style="{ThemeResource PivotTitleContentControlStyle}" >
                             <StackPanel Orientation="Horizontal">
@@ -87,6 +88,12 @@
                             <ListView x:Name="BattersItemsGridView" ItemsSource="{Binding Source={StaticResource cvsBatterItems}}" Margin="12,0,0,0"
                                       IsItemClickEnabled="True"
                                       ItemClick="Batters_ItemClick" >
+                                <ListView.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Uid="SelectSeasonTeamText" Text="select season then a team" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding BatterItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                    </DataTemplate>
+                                </ListView.HeaderTemplate>
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <itemViews:PlayersBatterItem />
@@ -111,7 +118,7 @@
             </PivotItem>
 
             <!--Pivot item for Pitchers-->
-            <PivotItem Header="pitchers">
+            <PivotItem x:Uid="PitcherPivot" Header="pitchers" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="pitcherSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -127,6 +134,12 @@
                         <ListView x:Name="PitcherItemsGridView" ItemsSource="{Binding Source={StaticResource cvsPitcherItems}}" Margin="12,0,0,0"
                                       IsItemClickEnabled="True"
                                       ItemClick="Pitchers_ItemClick" >
+                            <ListView.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Uid="SelectBatterText" Text="select batter first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding PitcherItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <itemViews:PlayersPitcherItem />
@@ -150,7 +163,7 @@
             </PivotItem>
 
             <!--Pivot item for Player results -->
-            <PivotItem Header="results">
+            <PivotItem x:Uid="PlayersResultsPivot" Header="results" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="playerResultsSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -166,6 +179,12 @@
                         <ListView x:Name="playerResultsItemsGridView" ItemsSource="{Binding Source={StaticResource cvsPlayerResults}}" Margin="12,0,0,0"
                                       IsItemClickEnabled="True"
                                       ItemClick="PlayerResults_ItemClick" >
+                            <ListView.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Uid="SelectPitcherText" Text="select pitcher first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding PlayerResultItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <itemViews:PlayersResultsItem />
@@ -189,7 +208,7 @@
             </PivotItem>
 
             <!--Pivot item for Player game details -->
-            <PivotItem Header="details">
+            <PivotItem x:Uid="PlayersDrillDownPivot" Header="details" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <SemanticZoom x:Name="playerDrillDownSemanticZoom">
                     <SemanticZoom.ZoomedOutView>
                         <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -203,6 +222,12 @@
                     </SemanticZoom.ZoomedOutView>
                     <SemanticZoom.ZoomedInView>
                         <ListView x:Name="playerDrillDownItemsGridView" ItemsSource="{Binding Source={StaticResource cvsPlayerDrillDownItems}}" Margin="12,0,0,0">
+                            <ListView.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Uid="SelectPlayerResultText" Text="select result first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding PlayerDrillDownItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <itemViews:PlayersDrillDownItem />

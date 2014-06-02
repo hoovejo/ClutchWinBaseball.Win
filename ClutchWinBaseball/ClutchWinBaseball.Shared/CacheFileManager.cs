@@ -32,5 +32,23 @@ namespace ClutchWinBaseball
             await FileIO.WriteTextAsync(file, jsonContent);
             return returnValue;
         }
+
+        public async Task<bool> DeleteAllFilesAsync()
+        {
+            await ApplicationData.Current.ClearAsync(ApplicationDataLocality.Local | ApplicationDataLocality.Temporary);
+            return true;
+        }
+
+        public async Task<bool> DeleteFileAsync(string fileName)
+        {
+            var exists = await tempFolder.FileExistsAsync(fileName);
+            if (exists)
+            {
+                StorageFile file = await tempFolder.GetFileAsync(fileName);
+                try { await file.DeleteAsync(StorageDeleteOption.PermanentDelete);  }
+                catch { }
+            }
+            return true;
+        }
     }
 }

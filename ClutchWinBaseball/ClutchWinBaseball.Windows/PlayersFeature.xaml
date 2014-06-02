@@ -154,9 +154,10 @@
                                 <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-11,0,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
                             </StackPanel>
                         </Button>
-                        <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}" Margin="20,0,0,0"
-                                        AutomationProperties.Name="goToYears" Click="goTo_Teams"
-                                        Style="{StaticResource TextBlockButtonStyle}" >
+                        <Button IsEnabled="{Binding SelectedYearId, Converter={StaticResource nullValueToButtonEnabledConverter}}" 
+                                Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}" Margin="20,0,0,0"
+                                AutomationProperties.Name="goToYears" Click="goTo_Teams"
+                                Style="{StaticResource TextBlockButtonStyle}" >
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding SelectedTeamId}" Margin="0,-11,10,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
                                 <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-11,0,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
