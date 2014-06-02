@@ -35,9 +35,18 @@ namespace ClutchWinBaseball.Portable
         private string _selectedYearId = "season";
         private string _selectedTeamId = "team";
         private bool _isLoadingData, _isShowingBatters;
-        
-        public string SelectedYearId {  get { return _selectedYearId; } set { _selectedYearId = value; } }
-        public string SelectedTeamId { get { return _selectedTeamId; } set { _selectedTeamId = value; } }
+
+        public string SelectedYearId
+        {
+            get { return _selectedYearId; }
+            set { if (value != _selectedYearId) { _selectedYearId = value; NotifyPropertyChanged("SelectedYearId"); } }
+        }
+
+        public string SelectedTeamId
+        {
+            get { return _selectedTeamId; }
+            set { if (value != _selectedTeamId) { _selectedTeamId = value; NotifyPropertyChanged("SelectedTeamId"); } }
+        }
 
         public bool IsShowingBatters
         {

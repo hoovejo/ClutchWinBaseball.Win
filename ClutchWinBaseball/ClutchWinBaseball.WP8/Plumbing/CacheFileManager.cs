@@ -19,7 +19,12 @@ namespace ClutchWinBaseball.WP8
 
         public async Task<string> CacheInquiryAsync(string fileName)
         {
-            var folder = await tempFolder.GetFolderAsync(DataFolderName);
+            StorageFolder folder = null;
+            try
+            {
+                folder = await tempFolder.GetFolderAsync(DataFolderName);
+            }
+            catch { }
 
             var contents = string.Empty;
             if (folder != null)
@@ -52,7 +57,13 @@ namespace ClutchWinBaseball.WP8
 
         public async Task<bool> DeleteAllFilesAsync()
         {
-            var folder = await tempFolder.GetFolderAsync(DataFolderName);
+            StorageFolder folder = null;
+            try
+            {
+                folder = await tempFolder.GetFolderAsync(DataFolderName);
+            }
+            catch { }
+
             if (folder != null)
             {
                 await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
@@ -62,7 +73,12 @@ namespace ClutchWinBaseball.WP8
 
         public async Task<bool> DeleteFileAsync(string fileName)
         {
-            var folder = await tempFolder.GetFolderAsync(DataFolderName);
+            StorageFolder folder = null;
+            try
+            {
+                folder = await tempFolder.GetFolderAsync(DataFolderName);
+            }
+            catch { }
 
             if (folder != null)
             {
