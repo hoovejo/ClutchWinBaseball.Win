@@ -1,6 +1,7 @@
 ﻿using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.DataModel;
 using ClutchWinBaseball.Portable.FeatureStateModel;
+using ClutchWinBaseball.WP8.Exceptions;
 using Microsoft.Phone.Controls;
 using System;
 using System.Windows;
@@ -24,6 +25,8 @@ namespace ClutchWinBaseball.WP8
             {
                 ViewModelLocator.Main.LoadData();
             }
+
+            ExceptionHandler.CheckForPreviousException();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)

@@ -25,6 +25,8 @@ namespace ClutchWinBaseball
         public async Task<bool> GetFranchisesAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+            Exception exRef = null;
+
             try
             {
                 if (!_teamsContext.HasLoadedFranchisesOncePerSession)
@@ -57,17 +59,24 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { _teamsContext.HasLoadedFranchisesOncePerSession = false; ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { _teamsContext.HasLoadedFranchisesOncePerSession = false; exRef = ex; }
             finally
             {
                 _teamsViewModel.IsLoadingData = false;
             }
+            if (exRef != null)
+            {
+                await ExceptionHandler.HandleException(exRef);
+            }
+
             return returnValue;
         }
 
         public async Task<bool> GetOpponentsAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+            Exception exRef = null;
+
             try
             {
                 if (_teamsContext.ShouldFilterOpponents(isNetAvailable))
@@ -94,17 +103,24 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exRef = ex; }
             finally
             {
                 _teamsViewModel.IsLoadingData = false;
             }
+            if (exRef != null)
+            {
+                await ExceptionHandler.HandleException(exRef);
+            }
+
             return returnValue;
         }
 
         public async Task<bool> GetTeamsResultsAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+            Exception exRef = null;
+
             try
             {
                 if (_teamsContext.ShouldExecuteTeamResultsSearch(isNetAvailable))
@@ -136,17 +152,24 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exRef = ex; }
             finally
             {
                 _teamsViewModel.IsLoadingData = false;
             }
+            if (exRef != null)
+            {
+                await ExceptionHandler.HandleException(exRef);
+            }
+
             return returnValue;
         }
 
         public async Task<bool> GetTeamsDrillDownAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+            Exception exRef = null;
+
             try
             {
                 if (_teamsContext.ShouldExecuteTeamDrillDownSearch(isNetAvailable))
@@ -178,11 +201,16 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exRef = ex; }
             finally
             {
                 _teamsViewModel.IsLoadingData = false;
             }
+            if (exRef != null)
+            {
+                await ExceptionHandler.HandleException(exRef);
+            }
+
             return returnValue;
         }
     }

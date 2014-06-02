@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Storage;
@@ -13,11 +14,12 @@ namespace ClutchWinBaseball.Exceptions
     {
         const string FileName = "errorreporting.txt";
         const string EmailTarget = "joe_hoover7@hotmail.com";
+        const string ModelText = "An error occured last time ClutchWin was run, do you want to help us out and send the error to us?";
 
         private static TypedEventHandler<DataTransferManager, DataRequestedEventArgs> handler;
         private static ErrorMessageInfo errormessage;
 
-        public async static void HandleException(UnhandledExceptionEventArgs ex, string extra = "")
+        public async static Task<bool> HandleException(UnhandledExceptionEventArgs ex, string extra = "")
         {
             try
             {
@@ -33,9 +35,10 @@ namespace ClutchWinBaseball.Exceptions
                 await cache.CacheUpdateAsync(FileName, jsonString);
             }
             catch { }
+            return true;
         }
 
-        public async static void HandleException(Exception ex, string extra = "")
+        public async static Task<bool> HandleException(Exception ex, string extra = "")
         {
             try
             {
@@ -51,9 +54,10 @@ namespace ClutchWinBaseball.Exceptions
                 await cache.CacheUpdateAsync(FileName, jsonString);
             }
             catch { }
+            return true;
         }
 
-        public async static void CheckForPreviousException()
+        public async static Task<bool> CheckForPreviousException()
         {
             var cache = new CacheFileManager(ApplicationData.Current.TemporaryFolder);
             try
@@ -64,14 +68,15 @@ namespace ClutchWinBaseball.Exceptions
 
                 if (errormessage != null)
                 {
-                    ShowErrorMessageDialog();
+                    await ShowErrorMessageDialog();
                     await cache.DeleteFileAsync(FileName);
                 }
             }
             catch { }
+            return true;
         }
 
-        private static async void ShowErrorMessageDialog()
+        private async static Task<bool> ShowErrorMessageDialog()
         {
             // Register handler for DataRequested events for sharing
             if (handler != null)
@@ -81,7 +86,7 @@ namespace ClutchWinBaseball.Exceptions
             DataTransferManager.GetForCurrentView().DataRequested += handler;
 
             // Create the message dialog and set its content
-            var messageDialog = new MessageDialog("An error occured last time ClutchWin was run, do you want to help us out and send the error to us?");
+            var messageDialog = new MessageDialog(ModelText);
 
             // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
             messageDialog.Commands.Add(new UICommand(
@@ -99,6 +104,7 @@ namespace ClutchWinBaseball.Exceptions
 
             // Show the message dialog
             await messageDialog.ShowAsync();
+            return true;
         }
 
         private static void CommandInvokedHandler(IUICommand command)

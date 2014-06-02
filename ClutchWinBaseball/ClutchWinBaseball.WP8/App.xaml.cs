@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
-using Windows.Storage;
 
 namespace ClutchWinBaseball.WP8
 {
@@ -61,12 +60,10 @@ namespace ClutchWinBaseball.WP8
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
-        private async void Application_Launching(object sender, LaunchingEventArgs e)
+        private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            ExceptionHandler.CheckForPreviousException();
-
-            var fileManager = new CacheFileManager(ApplicationData.Current.LocalFolder);
-            await fileManager.DeleteAllFilesAsync();
+            //var fileManager = new CacheFileManager(ApplicationData.Current.LocalFolder);
+            //await fileManager.DeleteAllFilesAsync();
         }
 
         // Code to execute when the application is activated (brought to foreground)

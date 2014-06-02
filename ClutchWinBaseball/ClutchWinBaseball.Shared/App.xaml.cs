@@ -33,9 +33,9 @@ namespace ClutchWinBaseball
             this.UnhandledException += App_UnhandledException;
         }
 
-        void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            ExceptionHandler.HandleException(e);
+            var t = await ExceptionHandler.HandleException(e);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace ClutchWinBaseball
             // Ensure the current window is active
             Window.Current.Activate();
 
-            ExceptionHandler.CheckForPreviousException();
+            await ExceptionHandler.CheckForPreviousException();
 
             //var tempFolder = ApplicationData.Current.TemporaryFolder;
             //var fileManager = new CacheFileManager(tempFolder);
