@@ -187,7 +187,7 @@ namespace ClutchWinBaseball.Portable
                 select new TeamsResultsViewModel
                 {
                     Year = item.Year,
-                    Games = item.Wins + item.Losses,
+                    Games = (int.Parse(item.Wins) + int.Parse(item.Losses)).ToString(),
                     Team = item.Team,
                     Opponent = item.Opponent,
                     Wins = item.Wins,
