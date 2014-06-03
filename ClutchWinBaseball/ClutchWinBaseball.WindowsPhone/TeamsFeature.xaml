@@ -148,8 +148,12 @@
                                       ItemClick="TeamResults_ItemClick" >
                             <ListView.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock x:Uid="SelectOpponentText" Text="select opponent first" Style="{ThemeResource SubheaderTextBlockStyle}"
-                                               Visibility="{Binding TeamResultItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                    <StackPanel>
+                                        <TextBlock x:Uid="SelectOpponentText" Text="select opponent first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding ResultsGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                                        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="no results" x:Name="NoResults" 
+                                                Visibility="{Binding NoResults, Converter={StaticResource booleanToVisibilityConverter}}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
@@ -191,8 +195,12 @@
                         <ListView x:Name="teamDrillDownItemsGridView" ItemsSource="{Binding Source={StaticResource cvsTeamDrillDownItems}}" Margin="12,0,0,0" >
                             <ListView.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock x:Uid="SelectResultText" Text="select result first" Style="{ThemeResource SubheaderTextBlockStyle}"
-                                               Visibility="{Binding TeamDrillDownItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                    <StackPanel>
+                                        <TextBlock x:Uid="SelectResultText" Text="select result first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding DrillDownGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                                        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="no results" x:Name="NoResults" 
+                                                Visibility="{Binding NoDrillDown, Converter={StaticResource booleanToVisibilityConverter}}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>

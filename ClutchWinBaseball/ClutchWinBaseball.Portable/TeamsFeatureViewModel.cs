@@ -27,7 +27,7 @@ namespace ClutchWinBaseball.Portable
         public ObservableCollection<KeyedList<string, TeamsResultsViewModel>> TeamResultItems { get; private set; }
         public ObservableCollection<KeyedList<string, TeamsDrillDownViewModel>> TeamDrillDownItems { get; private set; }
 
-        private bool _isLoadingData;
+        private bool _isLoadingData, _noResults, _resultsGoBack, _noDrillDown, _drillDownGoBack;
 
         //Determine if we need to show loading spinner
         public bool IsLoadingData
@@ -35,7 +35,30 @@ namespace ClutchWinBaseball.Portable
             get { return _isLoadingData; }
             set { if (value != _isLoadingData) { _isLoadingData = value; NotifyPropertyChanged("IsLoadingData"); } }
         }
+        
+        public bool NoResults
+        {
+            get { return _noResults; }
+            set { if (value != _noResults) { _noResults = value; NotifyPropertyChanged("NoResults"); } }
+        }
 
+        public bool ResultsGoBack
+        {
+            get { return _resultsGoBack; }
+            set { if (value != _resultsGoBack) { _resultsGoBack = value; NotifyPropertyChanged("ResultsGoBack"); } }
+        }
+        
+        public bool NoDrillDown
+        {
+            get { return _noDrillDown; }
+            set { if (value != _noDrillDown) { _noDrillDown = value; NotifyPropertyChanged("NoDrillDown"); } }
+        }
+
+        public bool DrillDownGoBack
+        {
+            get { return _drillDownGoBack; }
+            set { if (value != _drillDownGoBack) { _drillDownGoBack = value; NotifyPropertyChanged("DrillDownGoBack"); } }
+        }
 
         //base list to build opponent list from
         private List<TeamsFranchisesViewModel> FranchiseList = new List<TeamsFranchisesViewModel>();

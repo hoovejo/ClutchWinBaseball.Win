@@ -17,6 +17,7 @@ namespace ClutchWinBaseball
     {
         private readonly NavigationHelper navigationHelper;
         private TeamsContextViewModel teamsContext;
+        private bool handledByUserAction;
 
         public TeamsFeature()
         {
@@ -110,6 +111,7 @@ namespace ClutchWinBaseball
 
             success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
 
+            handledByUserAction = true;
             pvControl.SelectedIndex = 1;
 
             ServiceInteractionNotify(success, isNetAvailable);
@@ -131,6 +133,7 @@ namespace ClutchWinBaseball
 
             success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable);
 
+            handledByUserAction = true;
             pvControl.SelectedIndex = 2;
 
             ServiceInteractionNotify(success, isNetAvailable);
@@ -152,6 +155,7 @@ namespace ClutchWinBaseball
 
             success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable);
 
+            handledByUserAction = true;
             pvControl.SelectedIndex = 3;
 
             ServiceInteractionNotify(success, isNetAvailable);
@@ -186,6 +190,8 @@ namespace ClutchWinBaseball
 
         private async void pvControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (handledByUserAction) return;
+
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
             bool neededRefresh = false;

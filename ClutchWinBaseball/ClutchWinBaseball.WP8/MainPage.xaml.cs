@@ -7,6 +7,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Windows.Storage;
 
 namespace ClutchWinBaseball.WP8
 {
@@ -19,7 +20,7 @@ namespace ClutchWinBaseball.WP8
         }
 
         // Load data for the ViewModel Items
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (!ViewModelLocator.Main.IsDataLoaded)
             {
@@ -27,6 +28,9 @@ namespace ClutchWinBaseball.WP8
             }
 
             ExceptionHandler.CheckForPreviousException();
+
+            //var fileManager = new CacheFileManager(ApplicationData.Current.LocalFolder);
+            //await fileManager.DeleteAllFilesAsync();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)

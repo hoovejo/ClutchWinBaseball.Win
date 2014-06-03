@@ -34,7 +34,7 @@ namespace ClutchWinBaseball.Portable
 
         private string _selectedYearId = "season";
         private string _selectedTeamId = "team";
-        private bool _isLoadingData, _isShowingBatters;
+        private bool _isShowingBatters, _isLoadingData, _noPitchers, _pitchersGoBack, _noResults, _resultsGoBack, _noDrillDown, _drillDownGoBack;
 
         public string SelectedYearId
         {
@@ -59,6 +59,42 @@ namespace ClutchWinBaseball.Portable
         {
             get { return _isLoadingData; }
             set { if (value != _isLoadingData) { _isLoadingData = value; NotifyPropertyChanged("IsLoadingData"); } }
+        }
+
+        public bool NoPitchers
+        {
+            get { return _noPitchers; }
+            set { if (value != _noPitchers) { _noPitchers = value; NotifyPropertyChanged("NoPitchers"); } }
+        }
+
+        public bool PitchersGoBack
+        {
+            get { return _pitchersGoBack; }
+            set { if (value != _pitchersGoBack) { _pitchersGoBack = value; NotifyPropertyChanged("PitchersGoBack"); } }
+        }
+
+        public bool NoResults
+        {
+            get { return _noResults; }
+            set { if (value != _noResults) { _noResults = value; NotifyPropertyChanged("NoResults"); } }
+        }
+
+        public bool ResultsGoBack
+        {
+            get { return _resultsGoBack; }
+            set { if (value != _resultsGoBack) { _resultsGoBack = value; NotifyPropertyChanged("ResultsGoBack"); } }
+        }
+
+        public bool NoDrillDown
+        {
+            get { return _noDrillDown; }
+            set { if (value != _noDrillDown) { _noDrillDown = value; NotifyPropertyChanged("NoDrillDown"); } }
+        }
+
+        public bool DrillDownGoBack
+        {
+            get { return _drillDownGoBack; }
+            set { if (value != _drillDownGoBack) { _drillDownGoBack = value; NotifyPropertyChanged("DrillDownGoBack"); } }
         }
 
         public string YearsDataString { get; set; }

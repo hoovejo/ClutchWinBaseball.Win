@@ -14,7 +14,7 @@ namespace ClutchWinBaseball.WP8
         private CacheFileManager _fileManager;
         private ContextCacheManager _cacheManager;
 
-        public PlayersDataManager(PlayersContextViewModel pc, PlayersFeatureViewModel pvm, CacheFileManager fm, ContextCacheManager c) 
+        public PlayersDataManager(PlayersContextViewModel pc, PlayersFeatureViewModel pvm, CacheFileManager fm, ContextCacheManager c)
         {
             _playersContext = pc;
             _playersViewModel = pvm;
@@ -25,6 +25,7 @@ namespace ClutchWinBaseball.WP8
         public async Task<bool> GetSeasonsAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+
             try
             {
                 if (!_playersContext.HasLoadedSeasonsOncePerSession)
@@ -42,6 +43,7 @@ namespace ClutchWinBaseball.WP8
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PY_CacheFileKey, jsonString);
                         _playersContext.HasLoadedSeasonsOncePerSession = true;
                     }
+                    else { await _fileManager.DeleteFileAsync(Config.PY_CacheFileKey); }
                 }
                 else
                 {
@@ -68,6 +70,7 @@ namespace ClutchWinBaseball.WP8
         public async Task<bool> GetTeamsAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+
             try
             {
                 if (_playersContext.ShouldExecuteLoadTeams(isNetAvailable))
@@ -84,6 +87,7 @@ namespace ClutchWinBaseball.WP8
                         var jsonString = _playersViewModel.TeamsDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PT_CacheFileKey, jsonString);
                     }
+                    else { await _fileManager.DeleteFileAsync(Config.PT_CacheFileKey); }
                 }
                 else
                 {
@@ -110,6 +114,7 @@ namespace ClutchWinBaseball.WP8
         public async Task<bool> GetBattersAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+
             try
             {
                 if (_playersContext.ShouldExecuteLoadBatters(isNetAvailable))
@@ -126,6 +131,7 @@ namespace ClutchWinBaseball.WP8
                         var jsonString = _playersViewModel.BattersDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PB_CacheFileKey, jsonString);
                     }
+                    else { await _fileManager.DeleteFileAsync(Config.PB_CacheFileKey); }
                 }
                 else
                 {
@@ -152,14 +158,18 @@ namespace ClutchWinBaseball.WP8
         public async Task<bool> GetPitchersAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+
             try
             {
+                _playersViewModel.PitchersGoBack = false;
+
                 if (_playersContext.ShouldExecuteLoadPitchers(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
                     _playersViewModel.IsLoadingData = true;
+                    _playersViewModel.NoPitchers = false;
                     returnValue = await _playersViewModel.LoadPitcherDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -167,6 +177,11 @@ namespace ClutchWinBaseball.WP8
                     {
                         var jsonString = _playersViewModel.PitchersDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PP_CacheFileKey, jsonString);
+                    }
+                    else
+                    {
+                        await _fileManager.DeleteFileAsync(Config.PP_CacheFileKey);
+                        _playersViewModel.NoPitchers = true;
                     }
                 }
                 else
@@ -180,6 +195,7 @@ namespace ClutchWinBaseball.WP8
                         {
                             returnValue = await _playersViewModel.LoadPitcherDataAsync(_playersContext, jsonString);
                         }
+                        else { _playersViewModel.PitchersGoBack = true; }
                     }
                 }
             }
@@ -194,14 +210,18 @@ namespace ClutchWinBaseball.WP8
         public async Task<bool> GetPlayersResultsAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+
             try
             {
+                _playersViewModel.ResultsGoBack = false;
+
                 if (_playersContext.ShouldExecutePlayerResultsSearch(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
                     _playersViewModel.IsLoadingData = true;
+                    _playersViewModel.NoResults = false;
                     returnValue = await _playersViewModel.LoadPlayerResultsDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -209,6 +229,11 @@ namespace ClutchWinBaseball.WP8
                     {
                         var jsonString = _playersViewModel.PlayersResultsDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PR_CacheFileKey, jsonString);
+                    }
+                    else
+                    {
+                        await _fileManager.DeleteFileAsync(Config.PR_CacheFileKey);
+                        _playersViewModel.NoResults = true;
                     }
                 }
                 else
@@ -222,6 +247,7 @@ namespace ClutchWinBaseball.WP8
                         {
                             returnValue = await _playersViewModel.LoadPlayerResultsDataAsync(_playersContext, jsonString);
                         }
+                        else { _playersViewModel.ResultsGoBack = true; }
                     }
                 }
             }
@@ -236,14 +262,18 @@ namespace ClutchWinBaseball.WP8
         public async Task<bool> GetPlayersDrillDownAsync(bool isNetAvailable)
         {
             bool returnValue = false;
+
             try
             {
+                _playersViewModel.DrillDownGoBack = false;
+
                 if (_playersContext.ShouldExecutePlayersDrillDownSearch(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
                     _playersViewModel.IsLoadingData = true;
+                    _playersViewModel.NoDrillDown = false;
                     returnValue = await _playersViewModel.LoadPlayerDrillDownDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -251,6 +281,11 @@ namespace ClutchWinBaseball.WP8
                     {
                         var jsonString = _playersViewModel.PlayersDrillDownDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PDD_CacheFileKey, jsonString);
+                    }
+                    else
+                    {
+                        await _fileManager.DeleteFileAsync(Config.PDD_CacheFileKey);
+                        _playersViewModel.NoDrillDown = true;
                     }
                 }
                 else
@@ -264,6 +299,7 @@ namespace ClutchWinBaseball.WP8
                         {
                             returnValue = await _playersViewModel.LoadPlayerDrillDownDataAsync(_playersContext, jsonString);
                         }
+                        else { _playersViewModel.DrillDownGoBack = true; }
                     }
                 }
             }

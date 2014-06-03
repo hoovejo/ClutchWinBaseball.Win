@@ -1,5 +1,6 @@
 ﻿using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.DataModel;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using System;

@@ -90,8 +90,12 @@
                                         JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
                                         LayoutMode="List">
                     <phone:LongListSelector.ListHeader>
-                        <TextBlock x:Uid="SelectOpponentText" Text="select opponent first" Style="{StaticResource PhoneTextContrastStyle}"
-                                               Visibility="{Binding TeamResultItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                        <StackPanel>
+                            <TextBlock x:Uid="SelectOpponentText" Text="select opponent first" Style="{StaticResource PhoneTextContrastStyle}"
+                                               Visibility="{Binding ResultsGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                            <TextBlock Style="{StaticResource PhoneTextContrastStyle}" Text="no results" x:Name="NoResults" 
+                                                Visibility="{Binding NoResults, Converter={StaticResource booleanToVisibilityConverter}}" />
+                        </StackPanel>
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
@@ -132,8 +136,12 @@
                                         JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
                                         LayoutMode="List">
                     <phone:LongListSelector.ListHeader>
-                        <TextBlock x:Uid="SelectResultText" Text="select result first" Style="{StaticResource PhoneTextContrastStyle}"
-                                               Visibility="{Binding TeamDrillDownItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                        <StackPanel>
+                            <TextBlock x:Uid="SelectResultText" Text="select result first" Style="{StaticResource PhoneTextContrastStyle}"
+                                               Visibility="{Binding DrillDownGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                            <TextBlock Style="{StaticResource PhoneTextContrastStyle}" Text="no results" 
+                                                Visibility="{Binding NoDrillDown, Converter={StaticResource booleanToVisibilityConverter}}" />
+                        </StackPanel>
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>

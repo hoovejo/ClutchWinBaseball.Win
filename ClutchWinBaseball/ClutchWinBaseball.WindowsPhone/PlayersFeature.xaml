@@ -136,8 +136,12 @@
                                       ItemClick="Pitchers_ItemClick" >
                             <ListView.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock x:Uid="SelectBatterText" Text="select batter first" Style="{ThemeResource SubheaderTextBlockStyle}"
-                                               Visibility="{Binding PitcherItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                    <StackPanel>
+                                        <TextBlock x:Uid="SelectBatterText" Text="select batter first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding PitchersGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                                        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="no results" x:Name="NoResults" 
+                                                Visibility="{Binding NoPitchers, Converter={StaticResource booleanToVisibilityConverter}}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
@@ -181,8 +185,12 @@
                                       ItemClick="PlayerResults_ItemClick" >
                             <ListView.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock x:Uid="SelectPitcherText" Text="select pitcher first" Style="{ThemeResource SubheaderTextBlockStyle}"
-                                               Visibility="{Binding PlayerResultItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                    <StackPanel>
+                                        <TextBlock x:Uid="SelectPitcherText" Text="select pitcher first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding ResultsGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                                        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="no results" x:Name="NoResults" 
+                                                Visibility="{Binding NoResults, Converter={StaticResource booleanToVisibilityConverter}}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>
@@ -224,8 +232,12 @@
                         <ListView x:Name="playerDrillDownItemsGridView" ItemsSource="{Binding Source={StaticResource cvsPlayerDrillDownItems}}" Margin="12,0,0,0">
                             <ListView.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock x:Uid="SelectPlayerResultText" Text="select result first" Style="{ThemeResource SubheaderTextBlockStyle}"
-                                               Visibility="{Binding PlayerDrillDownItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                    <StackPanel>
+                                        <TextBlock x:Uid="SelectPlayerResultText" Text="select result first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding DrillDownGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                                        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="no results" x:Name="NoResults" 
+                                                Visibility="{Binding NoDrillDown, Converter={StaticResource booleanToVisibilityConverter}}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>

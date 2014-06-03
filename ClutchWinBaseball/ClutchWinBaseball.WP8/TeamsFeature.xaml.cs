@@ -15,6 +15,7 @@ namespace ClutchWinBaseball.WP8
     public partial class TeamsFeature : PhoneApplicationPage
     {
         private TeamsContextViewModel teamsContext;
+        private bool handledByUserAction;
 
         public TeamsFeature()
         {
@@ -85,7 +86,9 @@ namespace ClutchWinBaseball.WP8
 
             success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
 
+            handledByUserAction = true;
             pvControl.SelectedIndex = 1;
+
             if (piOpponents != null && piOpponents.ItemsSource.Count > 0)
             {
                 piOpponents.ScrollTo(ViewModelLocator.Teams.OpponentsItems.First(g => g.Any()));
@@ -112,7 +115,9 @@ namespace ClutchWinBaseball.WP8
 
             success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable);
 
+            handledByUserAction = true;
             pvControl.SelectedIndex = 2;
+
             if (piTeamResults != null && piTeamResults.ItemsSource.Count > 0)
             {
                 piTeamResults.ScrollTo(ViewModelLocator.Teams.TeamResultItems.First(g => g.Any()));
@@ -140,7 +145,9 @@ namespace ClutchWinBaseball.WP8
 
             success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable);
 
+            handledByUserAction = true;
             pvControl.SelectedIndex = 3;
+
             if (piTeamDrillDown != null && piTeamDrillDown.ItemsSource.Count > 0)
             {
                 piTeamDrillDown.ScrollTo(ViewModelLocator.Teams.TeamDrillDownItems.First(g => g.Any()));
@@ -151,6 +158,8 @@ namespace ClutchWinBaseball.WP8
 
         private async void pvControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (handledByUserAction) return;
+
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
             bool neededRefresh = false;

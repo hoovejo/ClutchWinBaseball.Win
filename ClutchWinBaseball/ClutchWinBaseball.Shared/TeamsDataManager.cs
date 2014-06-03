@@ -43,6 +43,7 @@ namespace ClutchWinBaseball
                         returnValue = await _fileManager.CacheUpdateAsync(Config.TF_CacheFileKey, jsonString);
                         _teamsContext.HasLoadedFranchisesOncePerSession = true;
                     }
+                    else { await _fileManager.DeleteFileAsync(Config.TF_CacheFileKey); }
                 }
                 else
                 {
@@ -110,12 +111,15 @@ namespace ClutchWinBaseball
 
             try
             {
+                _teamsViewModel.ResultsGoBack = false;
+
                 if (_teamsContext.ShouldExecuteTeamResultsSearch(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
                     _teamsViewModel.IsLoadingData = true;
+                    _teamsViewModel.NoResults = false;
                     returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(_teamsContext);
                     await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
@@ -123,6 +127,11 @@ namespace ClutchWinBaseball
                     {
                         var jsonString = _teamsViewModel.TeamsResultsDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.TR_CacheFileKey, jsonString);
+                    }
+                    else
+                    {
+                        await _fileManager.DeleteFileAsync(Config.TR_CacheFileKey);
+                        _teamsViewModel.NoResults = true;
                     }
                 }
                 else
@@ -136,6 +145,7 @@ namespace ClutchWinBaseball
                         {
                             returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(_teamsContext, jsonString);
                         }
+                        else { _teamsViewModel.ResultsGoBack = true;  }
                     }
                 }
             }
@@ -153,12 +163,15 @@ namespace ClutchWinBaseball
 
             try
             {
+                _teamsViewModel.DrillDownGoBack = false;
+
                 if (_teamsContext.ShouldExecuteTeamDrillDownSearch(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
                     _teamsViewModel.IsLoadingData = true;
+                    _teamsViewModel.NoDrillDown = true;
                     returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext);
                     await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
@@ -166,6 +179,11 @@ namespace ClutchWinBaseball
                     {
                         var jsonString = _teamsViewModel.TeamsDrillDownDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.TDD_CacheFileKey, jsonString);
+                    }
+                    else
+                    {
+                        await _fileManager.DeleteFileAsync(Config.TDD_CacheFileKey);
+                        _teamsViewModel.NoDrillDown = true;
                     }
                 }
                 else
@@ -179,6 +197,7 @@ namespace ClutchWinBaseball
                         {
                             returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext, jsonString);
                         }
+                        else { _teamsViewModel.DrillDownGoBack = true; }
                     }
                 }
             }

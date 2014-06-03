@@ -43,6 +43,7 @@ namespace ClutchWinBaseball
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PY_CacheFileKey, jsonString);
                         _playersContext.HasLoadedSeasonsOncePerSession = true;
                     }
+                    else { await _fileManager.DeleteFileAsync(Config.PY_CacheFileKey); }
                 }
                 else
                 {
@@ -86,6 +87,7 @@ namespace ClutchWinBaseball
                         var jsonString = _playersViewModel.TeamsDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PT_CacheFileKey, jsonString);
                     }
+                    else { await _fileManager.DeleteFileAsync(Config.PT_CacheFileKey); }
                 }
                 else
                 {
@@ -129,6 +131,7 @@ namespace ClutchWinBaseball
                         var jsonString = _playersViewModel.BattersDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PB_CacheFileKey, jsonString);
                     }
+                    else { await _fileManager.DeleteFileAsync(Config.PB_CacheFileKey); }
                 }
                 else
                 {
@@ -158,12 +161,15 @@ namespace ClutchWinBaseball
 
             try
             {
+                _playersViewModel.PitchersGoBack = false;
+
                 if (_playersContext.ShouldExecuteLoadPitchers(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
                     _playersViewModel.IsLoadingData = true;
+                    _playersViewModel.NoPitchers = false;
                     returnValue = await _playersViewModel.LoadPitcherDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -171,6 +177,11 @@ namespace ClutchWinBaseball
                     {
                         var jsonString = _playersViewModel.PitchersDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PP_CacheFileKey, jsonString);
+                    }
+                    else
+                    {
+                        await _fileManager.DeleteFileAsync(Config.PP_CacheFileKey);
+                        _playersViewModel.NoPitchers = true;
                     }
                 }
                 else
@@ -184,6 +195,7 @@ namespace ClutchWinBaseball
                         {
                             returnValue = await _playersViewModel.LoadPitcherDataAsync(_playersContext, jsonString);
                         }
+                        else { _playersViewModel.PitchersGoBack = true; }
                     }
                 }
             }
@@ -201,12 +213,15 @@ namespace ClutchWinBaseball
 
             try
             {
+                _playersViewModel.ResultsGoBack = false;
+
                 if (_playersContext.ShouldExecutePlayerResultsSearch(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
                     _playersViewModel.IsLoadingData = true;
+                    _playersViewModel.NoResults = false;
                     returnValue = await _playersViewModel.LoadPlayerResultsDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -214,6 +229,11 @@ namespace ClutchWinBaseball
                     {
                         var jsonString = _playersViewModel.PlayersResultsDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PR_CacheFileKey, jsonString);
+                    }
+                    else
+                    {
+                        await _fileManager.DeleteFileAsync(Config.PR_CacheFileKey);
+                        _playersViewModel.NoResults = true;
                     }
                 }
                 else
@@ -227,6 +247,7 @@ namespace ClutchWinBaseball
                         {
                             returnValue = await _playersViewModel.LoadPlayerResultsDataAsync(_playersContext, jsonString);
                         }
+                        else { _playersViewModel.ResultsGoBack = true; }
                     }
                 }
             }
@@ -244,12 +265,15 @@ namespace ClutchWinBaseball
 
             try
             {
+                _playersViewModel.DrillDownGoBack = false;
+
                 if (_playersContext.ShouldExecutePlayersDrillDownSearch(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
                     _playersViewModel.IsLoadingData = true;
+                    _playersViewModel.NoDrillDown = false;
                     returnValue = await _playersViewModel.LoadPlayerDrillDownDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -257,6 +281,11 @@ namespace ClutchWinBaseball
                     {
                         var jsonString = _playersViewModel.PlayersDrillDownDataString;
                         returnValue = await _fileManager.CacheUpdateAsync(Config.PDD_CacheFileKey, jsonString);
+                    }
+                    else
+                    {
+                        await _fileManager.DeleteFileAsync(Config.PDD_CacheFileKey);
+                        _playersViewModel.NoDrillDown = true;
                     }
                 }
                 else
@@ -270,6 +299,7 @@ namespace ClutchWinBaseball
                         {
                             returnValue = await _playersViewModel.LoadPlayerDrillDownDataAsync(_playersContext, jsonString);
                         }
+                        else { _playersViewModel.DrillDownGoBack = true; }
                     }
                 }
             }
