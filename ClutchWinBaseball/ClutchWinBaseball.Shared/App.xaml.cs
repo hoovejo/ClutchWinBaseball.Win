@@ -1,6 +1,7 @@
 ﻿using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Exceptions;
 using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Storage;
@@ -33,9 +34,9 @@ namespace ClutchWinBaseball
             this.UnhandledException += App_UnhandledException;
         }
 
-        async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            var t = await ExceptionHandler.HandleException(e);
+            ExceptionHandler.HandleException(e);
         }
 
         /// <summary>

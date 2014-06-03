@@ -10,16 +10,18 @@ using Windows.UI.Xaml;
 
 namespace ClutchWinBaseball.Exceptions
 {
-    public static class ExceptionHandler
+    public class ExceptionHandler
     {
         const string FileName = "errorreporting.txt";
         const string EmailTarget = "joe_hoover7@hotmail.com";
         const string ModelText = "An error occured last time ClutchWin was run, do you want to help us out and send the error to us?";
+        const string SettingName = "ExceptionContainer";
+        const string ExceptionStringKey = "ExceptionTextKey";
 
         private static TypedEventHandler<DataTransferManager, DataRequestedEventArgs> handler;
         private static ErrorMessageInfo errormessage;
 
-        public async static Task<bool> HandleException(UnhandledExceptionEventArgs ex, string extra = "")
+        public static void HandleException(UnhandledExceptionEventArgs ex, string extra = "")
         {
             try
             {
@@ -30,15 +32,16 @@ namespace ClutchWinBaseball.Exceptions
                     Exception = ex.Exception.Message,
                     ExceptionDetail = ex.Exception.StackTrace
                 };
-                var cache = new CacheFileManager(ApplicationData.Current.TemporaryFolder);
+
+                ApplicationData.Current.LocalSettings.CreateContainer(SettingName, ApplicationDataCreateDisposition.Always);
+                var exceptionValues = ApplicationData.Current.LocalSettings.Containers[SettingName].Values;
                 var jsonString = JsonConvert.SerializeObject(errormessage);
-                await cache.CacheUpdateAsync(FileName, jsonString);
+                exceptionValues[ExceptionStringKey] = jsonString;
             }
             catch { }
-            return true;
         }
 
-        public async static Task<bool> HandleException(Exception ex, string extra = "")
+        public static void HandleException(Exception ex, string extra = "")
         {
             try
             {
@@ -49,27 +52,37 @@ namespace ClutchWinBaseball.Exceptions
                     Exception = ex.InnerException.ToString(),
                     ExceptionDetail = ex.StackTrace
                 };
-                var cache = new CacheFileManager(ApplicationData.Current.TemporaryFolder);
+                ApplicationData.Current.LocalSettings.CreateContainer(SettingName, ApplicationDataCreateDisposition.Always);
+                var exceptionValues = ApplicationData.Current.LocalSettings.Containers[SettingName].Values;
                 var jsonString = JsonConvert.SerializeObject(errormessage);
-                await cache.CacheUpdateAsync(FileName, jsonString);
+                exceptionValues[ExceptionStringKey] = jsonString;
             }
             catch { }
-            return true;
         }
 
         public async static Task<bool> CheckForPreviousException()
         {
-            var cache = new CacheFileManager(ApplicationData.Current.TemporaryFolder);
             try
             {
                 errormessage = null;
-                var jsonString = await cache.CacheInquiryAsync(FileName);
-                errormessage = JsonConvert.DeserializeObject<ErrorMessageInfo>(jsonString);
+
+                var container = ApplicationData.Current.LocalSettings.Containers;
+                var exceptionValues = container[SettingName].Values;
+
+                string exceptionText = null;
+                if (exceptionValues.ContainsKey(ExceptionStringKey))
+                {
+                    exceptionText = exceptionValues[ExceptionStringKey] as string;
+                    if (!string.IsNullOrEmpty(exceptionText))
+                    {
+                        errormessage = JsonConvert.DeserializeObject<ErrorMessageInfo>(exceptionText);
+                    }
+                    exceptionValues[ExceptionStringKey] = string.Empty;
+                }
 
                 if (errormessage != null)
                 {
                     await ShowErrorMessageDialog();
-                    await cache.DeleteFileAsync(FileName);
                 }
             }
             catch { }
@@ -140,6 +153,8 @@ namespace ClutchWinBaseball.Exceptions
             builder.AppendLine();
 
             request.Data.SetText(builder.ToString());
+
+            DataTransferManager.GetForCurrentView().DataRequested -= handler;
         }
     }
 

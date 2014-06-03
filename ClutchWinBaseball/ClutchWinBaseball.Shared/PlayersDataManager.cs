@@ -25,7 +25,6 @@ namespace ClutchWinBaseball
         public async Task<bool> GetSeasonsAsync(bool isNetAvailable)
         {
             bool returnValue = false;
-            Exception exRef = null;
 
             try
             {
@@ -59,15 +58,10 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { _playersContext.HasLoadedSeasonsOncePerSession = false; exRef = ex; }
+            catch (Exception ex) { _playersContext.HasLoadedSeasonsOncePerSession = false; ExceptionHandler.HandleException(ex); }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
-            }
-
-            if (exRef != null)
-            {
-                await ExceptionHandler.HandleException(exRef);
             }
             return returnValue;
         }
@@ -75,7 +69,6 @@ namespace ClutchWinBaseball
         public async Task<bool> GetTeamsAsync(bool isNetAvailable)
         {
             bool returnValue = false;
-            Exception exRef = null;
 
             try
             {
@@ -108,14 +101,10 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { exRef = ex; }
+            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
-            }
-            if (exRef != null)
-            {
-                await ExceptionHandler.HandleException(exRef);
             }
             return returnValue;
         }
@@ -123,7 +112,6 @@ namespace ClutchWinBaseball
         public async Task<bool> GetBattersAsync(bool isNetAvailable)
         {
             bool returnValue = false;
-            Exception exRef = null;
 
             try
             {
@@ -156,14 +144,10 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { exRef = ex; }
+            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
-            }
-            if (exRef != null)
-            {
-                await ExceptionHandler.HandleException(exRef);
             }
             return returnValue;
         }
@@ -171,7 +155,6 @@ namespace ClutchWinBaseball
         public async Task<bool> GetPitchersAsync(bool isNetAvailable)
         {
             bool returnValue = false;
-            Exception exRef = null;
 
             try
             {
@@ -204,14 +187,10 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { exRef = ex; }
+            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
-            }
-            if (exRef != null)
-            {
-                await ExceptionHandler.HandleException(exRef);
             }
             return returnValue;
         }
@@ -219,7 +198,6 @@ namespace ClutchWinBaseball
         public async Task<bool> GetPlayersResultsAsync(bool isNetAvailable)
         {
             bool returnValue = false;
-            Exception exRef = null;
 
             try
             {
@@ -252,14 +230,10 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { exRef = ex; }
+            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
-            }
-            if (exRef != null)
-            {
-                await ExceptionHandler.HandleException(exRef);
             }
             return returnValue;
         }
@@ -267,7 +241,6 @@ namespace ClutchWinBaseball
         public async Task<bool> GetPlayersDrillDownAsync(bool isNetAvailable)
         {
             bool returnValue = false;
-            Exception exRef = null;
 
             try
             {
@@ -300,14 +273,10 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { exRef = ex; }
+            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
-            }
-            if (exRef != null)
-            {
-                await ExceptionHandler.HandleException(exRef);
             }
             return returnValue;
         }

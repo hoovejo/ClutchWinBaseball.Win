@@ -18,7 +18,6 @@ namespace ClutchWinBaseball.WP8.Exceptions
         const string MessageBoxTitle = "Problem Report";
         const string ModelText = "An error occured last time ClutchWin was run, do you want to help us out and send the error to us?";
 
-        private static TypedEventHandler<DataTransferManager, DataRequestedEventArgs> handler;
         private static ErrorMessageInfo errormessage;
 
         public static void HandleException(ApplicationUnhandledExceptionEventArgs ex, string extra = "")
@@ -73,7 +72,6 @@ namespace ClutchWinBaseball.WP8.Exceptions
 
         public static void CheckForPreviousException()
         {
-            var cache = new CacheFileManager(ApplicationData.Current.LocalFolder);
             try
             {
                 errormessage = null;
