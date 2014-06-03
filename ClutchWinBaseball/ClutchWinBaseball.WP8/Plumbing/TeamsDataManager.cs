@@ -171,7 +171,7 @@ namespace ClutchWinBaseball.WP8
                     if (!isNetAvailable) { returnValue = false; }
 
                     _teamsViewModel.IsLoadingData = true;
-                    _teamsViewModel.NoDrillDown = true;
+                    _teamsViewModel.NoDrillDown = false;
                     returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext);
                     await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
