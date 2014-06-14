@@ -20,14 +20,14 @@ namespace ClutchWinBaseball.WP8
         }
 
         // Load data for the ViewModel Items
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (!ViewModelLocator.Main.IsDataLoaded)
             {
                 ViewModelLocator.Main.LoadData();
             }
 
-            ExceptionHandler.CheckForPreviousException();
+            //ExceptionHandler.CheckForPreviousException();
 
             //var fileManager = new CacheFileManager(ApplicationData.Current.LocalFolder);
             //await fileManager.DeleteAllFilesAsync();

@@ -56,6 +56,9 @@ namespace ClutchWinBaseball
                 showNotification(Config.Error);
             }
 
+            // sets the items source for the zoomed out view to the group data as well
+            (teamsSemanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamItems.View.CollectionGroups;
+
             base.OnNavigatedTo(e);
         }
 

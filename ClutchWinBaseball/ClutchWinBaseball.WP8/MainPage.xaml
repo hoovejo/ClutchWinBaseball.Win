@@ -13,15 +13,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    DataContext="{Binding Main, Source={StaticResource Locator}}"
-    shell:SystemTray.IsVisible="False">
-
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Mode="Minimized" Opacity="1.0" IsMenuEnabled="True" IsVisible="True" >
-            <shell:ApplicationBarIconButton Click="SettingsButton_Click"  IconUri="/Assets/Images/feature.settings.png" Text="settings" />
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
-
+    DataContext="{Binding Main, Source={StaticResource Locator}}">
 
         <!--LayoutRoot is the root grid where all page content is placed-->
 	<Grid x:Name="LayoutRoot" Background="Transparent">
@@ -55,16 +47,18 @@
 
 
 		<!--Panorama control-->
-		<phone:Panorama x:Name="panorama" Title="ClutchWin">
+		<phone:Panorama x:Name="panorama">
+            <phone:Panorama.Title>
+                <TextBlock Text="ClutchWin baseball" FontSize="80" Margin="0,76,0,0"/>
+            </phone:Panorama.Title>
 			<phone:Panorama.Background>
 				<ImageBrush ImageSource="/ClutchWinBaseball.WP8;component/Assets/PanoramaBackground.png"/>
 			</phone:Panorama.Background>
 
 			<!--Panorama item Home-->
-            <phone:PanoramaItem Header="Welcome!">
-                    <TextBlock TextWrapping="Wrap" 
-                               Text="Discover how your favorite baseball teams or players perform against their rivals."
-                               Style="{StaticResource PhoneTextLargeStyle}" />
+            <phone:PanoramaItem Header="welcome!">
+                    <TextBlock x:Uid="Discover" TextWrapping="Wrap" Text="Discover how your favorite baseball teams or players perform against their rivals."
+                                   Style="{StaticResource PhoneTextLargeStyle}" />
             </phone:PanoramaItem>
 
 			<!--Panorama item Feature list-->

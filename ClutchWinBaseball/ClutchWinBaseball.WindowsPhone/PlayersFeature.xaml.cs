@@ -201,29 +201,20 @@ namespace ClutchWinBaseball
                     break;
                 case 1:
                     {
-                        if (ViewModelLocator.Players.PitcherItems.Count <= 0)
-                        {
-                            success = await DataManagerLocator.PlayersDataManager.GetPitchersAsync(isNetAvailable);
-                            neededRefresh = true;
-                        }
+                        success = await DataManagerLocator.PlayersDataManager.GetPitchersAsync(isNetAvailable);
+                        neededRefresh = true;
                     }
                     break;
                 case 2:
                     {
-                        if (ViewModelLocator.Players.PlayerResultItems.Count <= 0)
-                        {
-                            success = await DataManagerLocator.PlayersDataManager.GetPlayersResultsAsync(isNetAvailable);
-                            neededRefresh = true;
-                        }
+                        success = await DataManagerLocator.PlayersDataManager.GetPlayersResultsAsync(isNetAvailable);
+                        neededRefresh = true;
                     }
                     break;
                 case 3:
                     {
-                        if (ViewModelLocator.Players.PlayerDrillDownItems.Count <= 0)
-                        {
-                            success = await DataManagerLocator.PlayersDataManager.GetPlayersDrillDownAsync(isNetAvailable);
-                            neededRefresh = true;
-                        }
+                        success = await DataManagerLocator.PlayersDataManager.GetPlayersDrillDownAsync(isNetAvailable);
+                        neededRefresh = true;
                     }
                     break;
             }

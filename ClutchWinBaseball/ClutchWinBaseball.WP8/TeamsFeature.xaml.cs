@@ -171,29 +171,20 @@ namespace ClutchWinBaseball.WP8
                     break;
                 case 1:
                     {
-                        if (ViewModelLocator.Teams.OpponentsItems.Count <= 0)
-                        {
-                            success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
-                            neededRefresh = true;
-                        }
+                        success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
+                        neededRefresh = true;
                     }
                     break;
                 case 2:
                     {
-                        if (ViewModelLocator.Teams.TeamResultItems.Count <= 0)
-                        {
-                            success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable);
-                            neededRefresh = true;
-                        }
+                        success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable);
+                        neededRefresh = true;
                     }
                     break;
                 case 3:
                     {
-                        if (ViewModelLocator.Teams.TeamDrillDownItems.Count <= 0)
-                        {
-                            success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable);
-                            neededRefresh = true;
-                        }
+                        success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable);
+                        neededRefresh = true;
                     }
                     break;
             }

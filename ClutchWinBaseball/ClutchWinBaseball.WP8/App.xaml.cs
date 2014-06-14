@@ -1,10 +1,14 @@
-﻿using ClutchWinBaseball.Portable;
+﻿using BugSense;
+using BugSense.Core.Model;
+using ClutchWinBaseball.Portable;
+using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.WP8.Exceptions;
 using ClutchWinBaseball.WP8.Resources;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System;
 using System.Diagnostics;
+using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
@@ -25,7 +29,7 @@ namespace ClutchWinBaseball.WP8
         public App()
         {
             // Global handler for uncaught exceptions.
-            UnhandledException += Application_UnhandledException;
+            //UnhandledException += Application_UnhandledException;
 
             // Standard XAML initialization
             InitializeComponent();
@@ -56,6 +60,9 @@ namespace ClutchWinBaseball.WP8
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
+            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), RootFrame, "6d284312");
+            //BugSenseHandler.Instance.UnhandledExceptionHandled += Instance_UnhandledExceptionHandled;
+
         }
 
         // Code to execute when the application is launching (eg, from Start)
@@ -64,6 +71,25 @@ namespace ClutchWinBaseball.WP8
         {
             //var fileManager = new CacheFileManager(ApplicationData.Current.LocalFolder);
             //await fileManager.DeleteAllFilesAsync();
+
+            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+            if (!settings.Contains(Config.TeamsFeatureTabCache))
+            {
+                settings.Add(Config.TeamsFeatureTabCache, 0);
+            }
+            else
+            {
+                settings[Config.TeamsFeatureTabCache] = 0;
+            }
+            if (!settings.Contains(Config.PlayersFeatureTabCache))
+            {
+                settings.Add(Config.PlayersFeatureTabCache, 0);
+            }
+            else
+            {
+                settings[Config.PlayersFeatureTabCache] = 0;
+            }
+            settings.Save();
         }
 
         // Code to execute when the application is activated (brought to foreground)
@@ -88,6 +114,7 @@ namespace ClutchWinBaseball.WP8
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            BugSenseHandler.Instance.CloseSession();
         }
 
         // Code to execute if a navigation fails
@@ -103,7 +130,7 @@ namespace ClutchWinBaseball.WP8
         // Code to execute on Unhandled Exceptions
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
-            ExceptionHandler.HandleException(e);
+            //ExceptionHandler.HandleException(e);
 
             if (Debugger.IsAttached)
             {

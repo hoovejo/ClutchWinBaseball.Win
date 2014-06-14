@@ -1,4 +1,4 @@
-﻿using ClutchWinBaseball.Exceptions;
+﻿using BugSense;
 using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
@@ -13,6 +13,7 @@ namespace ClutchWinBaseball
         private TeamsFeatureViewModel _teamsViewModel;
         private CacheFileManager _fileManager;
         private ContextCacheManager _cacheManager;
+        private Exception exception;
 
         public TeamsDataManager(TeamsContextViewModel tc, TeamsFeatureViewModel tvm, CacheFileManager fm, ContextCacheManager c) 
         {
@@ -28,12 +29,13 @@ namespace ClutchWinBaseball
 
             try
             {
+                _teamsViewModel.IsLoadingData = true;
+
                 if (!_teamsContext.HasLoadedFranchisesOncePerSession)
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _teamsViewModel.IsLoadingData = true;
                     returnValue = await _teamsViewModel.LoadFranchisesDataAsync();
                     await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
@@ -50,7 +52,6 @@ namespace ClutchWinBaseball
                     returnValue = true;
                     if (_teamsViewModel.FranchiseItems.Count <= 0)
                     {
-                        _teamsViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.TF_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -59,11 +60,12 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { _teamsContext.HasLoadedFranchisesOncePerSession = false; ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { _teamsContext.HasLoadedFranchisesOncePerSession = false; exception = ex; }
             finally
             {
                 _teamsViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -73,12 +75,13 @@ namespace ClutchWinBaseball
 
             try
             {
+                _teamsViewModel.IsLoadingData = true;
+
                 if (_teamsContext.ShouldFilterOpponents(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _teamsViewModel.IsLoadingData = true;
                     _teamsViewModel.LoadOpponentsData(_teamsContext);
                     await _cacheManager.SaveTeamsContextAsync(_teamsContext);
                     returnValue = true;
@@ -88,7 +91,6 @@ namespace ClutchWinBaseball
                     returnValue = true;
                     if (_teamsViewModel.OpponentsItems.Count <= 0 && !string.IsNullOrEmpty(_teamsContext.SelectedTeamId))
                     {
-                        _teamsViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.TF_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -97,11 +99,12 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exception = ex; }
             finally
             {
                 _teamsViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -111,15 +114,15 @@ namespace ClutchWinBaseball
 
             try
             {
+                _teamsViewModel.IsLoadingData = true;
                 _teamsViewModel.ResultsGoBack = false;
+                _teamsViewModel.NoResults = false;
 
                 if (_teamsContext.ShouldExecuteTeamResultsSearch(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _teamsViewModel.IsLoadingData = true;
-                    _teamsViewModel.NoResults = false;
                     returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(_teamsContext);
                     await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
@@ -139,7 +142,6 @@ namespace ClutchWinBaseball
                     returnValue = true;
                     if (_teamsViewModel.TeamResultItems.Count <= 0)
                     {
-                        _teamsViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.TR_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -149,11 +151,12 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exception = ex; }
             finally
             {
                 _teamsViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -163,6 +166,8 @@ namespace ClutchWinBaseball
 
             try
             {
+                _teamsViewModel.IsLoadingData = true;
+                _teamsViewModel.NoDrillDown = false;
                 _teamsViewModel.DrillDownGoBack = false;
 
                 if (_teamsContext.ShouldExecuteTeamDrillDownSearch(isNetAvailable))
@@ -170,8 +175,6 @@ namespace ClutchWinBaseball
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _teamsViewModel.IsLoadingData = true;
-                    _teamsViewModel.NoDrillDown = false;
                     returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext);
                     await _cacheManager.SaveTeamsContextAsync(_teamsContext);
 
@@ -191,7 +194,6 @@ namespace ClutchWinBaseball
                     returnValue = true;
                     if (_teamsViewModel.TeamDrillDownItems.Count <= 0)
                     {
-                        _teamsViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.TDD_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -201,11 +203,12 @@ namespace ClutchWinBaseball
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exception = ex; }
             finally
             {
                 _teamsViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
     }

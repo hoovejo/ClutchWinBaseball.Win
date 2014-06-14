@@ -49,26 +49,41 @@
 
         <!--Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="24,0,0,0">
-            <ListView ItemsSource="{Binding Source={StaticResource cvsTeamItems}}" IsItemClickEnabled="True" 
-                                  ItemClick="Teams_ItemClick" ContinuumNavigationTransitionInfo.ExitElementContainer="True">
-                <ListView.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
+            <SemanticZoom x:Name="teamsSemanticZoom">
+                <SemanticZoom.ZoomedOutView>
+                    <ListView ScrollViewer.IsHorizontalScrollChainingEnabled="False" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                ItemContainerStyle="{StaticResource ListItemStyle}">
+                        <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Background="{ThemeResource PhoneAccentBrush}" >
-                                    <TextBlock Text="{Binding Key}" Foreground="{ThemeResource PhoneForegroundBrush}" Margin="10" 
-                                                   Style="{ThemeResource SubheaderTextBlockStyle}" />
-                                </Grid>
+                                <TextBlock Text="{Binding Group.Key}" FontFamily="Segoe UI" FontWeight="Light" FontSize="24"/>
                             </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                    </GroupStyle>
-                </ListView.GroupStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <itemViews:TeamsFranchiseItem />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </SemanticZoom.ZoomedOutView>
+                <SemanticZoom.ZoomedInView>
+                    <ListView x:Name="teamsItemsGridView" ItemsSource="{Binding Source={StaticResource cvsTeamItems}}" Margin="12,0,0,0"
+                                    IsItemClickEnabled="True"
+                                    ItemClick="Teams_ItemClick" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <itemViews:TeamsFranchiseItem />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid Background="{ThemeResource PhoneAccentBrush}" >
+                                            <TextBlock Text="{Binding Key}" Foreground="{ThemeResource PhoneForegroundBrush}" Margin="10" 
+                                                            Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ListView.GroupStyle>
+                    </ListView>
+                </SemanticZoom.ZoomedInView>
+            </SemanticZoom>
         </Grid>
     </Grid>
 </Page>

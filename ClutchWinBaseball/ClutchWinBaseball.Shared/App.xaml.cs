@@ -1,5 +1,8 @@
-﻿using ClutchWinBaseball.Common;
+﻿using BugSense;
+using BugSense.Model;
+using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Exceptions;
+using ClutchWinBaseball.Portable.Common;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -31,12 +34,14 @@ namespace ClutchWinBaseball
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
 
-            this.UnhandledException += App_UnhandledException;
+            //this.UnhandledException += App_UnhandledException;
+
+            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), "w8c40cc1");
         }
 
         void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            ExceptionHandler.HandleException(e);
+            //ExceptionHandler.HandleException(e);
         }
 
         /// <summary>
@@ -116,11 +121,15 @@ namespace ClutchWinBaseball
             // Ensure the current window is active
             Window.Current.Activate();
 
-            await ExceptionHandler.CheckForPreviousException();
+            //await ExceptionHandler.CheckForPreviousException();
 
             //var tempFolder = ApplicationData.Current.TemporaryFolder;
             //var fileManager = new CacheFileManager(tempFolder);
             //await fileManager.DeleteAllFilesAsync();
+
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values[Config.TeamsFeatureTabCache] = 0;
+            localSettings.Values[Config.PlayersFeatureTabCache] = 0;
         }
 
 #if WINDOWS_PHONE_APP
@@ -146,6 +155,7 @@ namespace ClutchWinBaseball
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
+            await BugSenseHandler.Instance.CloseSessionAsync();
             deferral.Complete();
         }
     }

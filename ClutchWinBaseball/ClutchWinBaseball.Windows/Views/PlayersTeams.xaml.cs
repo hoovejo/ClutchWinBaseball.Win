@@ -56,6 +56,10 @@ namespace ClutchWinBaseball.Views
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             success = await DataManagerLocator.PlayersDataManager.GetTeamsAsync(isNetAvailable);
 
+            // sets the items source for the zoomed out view to the group data as well
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamItems.View.CollectionGroups;
+            (semanticZoomSmall.ZoomedOutView as ListViewBase).ItemsSource = cvsTeamItems.View.CollectionGroups;
+
             ServiceInteractionNotify(success, isNetAvailable);
         }
 

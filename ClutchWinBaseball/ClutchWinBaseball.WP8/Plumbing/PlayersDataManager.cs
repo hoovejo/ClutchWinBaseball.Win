@@ -1,4 +1,5 @@
-﻿using ClutchWinBaseball.Portable;
+﻿using BugSense;
+using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.WP8.Exceptions;
@@ -13,6 +14,7 @@ namespace ClutchWinBaseball.WP8
         private PlayersFeatureViewModel _playersViewModel;
         private CacheFileManager _fileManager;
         private ContextCacheManager _cacheManager;
+        private Exception exception;
 
         public PlayersDataManager(PlayersContextViewModel pc, PlayersFeatureViewModel pvm, CacheFileManager fm, ContextCacheManager c)
         {
@@ -28,12 +30,13 @@ namespace ClutchWinBaseball.WP8
 
             try
             {
+                _playersViewModel.IsLoadingData = true;
+
                 if (!_playersContext.HasLoadedSeasonsOncePerSession)
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _playersViewModel.IsLoadingData = true;
                     returnValue = await _playersViewModel.LoadYearDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -50,7 +53,6 @@ namespace ClutchWinBaseball.WP8
                     returnValue = true;
                     if (_playersViewModel.YearItems.Count <= 0)
                     {
-                        _playersViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.PY_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -59,11 +61,12 @@ namespace ClutchWinBaseball.WP8
                     }
                 }
             }
-            catch (Exception ex) { _playersContext.HasLoadedSeasonsOncePerSession = false; ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { _playersContext.HasLoadedSeasonsOncePerSession = false; exception = ex; }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -73,12 +76,13 @@ namespace ClutchWinBaseball.WP8
 
             try
             {
+                _playersViewModel.IsLoadingData = true;
+
                 if (_playersContext.ShouldExecuteLoadTeams(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _playersViewModel.IsLoadingData = true;
                     returnValue = await _playersViewModel.LoadTeamDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -94,7 +98,6 @@ namespace ClutchWinBaseball.WP8
                     returnValue = true;
                     if (_playersViewModel.TeamItems.Count <= 0)
                     {
-                        _playersViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.PT_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -103,11 +106,12 @@ namespace ClutchWinBaseball.WP8
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exception = ex; }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -117,12 +121,13 @@ namespace ClutchWinBaseball.WP8
 
             try
             {
+                _playersViewModel.IsLoadingData = true;
+
                 if (_playersContext.ShouldExecuteLoadBatters(isNetAvailable))
                 {
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _playersViewModel.IsLoadingData = true;
                     returnValue = await _playersViewModel.LoadBatterDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -138,7 +143,6 @@ namespace ClutchWinBaseball.WP8
                     returnValue = true;
                     if (_playersViewModel.BatterItems.Count <= 0)
                     {
-                        _playersViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.PB_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -147,11 +151,12 @@ namespace ClutchWinBaseball.WP8
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exception = ex; }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -161,6 +166,8 @@ namespace ClutchWinBaseball.WP8
 
             try
             {
+                _playersViewModel.IsLoadingData = true;
+                _playersViewModel.NoPitchers = false;
                 _playersViewModel.PitchersGoBack = false;
 
                 if (_playersContext.ShouldExecuteLoadPitchers(isNetAvailable))
@@ -168,8 +175,6 @@ namespace ClutchWinBaseball.WP8
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _playersViewModel.IsLoadingData = true;
-                    _playersViewModel.NoPitchers = false;
                     returnValue = await _playersViewModel.LoadPitcherDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -189,7 +194,6 @@ namespace ClutchWinBaseball.WP8
                     returnValue = true;
                     if (_playersViewModel.PitcherItems.Count <= 0)
                     {
-                        _playersViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.PP_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -199,11 +203,12 @@ namespace ClutchWinBaseball.WP8
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exception = ex; }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -213,6 +218,8 @@ namespace ClutchWinBaseball.WP8
 
             try
             {
+                _playersViewModel.IsLoadingData = true;
+                _playersViewModel.NoResults = false;
                 _playersViewModel.ResultsGoBack = false;
 
                 if (_playersContext.ShouldExecutePlayerResultsSearch(isNetAvailable))
@@ -220,8 +227,6 @@ namespace ClutchWinBaseball.WP8
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _playersViewModel.IsLoadingData = true;
-                    _playersViewModel.NoResults = false;
                     returnValue = await _playersViewModel.LoadPlayerResultsDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -241,7 +246,6 @@ namespace ClutchWinBaseball.WP8
                     returnValue = true;
                     if (_playersViewModel.PlayerResultItems.Count <= 0)
                     {
-                        _playersViewModel.IsLoadingData = true;
                         var jsonString = await _fileManager.CacheInquiryAsync(Config.PR_CacheFileKey);
                         if (!string.IsNullOrEmpty(jsonString))
                         {
@@ -251,11 +255,12 @@ namespace ClutchWinBaseball.WP8
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exception = ex; }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -265,6 +270,8 @@ namespace ClutchWinBaseball.WP8
 
             try
             {
+                _playersViewModel.IsLoadingData = true;
+                _playersViewModel.NoDrillDown = false;
                 _playersViewModel.DrillDownGoBack = false;
 
                 if (_playersContext.ShouldExecutePlayersDrillDownSearch(isNetAvailable))
@@ -272,8 +279,6 @@ namespace ClutchWinBaseball.WP8
                     //cache reads are allowed if no network, but svc calls not allowed
                     if (!isNetAvailable) { returnValue = false; }
 
-                    _playersViewModel.IsLoadingData = true;
-                    _playersViewModel.NoDrillDown = false;
                     returnValue = await _playersViewModel.LoadPlayerDrillDownDataAsync(_playersContext);
                     await _cacheManager.SavePlayersContextAsync(_playersContext);
 
@@ -303,11 +308,12 @@ namespace ClutchWinBaseball.WP8
                     }
                 }
             }
-            catch (Exception ex) { ExceptionHandler.HandleException(ex); }
+            catch (Exception ex) { exception = ex; }
             finally
             {
                 _playersViewModel.IsLoadingData = false;
             }
+            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
             return returnValue;
         }
     }
