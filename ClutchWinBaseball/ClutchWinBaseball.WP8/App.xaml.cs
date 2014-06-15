@@ -60,7 +60,7 @@ namespace ClutchWinBaseball.WP8
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
-            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), RootFrame, "6d284312");
+            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), RootFrame, Config.BugSenseTokenValue);
             //BugSenseHandler.Instance.UnhandledExceptionHandled += Instance_UnhandledExceptionHandled;
 
         }

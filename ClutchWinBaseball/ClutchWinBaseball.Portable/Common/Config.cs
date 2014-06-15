@@ -5,7 +5,8 @@ namespace ClutchWinBaseball.Portable.Common
     public class Config
     {
         public const string AccessTokenKey = "&access_token=";
-        public const string AccessTokenValue = "joe";
+        public const string AccessTokenValue = "b8f5186dcbc591256f176aeb7f72f7cd";
+        public const string BugSenseTokenValue = "w8c40cc1";
 
         public const string FranchiseIdKey = "&franchise_abbr=";
         public const string OpponentIdKey = "&opp_franchise_abbr=";

@@ -36,7 +36,7 @@ namespace ClutchWinBaseball
 
             //this.UnhandledException += App_UnhandledException;
 
-            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), "w8c40cc1");
+            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), Config.BugSenseTokenValue);
         }
 
         void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
