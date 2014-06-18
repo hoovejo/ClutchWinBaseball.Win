@@ -13,7 +13,8 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    DataContext="{Binding Main, Source={StaticResource Locator}}">
+    DataContext="{Binding Main, Source={StaticResource Locator}}"
+    xmlns:UI="clr-namespace:Microsoft.Advertising.Mobile.UI;assembly=Microsoft.Advertising.Mobile.UI">
 
         <!--LayoutRoot is the root grid where all page content is placed-->
 	<Grid x:Name="LayoutRoot" Background="Transparent">
@@ -88,5 +89,13 @@
             </phone:PanoramaItem>
         </phone:Panorama>
 
-	</Grid>
+        <UI:AdControl 
+         ApplicationId="test_client" 
+         AdUnitId="Image480_80" 
+         HorizontalAlignment="Left" 
+         Height="80" 
+         Margin="0,0,0,30" 
+         VerticalAlignment="Bottom" 
+         Width="480"/>
+    </Grid>
 </phone:PhoneApplicationPage>

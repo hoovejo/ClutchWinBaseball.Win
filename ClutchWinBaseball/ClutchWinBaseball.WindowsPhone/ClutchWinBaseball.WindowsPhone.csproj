@@ -152,7 +152,11 @@
       <Name>ClutchWinBaseball.Portable</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="Microsoft.Advertising.Mobile.Display, Version=8.1">
+      <Name>Microsoft Advertising SDK for Windows Phone 8.1 %28XAML%29</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
