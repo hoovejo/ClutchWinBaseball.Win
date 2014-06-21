@@ -102,26 +102,6 @@ namespace ClutchWinBaseball
                     break;
                 case 1:
                     {
-                        PlayersContextViewModel playersContext = PlayersContextViewModel.Instance;
-                        if (!playersContext.IsHydratedObject)
-                        {
-                            PlayersContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadPlayersContextAsync();
-                            if (ctx != null)
-                            {
-                                playersContext.ReHydrateMe(ctx);
-                            }
-                            playersContext.IsHydratedObject = true;
-
-                            if (!string.IsNullOrEmpty(playersContext.SelectedYearId))
-                            {
-                                ViewModelLocator.Players.SelectedYearId = playersContext.SelectedYearId;
-                            }
-                            if (!string.IsNullOrEmpty(playersContext.SelectedTeamId))
-                            {
-                                ViewModelLocator.Players.SelectedTeamId = playersContext.SelectedTeamId;
-                            }
-                        }
-
                         if (!Frame.Navigate(typeof(PlayersFeature)))
                         {
                             throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));

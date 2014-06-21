@@ -32,33 +32,17 @@ namespace ClutchWinBaseball.WP8
             {
                 _playersViewModel.IsLoadingData = true;
 
-                if (!_playersContext.HasLoadedSeasonsOncePerSession)
+                if (!_playersContext.HasLoadedSeasonsOncePerSession || _playersViewModel.YearItems.Count <= 0)
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _playersViewModel.LoadYearDataAsync(_playersContext);
-                    await _cacheManager.SavePlayersContextAsync(_playersContext);
-
-                    if (returnValue && _playersViewModel.YearItems.Count > 0)
+                    if (isNetAvailable)
                     {
-                        var jsonString = _playersViewModel.YearsDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.PY_CacheFileKey, jsonString);
-                        _playersContext.HasLoadedSeasonsOncePerSession = true;
+                        returnValue = await _playersViewModel.LoadYearDataAsync(_playersContext);
+                        if (returnValue) { _playersContext.HasLoadedSeasonsOncePerSession = true; }
                     }
-                    else { await _fileManager.DeleteFileAsync(Config.PY_CacheFileKey); }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_playersViewModel.YearItems.Count <= 0)
-                    {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.PY_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _playersViewModel.LoadYearDataAsync(_playersContext, jsonString);
-                        }
-                    }
                 }
             }
             catch (Exception ex) { _playersContext.HasLoadedSeasonsOncePerSession = false; exception = ex; }
@@ -80,30 +64,14 @@ namespace ClutchWinBaseball.WP8
 
                 if (_playersContext.ShouldExecuteLoadTeams(isNetAvailable))
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _playersViewModel.LoadTeamDataAsync(_playersContext);
-                    await _cacheManager.SavePlayersContextAsync(_playersContext);
-
-                    if (returnValue && _playersViewModel.TeamItems.Count > 0)
+                    if (isNetAvailable)
                     {
-                        var jsonString = _playersViewModel.TeamsDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.PT_CacheFileKey, jsonString);
+                        returnValue = await _playersViewModel.LoadTeamDataAsync(_playersContext);
                     }
-                    else { await _fileManager.DeleteFileAsync(Config.PT_CacheFileKey); }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_playersViewModel.TeamItems.Count <= 0)
-                    {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.PT_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _playersViewModel.LoadTeamDataAsync(_playersContext, jsonString);
-                        }
-                    }
                 }
             }
             catch (Exception ex) { exception = ex; }
@@ -125,30 +93,14 @@ namespace ClutchWinBaseball.WP8
 
                 if (_playersContext.ShouldExecuteLoadBatters(isNetAvailable))
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _playersViewModel.LoadBatterDataAsync(_playersContext);
-                    await _cacheManager.SavePlayersContextAsync(_playersContext);
-
-                    if (returnValue && _playersViewModel.BatterItems.Count > 0)
+                    if (isNetAvailable)
                     {
-                        var jsonString = _playersViewModel.BattersDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.PB_CacheFileKey, jsonString);
+                        returnValue = await _playersViewModel.LoadBatterDataAsync(_playersContext);
                     }
-                    else { await _fileManager.DeleteFileAsync(Config.PB_CacheFileKey); }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_playersViewModel.BatterItems.Count <= 0)
-                    {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.PB_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _playersViewModel.LoadBatterDataAsync(_playersContext, jsonString);
-                        }
-                    }
                 }
             }
             catch (Exception ex) { exception = ex; }
@@ -172,34 +124,22 @@ namespace ClutchWinBaseball.WP8
 
                 if (_playersContext.ShouldExecuteLoadPitchers(isNetAvailable))
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _playersViewModel.LoadPitcherDataAsync(_playersContext);
-                    await _cacheManager.SavePlayersContextAsync(_playersContext);
-
-                    if (returnValue && _playersViewModel.PitcherItems.Count > 0)
+                    if (isNetAvailable)
                     {
-                        var jsonString = _playersViewModel.PitchersDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.PP_CacheFileKey, jsonString);
+                        returnValue = await _playersViewModel.LoadPitcherDataAsync(_playersContext);
                     }
-                    else
+
+                    if (returnValue && _playersViewModel.PitcherItems.Count <= 0)
                     {
-                        await _fileManager.DeleteFileAsync(Config.PP_CacheFileKey);
                         _playersViewModel.NoPitchers = true;
                     }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_playersViewModel.PitcherItems.Count <= 0)
+                    if (!_playersContext.PlayersPitchersServiceCallAllowed() && _playersViewModel.PitcherItems.Count <= 0)
                     {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.PP_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _playersViewModel.LoadPitcherDataAsync(_playersContext, jsonString);
-                        }
-                        else { _playersViewModel.PitchersGoBack = true; }
+                        _playersViewModel.PitchersGoBack = true;
                     }
                 }
             }
@@ -224,34 +164,22 @@ namespace ClutchWinBaseball.WP8
 
                 if (_playersContext.ShouldExecutePlayerResultsSearch(isNetAvailable))
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _playersViewModel.LoadPlayerResultsDataAsync(_playersContext);
-                    await _cacheManager.SavePlayersContextAsync(_playersContext);
-
-                    if (returnValue && _playersViewModel.PlayerResultItems.Count > 0)
+                    if (isNetAvailable)
                     {
-                        var jsonString = _playersViewModel.PlayersResultsDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.PR_CacheFileKey, jsonString);
+                        returnValue = await _playersViewModel.LoadPlayerResultsDataAsync(_playersContext);
                     }
-                    else
+
+                    if (returnValue && _playersViewModel.PlayerResultItems.Count <= 0)
                     {
-                        await _fileManager.DeleteFileAsync(Config.PR_CacheFileKey);
                         _playersViewModel.NoResults = true;
                     }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_playersViewModel.PlayerResultItems.Count <= 0)
+                    if (!_playersContext.PlayersResultsServiceCallAllowed() && _playersViewModel.PlayerResultItems.Count <= 0)
                     {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.PR_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _playersViewModel.LoadPlayerResultsDataAsync(_playersContext, jsonString);
-                        }
-                        else { _playersViewModel.ResultsGoBack = true; }
+                        _playersViewModel.ResultsGoBack = true;
                     }
                 }
             }
@@ -276,35 +204,22 @@ namespace ClutchWinBaseball.WP8
 
                 if (_playersContext.ShouldExecutePlayersDrillDownSearch(isNetAvailable))
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _playersViewModel.LoadPlayerDrillDownDataAsync(_playersContext);
-                    await _cacheManager.SavePlayersContextAsync(_playersContext);
-
-                    if (returnValue && _playersViewModel.PlayerDrillDownItems.Count > 0)
+                    if (isNetAvailable)
                     {
-                        var jsonString = _playersViewModel.PlayersDrillDownDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.PDD_CacheFileKey, jsonString);
+                        returnValue = await _playersViewModel.LoadPlayerDrillDownDataAsync(_playersContext);
                     }
-                    else
+
+                    if (returnValue && _playersViewModel.PlayerDrillDownItems.Count <= 0)
                     {
-                        await _fileManager.DeleteFileAsync(Config.PDD_CacheFileKey);
                         _playersViewModel.NoDrillDown = true;
                     }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_playersViewModel.PlayerDrillDownItems.Count <= 0)
+                    if (!_playersContext.PlayersDrillDownServiceCallAllowed() && _playersViewModel.PlayerDrillDownItems.Count <= 0)
                     {
-                        _playersViewModel.IsLoadingData = true;
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.PDD_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _playersViewModel.LoadPlayerDrillDownDataAsync(_playersContext, jsonString);
-                        }
-                        else { _playersViewModel.DrillDownGoBack = true; }
+                        _playersViewModel.DrillDownGoBack = true;
                     }
                 }
             }
@@ -318,4 +233,3 @@ namespace ClutchWinBaseball.WP8
         }
     }
 }
-

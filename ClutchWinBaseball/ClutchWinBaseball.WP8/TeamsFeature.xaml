@@ -68,8 +68,12 @@
                                         JumpListStyle="{StaticResource JumpListStyle}" IsGroupingEnabled="True" 
                                         LayoutMode="List">
                     <phone:LongListSelector.ListHeader>
-                        <TextBlock x:Uid="SelectTeamText" Text="select team first" Style="{StaticResource PhoneTextContrastStyle}"
-                                               Visibility="{Binding OpponentsItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                        <StackPanel>
+                            <TextBlock x:Uid="SelectTeamText" Text="select team first" Style="{StaticResource PhoneTextContrastStyle}"
+                                               Visibility="{Binding OpponentsGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                            <TextBlock Style="{StaticResource PhoneTextContrastStyle}" Text="no results" 
+                                                Visibility="{Binding NoOpponents, Converter={StaticResource booleanToVisibilityConverter}}" />
+                        </StackPanel>
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>

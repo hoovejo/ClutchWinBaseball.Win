@@ -31,33 +31,17 @@ namespace ClutchWinBaseball
             {
                 _teamsViewModel.IsLoadingData = true;
 
-                if (!_teamsContext.HasLoadedFranchisesOncePerSession)
+                if (!_teamsContext.HasLoadedFranchisesOncePerSession || _teamsViewModel.FranchiseItems.Count <= 0)
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _teamsViewModel.LoadFranchisesDataAsync();
-                    await _cacheManager.SaveTeamsContextAsync(_teamsContext);
-
-                    if (returnValue && _teamsViewModel.FranchiseItems.Count > 0)
+                    if (isNetAvailable) 
                     {
-                        var jsonString = _teamsViewModel.FranchisesDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.TF_CacheFileKey, jsonString);
-                        _teamsContext.HasLoadedFranchisesOncePerSession = true;
+                        returnValue = await _teamsViewModel.LoadFranchisesDataAsync();
+                        if (returnValue) { _teamsContext.HasLoadedFranchisesOncePerSession = true; }
                     }
-                    else { await _fileManager.DeleteFileAsync(Config.TF_CacheFileKey); }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_teamsViewModel.FranchiseItems.Count <= 0)
-                    {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.TF_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _teamsViewModel.LoadFranchisesDataAsync(jsonString);
-                        }
-                    }
                 }
             }
             catch (Exception ex) { _teamsContext.HasLoadedFranchisesOncePerSession = false; exception = ex; }
@@ -79,23 +63,19 @@ namespace ClutchWinBaseball
 
                 if (_teamsContext.ShouldFilterOpponents(isNetAvailable))
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
                     _teamsViewModel.LoadOpponentsData(_teamsContext);
-                    await _cacheManager.SaveTeamsContextAsync(_teamsContext);
                     returnValue = true;
+                    if (_teamsViewModel.OpponentsItems.Count <= 0)
+                    {
+                        _teamsViewModel.NoOpponents = true;
+                    }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_teamsViewModel.OpponentsItems.Count <= 0 && !string.IsNullOrEmpty(_teamsContext.SelectedTeamId))
+                    if (string.IsNullOrEmpty(_teamsContext.SelectedTeamId) && _teamsViewModel.OpponentsItems.Count <= 0)
                     {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.TF_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            _teamsViewModel.LoadOpponentsData(_teamsContext, jsonString);
-                        }
+                        _teamsViewModel.OpponentsGoBack = true;
                     }
                 }
             }
@@ -120,34 +100,22 @@ namespace ClutchWinBaseball
 
                 if (_teamsContext.ShouldExecuteTeamResultsSearch(isNetAvailable))
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(_teamsContext);
-                    await _cacheManager.SaveTeamsContextAsync(_teamsContext);
-
-                    if (returnValue && _teamsViewModel.TeamResultItems.Count > 0)
+                    if (isNetAvailable) 
                     {
-                        var jsonString = _teamsViewModel.TeamsResultsDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.TR_CacheFileKey, jsonString);
+                        returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(_teamsContext);
                     }
-                    else
+
+                    if (returnValue && _teamsViewModel.TeamResultItems.Count <= 0)
                     {
-                        await _fileManager.DeleteFileAsync(Config.TR_CacheFileKey);
                         _teamsViewModel.NoResults = true;
                     }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_teamsViewModel.TeamResultItems.Count <= 0)
+                    if (!_teamsContext.TeamsResultsServiceCallAllowed() && _teamsViewModel.TeamResultItems.Count <= 0)
                     {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.TR_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _teamsViewModel.LoadTeamResultsDataAsync(_teamsContext, jsonString);
-                        }
-                        else { _teamsViewModel.ResultsGoBack = true;  }
+                        _teamsViewModel.ResultsGoBack = true;
                     }
                 }
             }
@@ -172,34 +140,22 @@ namespace ClutchWinBaseball
 
                 if (_teamsContext.ShouldExecuteTeamDrillDownSearch(isNetAvailable))
                 {
-                    //cache reads are allowed if no network, but svc calls not allowed
-                    if (!isNetAvailable) { returnValue = false; }
-
-                    returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext);
-                    await _cacheManager.SaveTeamsContextAsync(_teamsContext);
-
-                    if (returnValue && _teamsViewModel.TeamDrillDownItems.Count > 0)
+                    if (isNetAvailable)
                     {
-                        var jsonString = _teamsViewModel.TeamsDrillDownDataString;
-                        returnValue = await _fileManager.CacheUpdateAsync(Config.TDD_CacheFileKey, jsonString);
+                        returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext);
                     }
-                    else
+
+                    if (returnValue && _teamsViewModel.TeamDrillDownItems.Count <= 0)
                     {
-                        await _fileManager.DeleteFileAsync(Config.TDD_CacheFileKey);
                         _teamsViewModel.NoDrillDown = true;
                     }
                 }
                 else
                 {
                     returnValue = true;
-                    if (_teamsViewModel.TeamDrillDownItems.Count <= 0)
+                    if (!_teamsContext.TeamsDrillDownServiceCallAllowed() && _teamsViewModel.TeamDrillDownItems.Count <= 0)
                     {
-                        var jsonString = await _fileManager.CacheInquiryAsync(Config.TDD_CacheFileKey);
-                        if (!string.IsNullOrEmpty(jsonString))
-                        {
-                            returnValue = await _teamsViewModel.LoadTeamDrillDownDataAsync(_teamsContext, jsonString);
-                        }
-                        else { _teamsViewModel.DrillDownGoBack = true; }
+                        _teamsViewModel.DrillDownGoBack = true;
                     }
                 }
             }

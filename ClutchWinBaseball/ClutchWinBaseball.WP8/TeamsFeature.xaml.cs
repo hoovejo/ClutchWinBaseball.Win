@@ -32,16 +32,6 @@ namespace ClutchWinBaseball.WP8
                 pvControl.SelectedIndex = (int)IsolatedStorageSettings.ApplicationSettings[Config.TeamsFeatureTabCache];
             }
 
-            if (!teamsContext.IsHydratedObject)
-            {
-                TeamsContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadTeamsContextAsync();
-                if (ctx != null)
-                {
-                    teamsContext.ReHydrateMe(ctx);
-                }
-                teamsContext.IsHydratedObject = true;
-            }
-
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
@@ -158,7 +148,7 @@ namespace ClutchWinBaseball.WP8
 
         private async void pvControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (handledByUserAction) return;
+            if (handledByUserAction) { handledByUserAction = false; return; }
 
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;

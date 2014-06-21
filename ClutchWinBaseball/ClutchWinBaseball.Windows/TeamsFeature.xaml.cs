@@ -65,20 +65,8 @@ namespace ClutchWinBaseball
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session. The state will be null the first time a page is visited.</param>
-        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            TeamsContextViewModel teamsContext = TeamsContextViewModel.Instance;
-
-            if (!teamsContext.IsHydratedObject)
-            {
-                TeamsContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadTeamsContextAsync();
-                if (ctx != null)
-                {
-                    teamsContext.ReHydrateMe(ctx);
-                }
-                teamsContext.IsHydratedObject = true;
-            }
-
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             var view = localSettings.Values[Config.TeamsFeatureTabCache] as string;
             if (view != null)

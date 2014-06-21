@@ -103,8 +103,12 @@
                                       ItemClick="Opponents_ItemClick" >
                             <ListView.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock x:Uid="SelectTeamText" Text="select team first" Style="{ThemeResource SubheaderTextBlockStyle}"
-                                               Visibility="{Binding OpponentsItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
+                                    <StackPanel>
+                                        <TextBlock x:Uid="SelectTeamText" Text="select team first" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                               Visibility="{Binding OpponentsGoBack, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                                        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="no results" x:Name="NoResults" 
+                                                Visibility="{Binding NoOpponents, Converter={StaticResource booleanToVisibilityConverter}}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.HeaderTemplate>
                             <ListView.ItemTemplate>

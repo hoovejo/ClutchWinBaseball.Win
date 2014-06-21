@@ -33,7 +33,10 @@
                     TextWrapping="Wrap" Margin="0,0,0,25" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Center"/>
             <TextBlock Grid.Row="1" Style="{StaticResource SubheaderTextBlockStyle}" 
                        Text="select team first" x:Name="SelectTeamText" 
-                       Visibility="{Binding OpponentsItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}" />            
+                       Visibility="{Binding OpponentsGoBack, Converter={StaticResource booleanToVisibilityConverter}}" />
+            <TextBlock Grid.Row="1" Style="{StaticResource SubheaderTextBlockStyle}" 
+                       Text="no results" x:Name="NoResults" 
+                       Visibility="{Binding NoOpponents, Converter={StaticResource booleanToVisibilityConverter}}" />
         </Grid>
 
         <Grid x:Name="Output" Grid.Row="1">

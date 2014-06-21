@@ -43,10 +43,10 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
         public bool ShouldFilterOpponents(bool update)
         {
             //needed for opponent filtering
-            if (SelectedTeamId == null) return false;
+            if (string.IsNullOrEmpty(SelectedTeamId)) return false;
 
             bool returnValue;
-            if (LastOpponentFilterFranchiseId == null || !LastOpponentFilterFranchiseId.Equals(SelectedTeamId))
+            if (string.IsNullOrEmpty(LastOpponentFilterFranchiseId) || !LastOpponentFilterFranchiseId.Equals(SelectedTeamId))
             {
                 returnValue = true;
             }
@@ -64,13 +64,20 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
         public string LastSearchFranchiseId { get; set; }
         public string LastSearchOpponentId { get; set; }
 
+        public bool TeamsResultsServiceCallAllowed()
+        {
+            //needed for team results svc call
+            if (string.IsNullOrEmpty(SelectedTeamId) || string.IsNullOrEmpty(SelectedOpponentId)) return false;
+            else return true;
+        }
+
         public bool ShouldExecuteTeamResultsSearch(bool update)
         {
             //needed for team results svc call
-            if (SelectedTeamId == null || SelectedOpponentId == null) return false;
+            if (string.IsNullOrEmpty(SelectedTeamId) || string.IsNullOrEmpty(SelectedOpponentId)) return false;
 
             bool returnValue;
-            if (LastSearchFranchiseId == null || LastSearchOpponentId == null ||
+            if (string.IsNullOrEmpty(LastSearchFranchiseId) || string.IsNullOrEmpty(LastSearchOpponentId) ||
                     !LastSearchFranchiseId.Equals(SelectedTeamId) || !LastSearchOpponentId.Equals(SelectedOpponentId))
             {
                 returnValue = true;
@@ -91,14 +98,21 @@ namespace ClutchWinBaseball.Portable.FeatureStateModel
         public string LastDrillDownOpponentId { get; set; }
         public string LastDrillDownYearId { get; set; }
 
+        public bool TeamsDrillDownServiceCallAllowed()
+        {
+            //needed for team results svc call
+            if (string.IsNullOrEmpty(SelectedTeamId) || string.IsNullOrEmpty(SelectedOpponentId) || string.IsNullOrEmpty(SelectedYearId)) return false;
+            else return true;
+        }
+
         public bool ShouldExecuteTeamDrillDownSearch(bool update)
         {
             //needed for team results svc call
-            if (SelectedTeamId == null || SelectedOpponentId == null || SelectedYearId == null) return false;
+            if (string.IsNullOrEmpty(SelectedTeamId) || string.IsNullOrEmpty(SelectedOpponentId) || string.IsNullOrEmpty(SelectedYearId)) return false;
 
             bool returnValue;
-            if (LastDrillDownFranchiseId == null || LastDrillDownOpponentId == null ||
-                    LastDrillDownYearId == null ||
+            if (string.IsNullOrEmpty(LastDrillDownFranchiseId) || string.IsNullOrEmpty(LastDrillDownOpponentId) ||
+                    string.IsNullOrEmpty(LastDrillDownYearId) ||
                     !LastDrillDownFranchiseId.Equals(SelectedTeamId) || !LastDrillDownOpponentId.Equals(SelectedOpponentId) ||
                     !LastDrillDownYearId.Equals(SelectedYearId))
             {

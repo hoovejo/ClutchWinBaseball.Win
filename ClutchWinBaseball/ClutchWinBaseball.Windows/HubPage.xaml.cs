@@ -55,7 +55,7 @@ namespace ClutchWinBaseball
         /// <param name="sender">The GridView or ListView
         /// displaying the item clicked.</param>
         /// <param name="e">Event data that describes the item clicked.</param>
-        private async void ItemView_ItemClick(object sender, ItemClickEventArgs e)
+        private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
             //// Navigate to the appropriate destination page, configuring the new page
             var selectedItem = 0;
@@ -75,26 +75,6 @@ namespace ClutchWinBaseball
                     break;
                 case 1:
                     {
-                        PlayersContextViewModel playersContext = PlayersContextViewModel.Instance;
-                        if (!playersContext.IsHydratedObject)
-                        {
-                            PlayersContextViewModel ctx = await DataManagerLocator.ContextCacheManager.ReadPlayersContextAsync();
-                            if (ctx != null)
-                            {
-                                playersContext.ReHydrateMe(ctx);
-                            }
-                            playersContext.IsHydratedObject = true;
-
-                            if (!string.IsNullOrEmpty(playersContext.SelectedYearId))
-                            {
-                                ViewModelLocator.Players.SelectedYearId = playersContext.SelectedYearId;
-                            }
-                            if (!string.IsNullOrEmpty(playersContext.SelectedTeamId))
-                            {
-                                ViewModelLocator.Players.SelectedTeamId = playersContext.SelectedTeamId;
-                            }
-                        }
-
                         if (!Frame.Navigate(typeof(PlayersFeature)))
                         {
                             //throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));

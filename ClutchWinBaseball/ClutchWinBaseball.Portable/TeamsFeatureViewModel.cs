@@ -27,7 +27,7 @@ namespace ClutchWinBaseball.Portable
         public ObservableCollection<KeyedList<string, TeamsResultsViewModel>> TeamResultItems { get; private set; }
         public ObservableCollection<KeyedList<string, TeamsDrillDownViewModel>> TeamDrillDownItems { get; private set; }
 
-        private bool _isLoadingData, _noResults, _resultsGoBack, _noDrillDown, _drillDownGoBack;
+        private bool _isLoadingData, _noOpponents, _opponentsGoBack, _noResults, _resultsGoBack, _noDrillDown, _drillDownGoBack;
 
         //Determine if we need to show loading spinner
         public bool IsLoadingData
@@ -35,7 +35,19 @@ namespace ClutchWinBaseball.Portable
             get { return _isLoadingData; }
             set { if (value != _isLoadingData) { _isLoadingData = value; NotifyPropertyChanged("IsLoadingData"); } }
         }
-        
+
+        public bool NoOpponents
+        {
+            get { return _noOpponents; }
+            set { if (value != _noOpponents) { _noOpponents = value; NotifyPropertyChanged("NoOpponents"); } }
+        }
+
+        public bool OpponentsGoBack
+        {
+            get { return _opponentsGoBack; }
+            set { if (value != _opponentsGoBack) { _opponentsGoBack = value; NotifyPropertyChanged("OpponentsGoBack"); } }
+        }
+
         public bool NoResults
         {
             get { return _noResults; }

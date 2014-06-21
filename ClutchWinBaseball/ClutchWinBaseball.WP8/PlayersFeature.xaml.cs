@@ -157,7 +157,7 @@ namespace ClutchWinBaseball.WP8
 
         private async void pvControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (handledByUserAction) return;
+            if (handledByUserAction) { handledByUserAction = false; return; }
 
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
