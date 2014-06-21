@@ -20,8 +20,8 @@
                         <TextBlock x:Name="hitLabel" Text="Hits" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="walksLabel" Text="Walks" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="strikeOutLabel" Text="Strike outs" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="secondBaseLabel" Text="Second base hits" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="thirdBaseLabel" Text="Third base hits" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="secondBaseLabel" Text="Doubles" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="thirdBaseLabel" Text="Triples" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="homeRunLabel" Text="Home runs" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="runBattedInLabel" Text="Runs batted in" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
                         <TextBlock x:Name="averageLabel" Text="Average" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
