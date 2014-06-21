@@ -126,5 +126,21 @@ namespace ClutchWinBaseball
         {
             await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
         }
+
+        private void AdControl_AdRefreshed(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (adControl != null)
+            {
+                adControl.Height = 50;
+            }
+        }
+
+        private void AdControl_ErrorOccurred(object sender, Microsoft.Advertising.Mobile.Common.AdErrorEventArgs e)
+        {
+            if (adControl != null)
+            {
+                adControl.Height = 1;
+            }
+        }
     }
 }

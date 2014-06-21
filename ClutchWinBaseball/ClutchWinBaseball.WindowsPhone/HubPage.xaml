@@ -72,7 +72,7 @@
                             </StackPanel>
                         </Grid>
 
-                        <Grid x:Name="Footer" Grid.Row="1" Margin="0,10,0,85" VerticalAlignment="Bottom" >
+                        <Grid x:Name="Footer" Grid.Row="1" Margin="0,10,0,55" VerticalAlignment="Bottom" >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
@@ -85,14 +85,16 @@
             </HubSection>
         </Hub>
 
-        <UI:AdControl Grid.Row="1"
-             AutoRefreshIntervalInSeconds="60" 
-             ApplicationId="test_client" 
-             AdUnitId="Image480_80"
-             HorizontalAlignment="Left"
-             Height="80"
-             IsAutoRefreshEnabled="True"
-             VerticalAlignment="Bottom" 
-             Width="480"/>
+        <UI:AdControl Grid.Row="1" x:Name="adControl"
+            AutoRefreshIntervalInSeconds="60" 
+            ApplicationId="test_client" 
+            AdUnitId="Image320_50"
+            HorizontalAlignment="Left"
+            Height="50"
+            IsAutoRefreshEnabled="True"
+            VerticalAlignment="Bottom" 
+            Width="320" 
+            AdRefreshed="AdControl_AdRefreshed" 
+            ErrorOccurred="AdControl_ErrorOccurred" />
     </Grid>
 </Page>

@@ -68,5 +68,21 @@ namespace ClutchWinBaseball.WP8
         {
             await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
         }
+
+        private void adControl_ErrorOccurred(object sender, Microsoft.Advertising.AdErrorEventArgs e)
+        {
+            if (adControl != null)
+            {
+                adControl.Height = 1;
+            }
+        }
+
+        private void adControl_AdRefreshed(object sender, EventArgs e)
+        {
+            if (adControl != null)
+            {
+                adControl.Height = 50;
+            }
+        }
     }
 }

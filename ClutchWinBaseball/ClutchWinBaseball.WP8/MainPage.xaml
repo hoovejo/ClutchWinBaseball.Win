@@ -114,12 +114,14 @@
             </phone:PanoramaItem>
         </phone:Panorama>
 
-        <UI:AdControl 
-         ApplicationId="test_client" 
-         AdUnitId="Image480_80" 
-         HorizontalAlignment="Left" 
-         Height="80" 
-         VerticalAlignment="Bottom" 
-         Width="480"/>
+        <UI:AdControl x:Name="adControl"
+             ApplicationId="test_client" 
+             AdUnitId="Image480_80" 
+             HorizontalAlignment="Left" 
+             Height="80" 
+             VerticalAlignment="Bottom" 
+             Width="480"
+             ErrorOccurred="adControl_ErrorOccurred"
+             AdRefreshed="adControl_AdRefreshed" />
     </Grid>
 </phone:PhoneApplicationPage>
