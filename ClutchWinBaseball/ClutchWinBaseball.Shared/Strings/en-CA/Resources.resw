@@ -120,6 +120,9 @@
   <data name="BatterPivot" xml:space="preserve">
     <value>batters</value>
   </data>
+  <data name="ClutchWinDisclaimer" xml:space="preserve">
+    <value>There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use the material presented here. All information is subject to corrections as additional data are received.</value>
+  </data>
   <data name="Discover" xml:space="preserve">
     <value>Discover how your favorite baseball teams or players perform against their rivals.</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="PlayersResultsPivot" xml:space="preserve">
     <value>results</value>
+  </data>
+  <data name="RetrosheetDisclaimer" xml:space="preserve">
+    <value>The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at:</value>
   </data>
   <data name="SelectBatterText" xml:space="preserve">
     <value>select batter first</value>

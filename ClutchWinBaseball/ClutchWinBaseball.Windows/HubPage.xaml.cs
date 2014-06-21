@@ -116,5 +116,10 @@ namespace ClutchWinBaseball
             await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
         }
 
+        private async void Footer_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
+        }
+
     }
 }

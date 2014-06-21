@@ -59,37 +59,79 @@
 
             <HubSection Width="500" x:Name="FeaturedHubSection" x:Uid="HubSection2" Header="Featured" DataContext="{Binding Items}" >
                 <DataTemplate>
-                    <ListView ItemsSource="{Binding}" IsItemClickEnabled="True" ItemClick="ItemView_ItemClick">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="10,15,0,15">
-                                    <TextBlock Text="{Binding LineOne}" Style="{ThemeResource HeaderTextBlockStyle}" />
-                                    <TextBlock Text="{Binding LineTwo}" Style="{ThemeResource SubheaderTextBlockStyle}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid x:Name="Body" Grid.Row="0" Margin="0,10,0,10" VerticalAlignment="Top" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ListView ItemsSource="{Binding}" IsItemClickEnabled="True" ItemClick="ItemView_ItemClick">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="10,15,0,15">
+                                            <TextBlock Text="{Binding LineOne}" Style="{ThemeResource HeaderTextBlockStyle}" />
+                                            <TextBlock Text="{Binding LineTwo}" Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+
+                        <Grid x:Name="Footer" Grid.Row="1" Margin="0,10,0,10" VerticalAlignment="Bottom" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <UI:AdControl ApplicationId="d25517cb-12d4-4699-8bdc-52040c712cab" 
+                                  AdUnitId="10043107" 
+                                  HorizontalAlignment="Left" 
+                                  Height="250" 
+                                  VerticalAlignment="Bottom" 
+                                  Width="250"/>
+                        </Grid>
+                    </Grid>
                 </DataTemplate>
             </HubSection>
 
             <HubSection Width="520" x:Name="CreditsHubSection" x:Uid="HubSection3" Header="Credits">
                 <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Margin="10,0,0,0"
-                            Text="The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at:"
-                            Style="{ThemeResource BodyTextBlockStyle }" />
-                        <HyperlinkButton Margin="10,0,0,0" Content="www.retrosheet.org" Tag="http://www.retrosheet.org" Click="HyperlinkButton_Click" FontSize="12" />
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid x:Name="Body" Grid.Row="0" Margin="0,10,0,10" VerticalAlignment="Top" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel>
+                                <TextBlock Margin="10,0,0,0" TextWrapping="Wrap" x:Uid="RetrosheetDisclaimer"
+                                   Text="The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at:"
+                                   Style="{ThemeResource BodyTextBlockStyle }" />
+                                <HyperlinkButton Margin="10,0,0,0" HorizontalAlignment="Left" Content="www.retrosheet.org" Tag="http://www.retrosheet.org" Click="HyperlinkButton_Click" FontSize="12" />
+
+                                <TextBlock Margin="10,20,0,0" TextWrapping="Wrap" x:Uid="ClutchWinDisclaimer"
+                                   Text="There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use the material presented here. All information is subject to corrections as additional data are received."
+                                   Style="{ThemeResource BodyTextBlockStyle }" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="Footer" Grid.Row="1" Margin="0,10,0,85" VerticalAlignment="Bottom" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <HyperlinkButton Grid.Row="0" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Website" Tag="http://ClutchWin.com/" Click="Footer_Click" FontSize="12" />
+                            <TextBlock Grid.Row="1" Margin="10,10,0,0" Text="© ClutchWin baseball. All rights reserved." TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </Grid>
                 </DataTemplate>
             </HubSection>
  
         </Hub>
-
-        <UI:AdControl ApplicationId="d25517cb-12d4-4699-8bdc-52040c712cab" 
-                      AdUnitId="10043107" 
-                      HorizontalAlignment="Center" 
-                      Height="250" 
-                      VerticalAlignment="Bottom" 
-                      Width="250"/>
     </Grid>
 </Page>

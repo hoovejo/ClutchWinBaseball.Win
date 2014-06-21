@@ -57,7 +57,7 @@
 			</phone:Panorama.Background>
 
 			<!--Panorama item Home-->
-            <phone:PanoramaItem Header="welcome!">
+            <phone:PanoramaItem Header="Welcome!">
                     <TextBlock x:Uid="Discover" TextWrapping="Wrap" Text="Discover how your favorite baseball teams or players perform against their rivals."
                                    Style="{StaticResource PhoneTextLargeStyle}" />
             </phone:PanoramaItem>
@@ -80,12 +80,37 @@
 
             <!--Panorama item credits-->
             <phone:PanoramaItem Header="credits">
-                <StackPanel>
-                    <TextBlock Margin="10,0,0,0" TextWrapping="Wrap"
-                               Text="The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at:"
-                               Style="{StaticResource PhoneTextLargeStyle }" />
-                    <HyperlinkButton Margin="10,0,0,0" Content="www.retrosheet.org" Tag="http://www.retrosheet.org" Click="HyperlinkButton_Click" FontSize="12" />
-                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid x:Name="Body" Grid.Row="0" Margin="0,10,0,10" VerticalAlignment="Top" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <TextBlock Margin="10,0,0,0" TextWrapping="Wrap"
+                                   Text="The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at:"
+                                   Style="{StaticResource PhoneTextSubtleStyle }" />
+                            <HyperlinkButton Margin="10,0,0,0" HorizontalAlignment="Left" Content="www.retrosheet.org" Tag="http://www.retrosheet.org" Click="HyperlinkButton_Click" FontSize="12" />
+
+                            <TextBlock Margin="10,20,0,0" TextWrapping="Wrap"
+                                   Text="There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use the material presented here. All information is subject to corrections as additional data are received."
+                                   Style="{StaticResource PhoneTextSubtleStyle }" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid x:Name="Footer" Grid.Row="1" Margin="0,10,0,85" VerticalAlignment="Bottom" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <HyperlinkButton Grid.Row="0" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Website" Tag="http://ClutchWin.com/" Click="Footer_Click" FontSize="12" />
+                        <TextBlock Grid.Row="1" Margin="10,10,0,0" Text="© ClutchWin baseball. All rights reserved." TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                    </Grid>
+                </Grid>
             </phone:PanoramaItem>
         </phone:Panorama>
 
@@ -94,7 +119,6 @@
          AdUnitId="Image480_80" 
          HorizontalAlignment="Left" 
          Height="80" 
-         Margin="0,0,0,30" 
          VerticalAlignment="Bottom" 
          Width="480"/>
     </Grid>

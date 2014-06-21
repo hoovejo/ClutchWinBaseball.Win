@@ -83,7 +83,7 @@ namespace ClutchWinBaseball
         }
         #endregion
 
-        private async void GridView_ItemClick(object sender, ItemClickEventArgs e)
+        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var selectedItem = 0;
             var item = e.ClickedItem;
@@ -118,6 +118,11 @@ namespace ClutchWinBaseball
         }
 
         private async void HyperlinkButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
+        }
+
+        private async void Footer_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
         }

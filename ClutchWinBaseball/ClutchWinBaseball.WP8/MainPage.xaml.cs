@@ -38,7 +38,7 @@ namespace ClutchWinBaseball.WP8
 
         }
 
-        private async void SelectFeature_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void SelectFeature_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             var selectedItem = 0;
             var textBlock = e.OriginalSource as TextBlock;
@@ -60,6 +60,11 @@ namespace ClutchWinBaseball.WP8
         }
 
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
+        }
+
+        private async void Footer_Click(object sender, RoutedEventArgs e)
         {
             await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
         }
