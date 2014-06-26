@@ -12,7 +12,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
     DataContext="{Binding Main, Source={StaticResource Locator}}"
     xmlns:UI="clr-namespace:Microsoft.Advertising.Mobile.UI;assembly=Microsoft.Advertising.Mobile.UI">
 
@@ -38,16 +38,7 @@
             CurrentUICulture of the app at run time.
          -->
 
-		<!--Uncomment to see an alignment grid to help ensure your controls are
-            aligned on common boundaries.  The image has a top margin of -32px to
-            account for the System Tray. Set this to 0 (or remove the margin altogether)
-            if the System Tray is hidden.
-
-            Before shipping remove this XAML and the image itself.-->
-		<!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
-
-
-		<!--Panorama control-->
+        <!--Panorama control-->
 		<phone:Panorama x:Name="panorama">
             <phone:Panorama.Title>
                 <TextBlock Text="ClutchWin baseball" FontSize="80" Margin="0,76,0,0"/>
@@ -97,7 +88,7 @@
                             <HyperlinkButton Margin="10,0,0,0" HorizontalAlignment="Left" Content="www.retrosheet.org" Tag="http://www.retrosheet.org" Click="HyperlinkButton_Click" FontSize="12" />
 
                             <TextBlock Margin="10,20,0,0" TextWrapping="Wrap"
-                                   Text="There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use the material presented here. All information is subject to corrections as additional data are received."
+                                   Text="There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use of the material presented here. All information is subject to corrections as additional data is received."
                                    Style="{StaticResource PhoneTextSubtleStyle }" />
                         </StackPanel>
                     </Grid>

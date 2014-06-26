@@ -121,7 +121,7 @@
     <value>batters</value>
   </data>
   <data name="ClutchWinDisclaimer" xml:space="preserve">
-    <value>There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use the material presented here. All information is subject to corrections as additional data are received.</value>
+    <value>There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use of the material presented here. All information is subject to corrections as additional data is received.</value>
   </data>
   <data name="Discover" xml:space="preserve">
     <value>Discover how your favorite baseball teams or players perform against their rivals.</value>

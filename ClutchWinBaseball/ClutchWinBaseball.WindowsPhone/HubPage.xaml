@@ -67,7 +67,7 @@
                                 <HyperlinkButton Margin="10,0,0,0" HorizontalAlignment="Left" Content="www.retrosheet.org" Tag="http://www.retrosheet.org" Click="HyperlinkButton_Click" FontSize="12" />
 
                                 <TextBlock Margin="10,20,0,0" TextWrapping="Wrap" x:Uid="ClutchWinDisclaimer"
-                                   Text="There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use the material presented here. All information is subject to corrections as additional data are received."
+                                   Text="There is no guarantee of accuracy for the information supplied. ClutchWin shall not be held responsible for any consequences arising from the use of the material presented here. All information is subject to corrections as additional data is received."
                                    Style="{ThemeResource BodyTextBlockStyle }" />
                             </StackPanel>
                         </Grid>

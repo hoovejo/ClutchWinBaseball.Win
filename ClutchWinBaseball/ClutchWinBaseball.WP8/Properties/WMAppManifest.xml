@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{e6c31065-c025-4fbc-900f-2e482be95232}" Title="ClutchWinBaseball.WP8" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="ClutchWinBaseball.WP8 author" Description="Sample description" Publisher="ClutchWinBaseball.WP8" PublisherID="{09f0c388-b87a-4d23-8762-ac970704d8a6}">
+  <App xmlns="" ProductID="{e6c31065-c025-4fbc-900f-2e482be95232}" Title="ClutchWin baseball" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Joe Hoover" Description="Discover how your favorite baseball teams or players perform against their rivals." Publisher="Joe Hoover" PublisherID="{09f0c388-b87a-4d23-8762-ac970704d8a6}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
@@ -22,7 +22,7 @@
           <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
           <Count>0</Count>
           <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>ClutchWinBaseball.WP8</Title>
+          <Title>ClutchWin baseball</Title>
           <BackContent>
           </BackContent>
           <BackBackgroundImageURI>

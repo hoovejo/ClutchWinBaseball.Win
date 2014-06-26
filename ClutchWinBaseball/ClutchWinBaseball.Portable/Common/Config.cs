@@ -11,7 +11,7 @@ namespace ClutchWinBaseball.Portable.Common
         public const string FranchiseIdKey = "&franchise_abbr=";
         public const string OpponentIdKey = "&opp_franchise_abbr=";
         public const string TeamIdKey = "&team_abbr=";
-        public const string FranchiseSearchKeyValue = "&group=season,team_abbr,opp_abbr&fieldset=basic";
+        public const string FranchiseSearchKeyValue = "&group=season,team_abbr,opp_abbr&fieldset=basic&max_entries=200";
         public const string SeasonIdKey = "&season=";
         public const string FieldSetBasicKeyValue = "&fieldset=basic";
 

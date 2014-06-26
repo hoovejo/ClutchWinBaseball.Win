@@ -97,12 +97,14 @@ namespace ClutchWinBaseball.Portable
             set { if (value != _drillDownGoBack) { _drillDownGoBack = value; NotifyPropertyChanged("DrillDownGoBack"); } }
         }
 
+        /*
         public string YearsDataString { get; set; }
         public string TeamsDataString { get; set; }
         public string BattersDataString { get; set; }
         public string PitchersDataString { get; set; }
         public string PlayersResultsDataString { get; set; }
         public string PlayersDrillDownDataString { get; set; }
+        */
 
         public async Task<bool> LoadYearDataAsync(PlayersContextViewModel context, string cachedJson = "")
         {
@@ -115,7 +117,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetYearsAsync();
                 if (svcResult == null) { return false; } //no results message
-                YearsDataString = svcResult;
+                //YearsDataString = svcResult;
                 years = JsonConvert.DeserializeObject<List<YearModel>>(svcResult);
             }
             else
@@ -142,7 +144,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetTeamsAsync(context.SelectedYearId);
                 if (svcResult == null) { return false; } //no results message
-                TeamsDataString = svcResult;
+                //TeamsDataString = svcResult;
                 teams = JsonConvert.DeserializeObject<List<TeamModel>>(svcResult);
             }
             else
@@ -182,7 +184,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetBattersAsync(context.SelectedTeamId, context.SelectedYearId);
                 if (svcResult == null) { return false; } //no results message
-                BattersDataString = svcResult;
+                //BattersDataString = svcResult;
                 batters = JsonConvert.DeserializeObject<List<BatterModel>>(svcResult);
             }
             else
@@ -221,7 +223,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetPitchersAsync(context.SelectedBatterId, context.SelectedYearId);
                 if (svcResult == null) { return false; } //no results message
-                PitchersDataString = svcResult;
+                //PitchersDataString = svcResult;
                 pitchers = JsonConvert.DeserializeObject<List<PitcherModel>>(svcResult);
             }
             else
@@ -260,7 +262,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetPlayerResultsAsync(context.SelectedBatterId, context.SelectedPitcherId);
                 if (svcResult == null) { return false; } //no results message
-                PlayersResultsDataString = svcResult;
+                //PlayersResultsDataString = svcResult;
                 items = JsonConvert.DeserializeObject<List<PlayersResultModel>>(svcResult);
             }
             else
@@ -283,7 +285,7 @@ namespace ClutchWinBaseball.Portable
                     HomeRun = item.HomeRun,
                     RunBattedIn = item.RunBattedIn,
                     StrikeOut = item.StrikeOut,
-                    Average = item.Average.ToString("N3", CultureInfo.InvariantCulture)
+                    Average = item.Average.ToString("N3", CultureInfo.InvariantCulture).TrimStart('0')
                 } into list
                 group list by list.GameYear into listByYear
                 select new KeyedList<string, PlayersResultsViewModel>(listByYear);
@@ -307,7 +309,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetPlayerDrillDownAsync(context.SelectedBatterId, context.SelectedPitcherId, context.SelectedGameYear);
                 if (svcResult == null) { return false; } //no results message
-                PlayersDrillDownDataString = svcResult;
+                //PlayersDrillDownDataString = svcResult;
                 items = JsonConvert.DeserializeObject<List<PlayersDrillDownModel>>(svcResult);
             }
             else
@@ -329,7 +331,7 @@ namespace ClutchWinBaseball.Portable
                     HomeRun = item.HomeRun,
                     RunBattedIn = item.RunBattedIn,
                     StrikeOut = item.StrikeOut,
-                    Average = item.Average.ToString("N3", CultureInfo.InvariantCulture)
+                    Average = item.Average.ToString("N3", CultureInfo.InvariantCulture).TrimStart('0')
                 } into list
                 group list by list.GameDate into listByYear
                 select new KeyedList<string, PlayersDrillDownViewModel>(listByYear);

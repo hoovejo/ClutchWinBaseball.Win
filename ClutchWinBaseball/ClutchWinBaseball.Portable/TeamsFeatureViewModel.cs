@@ -75,9 +75,11 @@ namespace ClutchWinBaseball.Portable
         //base list to build opponent list from
         private List<TeamsFranchisesViewModel> FranchiseList = new List<TeamsFranchisesViewModel>();
 
+        /*
         public string FranchisesDataString { get; set; }
         public string TeamsResultsDataString { get; set; }
         public string TeamsDrillDownDataString { get; set; }
+        */
 
         public async Task<bool> LoadFranchisesDataAsync(string cachedJson = "")
         {
@@ -90,7 +92,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetFranchisesAsync();
                 if (svcResult == null) { return false; } //no results message
-                FranchisesDataString = svcResult;
+                //FranchisesDataString = svcResult;
                 franchises = JsonConvert.DeserializeObject<List<FranchiseModel>>(svcResult);
             }
             else
@@ -185,7 +187,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetTeamResultsAsync(context.SelectedTeamId, context.SelectedOpponentId);
                 if (svcResult == null) { return false; } //no results message
-                TeamsResultsDataString = svcResult;
+                //TeamsResultsDataString = svcResult;
                 items = JsonConvert.DeserializeObject<List<TeamsResultModel>>(svcResult);
             }
             else
@@ -229,7 +231,7 @@ namespace ClutchWinBaseball.Portable
 
                 svcResult = await dataContext.GetTeamDrillDownAsync(context.SelectedTeamId, context.SelectedOpponentId, context.SelectedYearId);
                 if (svcResult == null) { return false; } //no results message
-                TeamsDrillDownDataString = svcResult;
+                //TeamsDrillDownDataString = svcResult;
                 items = JsonConvert.DeserializeObject<List<TeamsDrillDownModel>>(svcResult);
             }
             else

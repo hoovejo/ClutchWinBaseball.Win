@@ -3,8 +3,8 @@
   <Identity Name="5b8ffc24-ef23-4f46-bf5d-302e0ac42900" Publisher="CN=Joe" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="5b8ffc24-ef23-4f46-bf5d-302e0ac42900" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>ClutchWinBaseball.WindowsPhone</DisplayName>
-    <PublisherDisplayName>Joe</PublisherDisplayName>
+    <DisplayName>ClutchWin baseball</DisplayName>
+    <PublisherDisplayName>Joe Hoover</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
@@ -16,7 +16,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ClutchWinBaseball.WindowsPhone.App">
-      <m3:VisualElements DisplayName="ClutchWinBaseball.WindowsPhone" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="ClutchWinBaseball.WindowsPhone" ForegroundText="light" BackgroundColor="transparent">
+      <m3:VisualElements DisplayName="ClutchWin baseball" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Discover how your favorite baseball teams or players perform against their rivals." ForegroundText="light" BackgroundColor="transparent">
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
         </m3:DefaultTile>
         <m3:SplashScreen Image="Assets\SplashScreen.png" />
