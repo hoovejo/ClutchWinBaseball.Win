@@ -14,7 +14,7 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Default">
-                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.png"/>
+                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.png" Opacity="0.75"/>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="HighContrast">
                     <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="{x:Null}"/>
@@ -48,7 +48,7 @@
                 </DataTemplate>
             </HubSection>
 
-            <HubSection x:Name="CreditsHubSection" x:Uid="HubSection3" Header="credits">
+            <HubSection x:Name="CreditsHubSection" x:Uid="HubSection3" Header="information">
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>

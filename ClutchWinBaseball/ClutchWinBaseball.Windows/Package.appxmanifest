@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ClutchWinBaseball.Windows.App">
-      <m2:VisualElements DisplayName="ClutchWin baseball" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Discover how your favorite baseball teams or players perform against their rivals." ForegroundText="light" BackgroundColor="#464646">
+      <m2:VisualElements DisplayName="ClutchWin" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Discover how your favorite baseball teams or players perform against their rivals." ForegroundText="light" BackgroundColor="#464646">
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
         <m2:ApplicationView MinWidth="width500" />
       </m2:VisualElements>

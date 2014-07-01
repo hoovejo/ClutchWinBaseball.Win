@@ -57,6 +57,7 @@
       <DependentUpon>TeamsResultsItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\IndicatorDataSource.cs" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\HubImage.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\LightGray.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\MediumGray.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\DarkGray.png" />

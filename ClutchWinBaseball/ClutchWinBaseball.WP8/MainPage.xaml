@@ -44,7 +44,7 @@
                 <TextBlock Text="ClutchWin baseball" FontSize="80" Margin="0,76,0,0"/>
             </phone:Panorama.Title>
 			<phone:Panorama.Background>
-				<ImageBrush ImageSource="/ClutchWinBaseball.WP8;component/Assets/PanoramaBackground.png"/>
+                <ImageBrush ImageSource="/ClutchWinBaseball.WP8;component/Assets/PanoramaBackground.png" Opacity="0.75"/>
 			</phone:Panorama.Background>
 
 			<!--Panorama item Home-->
@@ -70,7 +70,7 @@
 			</phone:PanoramaItem>
 
             <!--Panorama item credits-->
-            <phone:PanoramaItem Header="credits">
+            <phone:PanoramaItem Header="information">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
