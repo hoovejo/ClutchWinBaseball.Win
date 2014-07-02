@@ -39,9 +39,6 @@
         
         <!--Pivot Control-->
         <phone:Pivot Grid.Row="1" Title="Team vs Team" x:Name="pvControl" SelectionChanged="pvControl_SelectionChanged">
-            <phone:Pivot.Background>
-                <ImageBrush ImageSource="/ClutchWinBaseball.WP8;component/Assets/PanoramaBackground.png"/>
-            </phone:Pivot.Background>
 
             <!--Teams view-->
             <phone:PivotItem Header="teams">
