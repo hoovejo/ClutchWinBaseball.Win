@@ -39,9 +39,6 @@
 
         <!--Pivot Control-->
         <phone:Pivot Grid.Row="1" Title="Batter vs Pitcher" x:Name="pvControl" SelectionChanged="pvControl_SelectionChanged">
-            <phone:Pivot.Background>
-                <ImageBrush ImageSource="/ClutchWinBaseball.WP8;component/Assets/PanoramaBackground.png"/>
-            </phone:Pivot.Background>
 
             <!--Pivot item for batters-->
             <phone:PivotItem Header="batters">
@@ -54,7 +51,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,-30,0,0">
                         <Button Foreground="{StaticResource PhoneContrastForegroundBrush}" Margin="4,0,20,0"
                                     AutomationProperties.Name="goToYears" Click="goTo_Years"
                                     Style="{StaticResource PivotTitleStyle}" >
@@ -74,8 +71,8 @@
                         </Button>
                     </StackPanel>
 
-                    <TextBlock Grid.Row="1" x:Uid="SelectSeasonTeamText" Text="select season then a team" 
-                                           Style="{StaticResource PhoneTextContrastStyle}"
+                    <TextBlock Grid.Row="1" Margin="15,0,0,0" x:Uid="SelectSeasonTeamText" Text="batter filters - select season then a team" 
+                                           Foreground="{StaticResource PhoneForegroundBrush}"
                                            Visibility="{Binding BatterItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
 
 

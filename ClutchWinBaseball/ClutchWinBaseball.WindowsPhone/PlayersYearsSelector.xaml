@@ -43,14 +43,29 @@
 
         <!--Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="24,0,0,0">
-            <ListView ItemsSource="{Binding YearItems}" IsItemClickEnabled="True" 
-                                  ItemClick="Years_ItemClick" ContinuumNavigationTransitionInfo.ExitElementContainer="True">
-                <ListView.ItemTemplate>
+
+            <GridView 
+					ItemsSource="{Binding YearItems}" 
+					ItemClick="Years_ItemClick"
+					IsItemClickEnabled="True"
+					ContainerContentChanging="Items_ContainerContentChanging"
+					IsSynchronizedWithCurrentItem="False"
+					SelectionMode="None"
+					IsSwipeEnabled="False"
+					ScrollViewer.IsHorizontalScrollChainingEnabled="False"
+                    ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                <GridView.ItemTemplate>
                     <DataTemplate>
                         <itemViews:PlayersYearItem />
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </GridView.ItemTemplate>
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+
         </Grid>
     </Grid>
 </Page>

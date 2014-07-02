@@ -166,7 +166,7 @@
     <value>select result first</value>
   </data>
   <data name="SelectSeasonTeamText" xml:space="preserve">
-    <value>select season then a team</value>
+    <value>batter filters - select season then a team</value>
   </data>
   <data name="SelectTeamText" xml:space="preserve">
     <value>select team first</value>

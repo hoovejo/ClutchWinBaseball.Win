@@ -53,7 +53,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,-30,0,0">
                         <Button Foreground="{ThemeResource ApplicationHeaderForegroundThemeBrush}" Margin="4,0,20,0"
                                     AutomationProperties.Name="goToYears" Click="goTo_Years"
                                     Style="{ThemeResource PivotTitleContentControlStyle}" >
@@ -90,7 +90,7 @@
                                       ItemClick="Batters_ItemClick" >
                                 <ListView.HeaderTemplate>
                                     <DataTemplate>
-                                        <TextBlock x:Uid="SelectSeasonTeamText" Text="select season then a team" Style="{ThemeResource SubheaderTextBlockStyle}"
+                                        <TextBlock x:Uid="SelectSeasonTeamText" Text="batter filters - select season then a team" Style="{ThemeResource TitleTextBlockStyle }"
                                                Visibility="{Binding BatterItems.Count, Converter={StaticResource itemCountToEmptyLabelVisibilityConverter}}"/>
                                     </DataTemplate>
                                 </ListView.HeaderTemplate>
