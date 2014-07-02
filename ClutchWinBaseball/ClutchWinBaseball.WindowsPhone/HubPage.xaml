@@ -87,8 +87,8 @@
 
         <UI:AdControl Grid.Row="1" x:Name="adControl"
             AutoRefreshIntervalInSeconds="60" 
-            ApplicationId="test_client" 
-            AdUnitId="Image320_50"
+            ApplicationId="0491b27e-106b-4c43-a135-c1335d3d3189" 
+            AdUnitId="10803189"
             HorizontalAlignment="Left"
             Height="50"
             IsAutoRefreshEnabled="True"

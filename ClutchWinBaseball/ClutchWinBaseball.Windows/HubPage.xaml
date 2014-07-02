@@ -116,8 +116,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <UI:AdControl ApplicationId="d25517cb-12d4-4699-8bdc-52040c712cab" 
-                                  AdUnitId="10043107" 
+            <UI:AdControl ApplicationId="test_client" 
+                                  AdUnitId="Image250_250" 
                                   HorizontalAlignment="Left" 
                                   Height="250" 
                                   VerticalAlignment="Bottom" 

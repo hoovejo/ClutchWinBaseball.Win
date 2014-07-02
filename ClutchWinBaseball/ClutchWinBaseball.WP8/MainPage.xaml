@@ -106,8 +106,8 @@
         </phone:Panorama>
 
         <UI:AdControl x:Name="adControl"
-             ApplicationId="test_client" 
-             AdUnitId="Image480_80" 
+             ApplicationId="02ced1e8-c903-4e18-9415-3467d328c0a4" 
+             AdUnitId="10801922" 
              HorizontalAlignment="Left" 
              Height="80" 
              VerticalAlignment="Bottom" 
