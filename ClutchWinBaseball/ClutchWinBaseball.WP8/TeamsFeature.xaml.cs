@@ -203,19 +203,7 @@ namespace ClutchWinBaseball.WP8
 
         private void showNotification(string msg)
         {
-            notifyMsg.Text = msg;
-            if (!notify.IsOpen)
-            {
-                notify.IsOpen = true;
-            }
-        }
-
-        private void btn_continue_Click(object sender, RoutedEventArgs e)
-        {
-            if (notify.IsOpen)
-            {
-                notify.IsOpen = false;
-            }
+            var result = MessageBox.Show(msg, "Notification", MessageBoxButton.OK);
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)

@@ -25,16 +25,6 @@
 
         <ProgressRing IsActive="{Binding IsLoadingData}"/>
 
-        <Popup x:Name="notify">
-            <Border  BorderThickness="2" Margin="10" BorderBrush="{ThemeResource PhoneAccentBrush}">
-                <StackPanel Background="LightBlue">
-                    <TextBlock Text="Notice" TextAlignment="Center" FontSize="40" Margin="10,0" />
-                    <TextBlock x:Name="notifyMsg" TextAlignment="Center" FontSize="21" Margin="10,0" />
-                    <Button x:Name="btn_continue" HorizontalAlignment="Center" Content="continue" Width="215" Click="btn_continue_Click"/>
-                </StackPanel>
-            </Border>
-        </Popup>
-
         <!-- TitlePanel -->
         <StackPanel Grid.Row="0" Margin="24,17,0,28">
             <TextBlock Text="Batter vs Pitcher" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>

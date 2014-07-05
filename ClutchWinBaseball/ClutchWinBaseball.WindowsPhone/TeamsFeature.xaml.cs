@@ -5,6 +5,7 @@ using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.Portable.ViewModels;
 using System;
 using Windows.Storage;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -233,21 +234,10 @@ namespace ClutchWinBaseball
             }
         }
 
-        private void showNotification(string msg)
+        private async void showNotification(string msg)
         {
-            notifyMsg.Text = msg;
-            if (!notify.IsOpen)
-            {
-                notify.IsOpen = true;
-            }
-        }
-
-        private void btn_continue_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if (notify.IsOpen)
-            {
-                notify.IsOpen = false;
-            }
+            var dialog = new MessageDialog(msg);
+            await dialog.ShowAsync();
         }
     }
 }

@@ -29,16 +29,6 @@
                      IsIndeterminate="{Binding IsLoadingData}" VerticalAlignment="Top" Background="{x:Null}" 
                      Foreground="{StaticResource PhoneAccentBrush}"/>
 
-        <Popup Grid.Row="0" x:Name="notify">
-            <Border BorderThickness="2" Margin="10" BorderBrush="{StaticResource PhoneBorderBrush}">
-                <StackPanel Background="LightBlue">
-                    <TextBlock Text="Notice" TextAlignment="Center" FontSize="40" Margin="10,0" />
-                    <TextBlock x:Name="notifyMsg" TextAlignment="Center" FontSize="21" Margin="10,0" />
-                    <Button x:Name="btn_continue" HorizontalAlignment="Center" Content="continue" Width="215" Click="btn_continue_Click" />
-                </StackPanel>
-            </Border>
-        </Popup>
-
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="1" Margin="12,17,0,28">
             <TextBlock Text="Batter vs Pitcher" Style="{StaticResource PhoneTextNormalStyle}"/>

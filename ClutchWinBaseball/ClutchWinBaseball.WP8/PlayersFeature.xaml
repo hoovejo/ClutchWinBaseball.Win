@@ -27,16 +27,6 @@
                      IsIndeterminate="{Binding IsLoadingData}" VerticalAlignment="Top" Background="{x:Null}" 
                      Foreground="{StaticResource PhoneAccentBrush}"/>
 
-        <Popup x:Name="notify" Grid.Row="0">
-            <Border BorderThickness="2" Margin="10" BorderBrush="{StaticResource PhoneBorderBrush}">
-                <StackPanel Background="LightBlue">
-                    <TextBlock Text="Notice" TextAlignment="Center" FontSize="40" Margin="10,0" />
-                    <TextBlock x:Name="notifyMsg" TextAlignment="Center" FontSize="21" Margin="10,0" />
-                    <Button x:Name="btn_continue" HorizontalAlignment="Center" Content="continue" Width="215" Click="btn_continue_Click" />
-                </StackPanel>
-            </Border>
-        </Popup>
-
         <!--Pivot Control-->
         <phone:Pivot Grid.Row="1" Title="Batter vs Pitcher" x:Name="pvControl" SelectionChanged="pvControl_SelectionChanged">
 
