@@ -2,6 +2,7 @@
 using ClutchWinBaseball.Portable.DataModel;
 using ClutchWinBaseball.Portable.FeatureStateModel;
 using ClutchWinBaseball.WP8.Exceptions;
+using GoogleAds;
 using Microsoft.Phone.Controls;
 using System;
 using System.Windows;
@@ -69,6 +70,23 @@ namespace ClutchWinBaseball.WP8
             await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
         }
 
+        private void OnAdReceived(object sender, AdEventArgs e)
+        {
+            if (adControl != null)
+            {
+                adControl.Height = 50;
+            }
+        }
+
+        private void OnFailedToReceiveAd(object sender, AdErrorEventArgs errorCode)
+        {
+            if (adControl != null)
+            {
+                adControl.Height = 1;
+            }
+        }
+
+        
         private void adControl_ErrorOccurred(object sender, Microsoft.Advertising.AdErrorEventArgs e)
         {
             if (adControl != null)
@@ -81,8 +99,9 @@ namespace ClutchWinBaseball.WP8
         {
             if (adControl != null)
             {
-                adControl.Height = 50;
+                adControl.Height = 80;
             }
         }
+        
     }
 }
