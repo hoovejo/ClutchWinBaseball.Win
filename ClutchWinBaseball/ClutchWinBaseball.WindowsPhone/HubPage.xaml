@@ -14,7 +14,8 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Default">
-                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.png" Opacity="0.75"/>
+                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.png" Opacity="0.75" 
+                                Stretch="UniformToFill" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="HighContrast">
                     <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="{x:Null}"/>
@@ -23,7 +24,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Background="Beige">
         <Hub x:Name="MainHub" x:Uid="Hub" Header="{StaticResource AppName}" Background="{ThemeResource HubBackgroundImageBrush}">
             <HubSection x:Name="HomeHubSection" x:Uid="Welcome" Header="Welcome!">
                 <DataTemplate>
@@ -89,7 +90,7 @@
             AutoRefreshIntervalInSeconds="60" 
             ApplicationId="0491b27e-106b-4c43-a135-c1335d3d3189" 
             AdUnitId="10803189"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Right"
             Height="50"
             IsAutoRefreshEnabled="True"
             VerticalAlignment="Bottom" 

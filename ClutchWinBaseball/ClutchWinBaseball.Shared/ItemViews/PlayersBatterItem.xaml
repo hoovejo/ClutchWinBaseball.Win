@@ -9,7 +9,7 @@
 
     <Grid HorizontalAlignment="Left" Width="250" Height="Auto" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Orientation="Horizontal" Margin="12,2,0,4">
-            <TextBlock x:Name="titleTextBlock" Text="{Binding LineOne}" Margin="4,10,0,10" Style="{ThemeResource BodyTextBlockStyle}" />
+            <TextBlock x:Name="titleTextBlock" Text="{Binding LineOne}" Margin="4,10,0,10" Style="{StaticResource BodyTextBlockStyle }" />
             <TextBlock x:Name="categoryTextBlock" Text="{Binding LineTwo}" Margin="4,0,0,0" Style="{StaticResource SimpleSubtle}" />
         </StackPanel>
     </Grid>

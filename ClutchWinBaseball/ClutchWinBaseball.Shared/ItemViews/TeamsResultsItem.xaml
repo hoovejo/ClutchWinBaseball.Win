@@ -16,13 +16,13 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,0,35,4" >
-                        <TextBlock x:Name="gamesLabel" Text="Games" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="teamLabel" Text="Team" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="oppoLabel" Text="Opponent" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="winsLabel" Text="Wins" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="lossLabel" Text="Losses" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="runsfLabel" Text="Runs for" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
-                        <TextBlock x:Name="runsaLabel" Text="Runs against" TextAlignment="Left" Style="{ThemeResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="gamesLabel" Text="Games" TextAlignment="Left" Style="{StaticResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="teamLabel" Text="Team" TextAlignment="Left" Style="{StaticResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="oppoLabel" Text="Opponent" TextAlignment="Left" Style="{StaticResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="winsLabel" Text="Wins" TextAlignment="Left" Style="{StaticResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="lossLabel" Text="Losses" TextAlignment="Left" Style="{StaticResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="runsfLabel" Text="Runs for" TextAlignment="Left" Style="{StaticResource BodyTextBlockStyle}" />
+                        <TextBlock x:Name="runsaLabel" Text="Runs against" TextAlignment="Left" Style="{StaticResource BodyTextBlockStyle}" />
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="1" Margin="25,0,10,4">
                         <TextBlock x:Name="gamesValue" Text="{Binding Games}" TextAlignment="Right" Style="{ThemeResource BodyTextBlockStyle}" />
