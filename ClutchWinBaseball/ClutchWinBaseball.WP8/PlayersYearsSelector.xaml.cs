@@ -24,8 +24,6 @@ namespace ClutchWinBaseball.WP8
 
             success = await DataManagerLocator.PlayersDataManager.GetSeasonsAsync(isNetAvailable);
 
-            showNotification(Config.NetworkNotAvailable);
-
             if (!success && !isNetAvailable)
             {
                 showNotification(Config.NetworkNotAvailable);
