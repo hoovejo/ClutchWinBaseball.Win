@@ -14,8 +14,8 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Default">
-                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.png" Opacity="0.75" 
-                                Stretch="UniformToFill" />
+                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.png" Opacity="0.95" 
+                                Stretch="Fill" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="HighContrast">
                     <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="{x:Null}"/>
@@ -24,7 +24,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="Beige">
+    <Grid x:Name="LayoutRoot" Background="Khaki">
         <Hub x:Name="MainHub" x:Uid="Hub" Header="{StaticResource AppName}" Background="{ThemeResource HubBackgroundImageBrush}">
             <HubSection x:Name="HomeHubSection" x:Uid="Welcome" Header="Welcome!">
                 <DataTemplate>
