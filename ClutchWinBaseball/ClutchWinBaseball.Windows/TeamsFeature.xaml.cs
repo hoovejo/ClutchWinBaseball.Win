@@ -149,7 +149,7 @@ namespace ClutchWinBaseball
                 switch (e.TeamsViewType)
                 {
                     case TeamsViewType.Franchises: success = await DataManagerLocator.TeamsDataManager.GetFranchisesAsync(isNetAvailable); break;
-                    case TeamsViewType.Opponents: success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable); break;
+                    case TeamsViewType.Opponents: success = DataManagerLocator.TeamsDataManager.GetOpponents(isNetAvailable); break;
                     case TeamsViewType.Results: success = await DataManagerLocator.TeamsDataManager.GetTeamsResultsAsync(isNetAvailable); break;
                     case TeamsViewType.DrillDown: success = await DataManagerLocator.TeamsDataManager.GetTeamsDrillDownAsync(isNetAvailable); break;
                 }

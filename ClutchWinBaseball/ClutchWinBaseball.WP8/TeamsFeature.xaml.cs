@@ -58,7 +58,7 @@ namespace ClutchWinBaseball.WP8
             base.OnNavigatedFrom(e);
         }
 
-        private async void FranchisesPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void FranchisesPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             if (ViewModelLocator.Teams.IsLoadingData) return;
 
@@ -74,7 +74,7 @@ namespace ClutchWinBaseball.WP8
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
+            success = DataManagerLocator.TeamsDataManager.GetOpponents(isNetAvailable);
 
             handledByUserAction = true;
             pvControl.SelectedIndex = 1;
@@ -161,7 +161,7 @@ namespace ClutchWinBaseball.WP8
                     break;
                 case 1:
                     {
-                        success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
+                        success = DataManagerLocator.TeamsDataManager.GetOpponents(isNetAvailable);
                         neededRefresh = true;
                     }
                     break;

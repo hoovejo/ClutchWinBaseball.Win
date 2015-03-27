@@ -1,5 +1,4 @@
-﻿using BugSense;
-using BugSense.Core.Model;
+﻿using CrittercismSDK;
 using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.WP8.Exceptions;
@@ -59,8 +58,8 @@ namespace ClutchWinBaseball.WP8
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
-            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), RootFrame, Config.BugSenseTokenValue);
+            
+            Crittercism.Init(Config.AnalyticsTokenValue);
             //BugSenseHandler.Instance.UnhandledExceptionHandled += Instance_UnhandledExceptionHandled;
 
         }
@@ -114,7 +113,7 @@ namespace ClutchWinBaseball.WP8
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
-            BugSenseHandler.Instance.CloseSession();
+            //BugSenseHandler.Instance.CloseSession();
         }
 
         // Code to execute if a navigation fails

@@ -1,4 +1,4 @@
-﻿using BugSense;
+﻿using CrittercismSDK;
 using ClutchWinBaseball.Portable;
 using ClutchWinBaseball.Portable.Common;
 using ClutchWinBaseball.Portable.FeatureStateModel;
@@ -49,11 +49,11 @@ namespace ClutchWinBaseball
             {
                 _teamsViewModel.IsLoadingData = false;
             }
-            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
+            if (exception != null) { try { Crittercism.LogHandledException(exception); } catch { } exception = null; }
             return returnValue;
         }
 
-        public async Task<bool> GetOpponentsAsync(bool isNetAvailable)
+        public bool GetOpponents(bool isNetAvailable)
         {
             bool returnValue = false;
 
@@ -84,7 +84,7 @@ namespace ClutchWinBaseball
             {
                 _teamsViewModel.IsLoadingData = false;
             }
-            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
+            if (exception != null) { try { Crittercism.LogHandledException(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -124,7 +124,7 @@ namespace ClutchWinBaseball
             {
                 _teamsViewModel.IsLoadingData = false;
             }
-            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
+            if (exception != null) { try { Crittercism.LogHandledException(exception); } catch { } exception = null; }
             return returnValue;
         }
 
@@ -164,7 +164,7 @@ namespace ClutchWinBaseball
             {
                 _teamsViewModel.IsLoadingData = false;
             }
-            if (exception != null) { try { var result = await BugSenseHandler.Instance.LogExceptionAsync(exception); } catch { } exception = null; }
+            if (exception != null) { try { Crittercism.LogHandledException(exception); } catch { } exception = null; }
             return returnValue;
         }
     }

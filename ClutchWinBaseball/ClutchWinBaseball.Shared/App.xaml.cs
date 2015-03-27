@@ -1,5 +1,4 @@
-﻿using BugSense;
-using BugSense.Model;
+﻿using CrittercismSDK;
 using ClutchWinBaseball.Common;
 using ClutchWinBaseball.Exceptions;
 using ClutchWinBaseball.Portable.Common;
@@ -35,10 +34,13 @@ namespace ClutchWinBaseball
             this.Suspending += this.OnSuspending;
 
             //this.UnhandledException += App_UnhandledException;
-
-            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), Config.BugSenseTokenValue);
+            Crittercism.Init(Config.AnalyticsTokenValue);
         }
 
+#if WINDOWS_APP
+#pragma warning disable 67
+        public new event UnhandledExceptionEventHandler UnhandledException;
+#endif
         void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             //ExceptionHandler.HandleException(e);
@@ -155,7 +157,7 @@ namespace ClutchWinBaseball
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
-            await BugSenseHandler.Instance.CloseSessionAsync();
+            //await BugSenseHandler.Instance.CloseSessionAsync();
             deferral.Complete();
         }
     }

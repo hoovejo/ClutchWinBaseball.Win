@@ -158,7 +158,6 @@
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\WideLogo.scale-100.png" />
-    <Content Include="BugSense\BugSense - SDK License Agreement.txt" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="HubPage.xaml">
@@ -215,14 +214,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="BugSense-Windows.Universal">
-      <HintPath>..\..\packages\BugSense.XAML81.3.6.6.0\lib\netcore451\BugSense-Windows.Universal.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.2\lib\netcore45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ClutchWinBaseball.Portable\ClutchWinBaseball.Portable.csproj">
       <Project>{a5a06994-faad-4ccc-8481-a6f358ae4f2a}</Project>
       <Name>ClutchWinBaseball.Portable</Name>
@@ -233,6 +224,14 @@
     <SDKReference Include="MSAdvertisingXaml, Version=8.1">
       <Name>Microsoft Advertising SDK for Windows 8.1 %28Xaml%29</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CrittercismSDK">
+      <HintPath>..\..\packages\Crittercism.2.2.0\lib\netcore451\CrittercismSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

@@ -23,7 +23,7 @@ namespace ClutchWinBaseball.Views
             this.InitializeComponent();
         }
 
-        private async void Items_ItemClick(object sender, ItemClickEventArgs e)
+        private void Items_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (ViewModelLocator.Teams.IsLoadingData) return;
 
@@ -32,7 +32,7 @@ namespace ClutchWinBaseball.Views
 
             bool success = false;
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
-            success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
+            success = DataManagerLocator.TeamsDataManager.GetOpponents(isNetAvailable);
 
             rootPage.ServiceInteractionNotify(success, isNetAvailable);
 

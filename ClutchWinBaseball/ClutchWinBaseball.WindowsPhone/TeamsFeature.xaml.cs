@@ -91,7 +91,7 @@ namespace ClutchWinBaseball
         /// </summary>
         /// <param name="sender">The source of the click event.</param>
         /// <param name="e">Details about the click event.</param>
-        private async void Teams_ItemClick(object sender, ItemClickEventArgs e)
+        private void Teams_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (ViewModelLocator.Teams.IsLoadingData) return;
 
@@ -100,7 +100,7 @@ namespace ClutchWinBaseball
             bool isNetAvailable = NetworkFunctions.GetIsNetworkAvailable();
             bool success = false;
 
-            success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
+            success = DataManagerLocator.TeamsDataManager.GetOpponents(isNetAvailable);
 
             handledByUserAction = true;
             pvControl.SelectedIndex = 1;
@@ -194,7 +194,7 @@ namespace ClutchWinBaseball
                     break;
                 case 1:
                     {
-                        success = await DataManagerLocator.TeamsDataManager.GetOpponentsAsync(isNetAvailable);
+                        success = DataManagerLocator.TeamsDataManager.GetOpponents(isNetAvailable);
                         neededRefresh = true;
                     }
                     break;
